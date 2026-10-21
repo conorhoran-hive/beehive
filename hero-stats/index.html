@@ -86,7 +86,7 @@ p { margin: 0; }
   color: var(--st-fg);
   overflow: hidden;
 }
-.stage[data-surface="dark"] { --st-bg: #121419; --st-fg: #F5F3F2; --st-muted: #A6A1A4; --st-line: #23262D; }
+.stage[data-surface="dark"] { --st-bg: #12163A; --st-fg: #F5F3F2; --st-muted: #A6A1A4; --st-line: #23262D; }
 .stage-inner {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
@@ -105,7 +105,7 @@ p { margin: 0; }
 .btn {
   font: 700 14px/1 var(--pg-font); padding: 14px 20px; border-radius: 10px; border: 1px solid transparent;
 }
-.btn-primary { background: #E1251B; color: #FFFFFF; }
+.btn-primary { background: #C20700; color: #FFFFFF; }
 .btn-ghost { border-color: var(--st-line); color: var(--st-fg); background: transparent; }
 .hero-art { min-width: 0; }
 
@@ -129,21 +129,21 @@ code { font-family: var(--pg-mono); font-size: .88em; }
 
 /* ==========================================================================
    SHARED SNIPPET BASE: copy this block once, alongside any variant.
-   Colours: replace the --bh-red values with the exact Webflow swatches.
+   Colours: Beehive red and navy, taken from the current homepage embed.
    Type: the snippets inherit the site's font (font-family: inherit).
    ========================================================================== */
 .bh {
-  --bh-red: #E1251B;
-  --bh-red-deep: #A3150E;
-  --bh-red-rim: #7E0F09;
+  --bh-red: #C20700;
+  --bh-red-deep: #8A0400;
+  --bh-red-rim: #4E0200;
   --bh-on-red: #FFFFFF;
-  --bh-fg: #16181D;
-  --bh-muted: #5E5A5D;
+  --bh-fg: #1B2152;
+  --bh-muted: #5C6080;
   --bh-card: #FFFFFF;
-  --bh-card-2: #F6F3F2;
-  --bh-rim: #DCD5D3;
-  --bh-line: rgba(22, 24, 29, .10);
-  --bh-shadow: rgba(60, 20, 16, .16);
+  --bh-card-2: #F5F6FA;
+  --bh-rim: #D9DCE8;
+  --bh-line: rgba(27, 33, 82, .10);
+  --bh-shadow: rgba(18, 22, 58, .20);
   font-family: inherit;
   color: var(--bh-fg);
   container-type: inline-size;
@@ -152,13 +152,13 @@ code { font-family: var(--pg-mono); font-size: .88em; }
 }
 /* Dark header: set data-surface="dark" on the .bh element. */
 .bh[data-surface="dark"] {
-  --bh-fg: #F5F3F2;
-  --bh-muted: #A6A1A4;
-  --bh-card: #22252C;
-  --bh-card-2: #1A1C22;
-  --bh-rim: #0A0B0E;
-  --bh-line: rgba(255, 255, 255, .09);
-  --bh-shadow: rgba(0, 0, 0, .55);
+  --bh-fg: #FFFFFF;
+  --bh-muted: #C3C8E4;
+  --bh-card: #2A3470;
+  --bh-card-2: #1B2152;
+  --bh-rim: #0C0F2C;
+  --bh-line: rgba(195, 200, 228, .14);
+  --bh-shadow: rgba(8, 10, 30, .55);
 }
 .bh-sr {
   position: absolute !important; width: 1px; height: 1px; overflow: hidden;
@@ -236,7 +236,7 @@ code { font-family: var(--pg-mono); font-size: .88em; }
 .bh-a-2 .bh-a-face {
   background: linear-gradient(150deg, var(--bh-red), var(--bh-red-deep));
   border-color: transparent; color: var(--bh-on-red);
-  box-shadow: 0 .9cqi 0 0 var(--bh-red-rim), 0 5cqi 9cqi -2cqi rgba(160, 20, 12, .45);
+  box-shadow: 0 .9cqi 0 0 var(--bh-red-rim), 0 5cqi 9cqi -2cqi rgba(142, 5, 0, .5);
 }
 .bh-a-2 .bh-lab, .bh-a-2 .bh-unit { color: rgba(255, 255, 255, .82); }
 .bh-a-2 .bh-unit { display: block; font-size: clamp(11px, 2.6cqi, 14px); margin-bottom: 1cqi; }

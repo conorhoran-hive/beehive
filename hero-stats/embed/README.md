@@ -2,10 +2,12 @@
 
 Homepage hero graphic, Variant A. No images, fonts or libraries; one inline SVG (etisalat logo).
 
-## Option 1 — one paste (≈12,000 characters)
+## Option 1 — replace the current embed (recommended)
 
-1. In the hero's right-hand column, add an **Embed** element.
-2. Paste the whole of `hive-stack.min.html`. Save and publish.
+Same format as the current homepage embed (`<div class="bh-hero-vis">…`): one wrapper `<div>` holding the `<style>`, markup and `<script>`.
+
+1. Open the existing Embed element in the hero's right-hand column.
+2. Delete its contents and paste the whole of `hive-stack.html` (≈13,600 characters, readable). If Webflow rejects the length, paste `hive-stack.min.html` instead (≈11,900 characters, same code minified). Save and publish.
 
 ## Option 2 — split (each part under 7,000 characters)
 
@@ -18,8 +20,8 @@ Use this if the Embed element refuses the one-paste version, or to keep CSS in t
 
 - **Dark header:** add `data-surface="dark"` to the opening `<section class="bh bh-a" …>` tag.
 - **Size:** fills its column up to 560px wide and scales down to phone width. Give the column a sensible width (about 45–50% of the hero on desktop); on mobile it stacks under the CTA.
-- **Brand red:** `--bh-red`, `--bh-red-deep` and `--bh-red-rim` at the top of the CSS.
+- **Colours:** Beehive red (`#C20700`) and navy (`#1B2152`), taken from the current homepage embed; tokens are at the top of the CSS.
 - **Type:** inherits the site font; uses weights 500, 600, 700 and 800.
 - **Motion:** previews as static in the Designer; the script (tilt and offscreen pause) only runs on the published site. Visitors with reduced motion get a still version.
 
-`hive-stack.html` is the readable source of the same code. The paste-ready files are generated from `../index.html`.
+All paste-ready files are generated from `../index.html`.
