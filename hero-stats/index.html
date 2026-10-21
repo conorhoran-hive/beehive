@@ -1,0 +1,798 @@
+<title>Beehive Hero Stats</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+/* ==========================================================================
+   SHOWCASE CHROME (not part of the snippets)
+   Layout: a stack of full-width "hero stages"; each stage mocks the homepage
+   header with copy on the left and the variant graphic on the right.
+   ========================================================================== */
+:root {
+  --pg-bg: #F7F5F4;
+  --pg-fg: #1A1B20;
+  --pg-muted: #6A6568;
+  --pg-line: #E4DFDD;
+  --pg-panel: #FFFFFF;
+  --pg-accent: #C81E16;
+  --pg-font: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
+  --pg-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --pg-bg: #0E0F13; --pg-fg: #F1EEED; --pg-muted: #A29C9E; --pg-line: #26282E;
+    --pg-panel: #16181D; --pg-accent: #FF5A4F; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --pg-bg: #0E0F13; --pg-fg: #F1EEED; --pg-muted: #A29C9E; --pg-line: #26282E;
+  --pg-panel: #16181D; --pg-accent: #FF5A4F; color-scheme: dark;
+}
+
+body {
+  background: var(--pg-bg);
+  color: var(--pg-fg);
+  font-family: var(--pg-font);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap {
+  max-width: 1240px;
+  margin-inline: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 40px 72px;
+  display: grid;
+  gap: 56px;
+}
+.intro { display: grid; gap: 14px; max-width: 70ch; }
+.eyebrow {
+  font-family: var(--pg-mono); font-size: 12px; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--pg-accent);
+}
+h1 { margin: 0; font-size: clamp(28px, 4vw, 40px); line-height: 1.12; letter-spacing: -.02em; text-wrap: balance; }
+h2 { margin: 0; font-size: 22px; letter-spacing: -.01em; text-wrap: balance; }
+p { margin: 0; }
+.muted { color: var(--pg-muted); }
+
+.variant { display: grid; gap: 16px; }
+.variant-head {
+  display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: end; justify-content: space-between;
+}
+.variant-head > div:first-child { display: grid; gap: 4px; min-width: 0; max-width: 68ch; }
+.spec { font-family: var(--pg-mono); font-size: 12px; color: var(--pg-muted); }
+
+.toggle {
+  display: inline-flex; border: 1px solid var(--pg-line); border-radius: 999px; padding: 3px;
+  background: var(--pg-panel);
+}
+.toggle button {
+  font: 600 13px/1 var(--pg-font); color: var(--pg-muted); background: transparent;
+  border: 0; border-radius: 999px; padding: 8px 14px; cursor: pointer;
+}
+.toggle button[aria-pressed="true"] { background: var(--pg-fg); color: var(--pg-bg); }
+.toggle button:focus-visible { outline: 2px solid var(--pg-accent); outline-offset: 2px; }
+
+/* The mock hero. Its colours follow the stage's surface, not the page theme,
+   because the real header background is fixed by the site. */
+.stage {
+  --st-bg: #FFFFFF; --st-fg: #16181D; --st-muted: #5E5A5D; --st-line: #ECE7E5;
+  border-radius: 20px;
+  border: 1px solid var(--pg-line);
+  background: var(--st-bg);
+  color: var(--st-fg);
+  overflow: hidden;
+}
+.stage[data-surface="dark"] { --st-bg: #121419; --st-fg: #F5F3F2; --st-muted: #A6A1A4; --st-line: #23262D; }
+.stage-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: 32px;
+  align-items: center;
+  padding: clamp(24px, 4vw, 56px);
+}
+.hero-copy { display: grid; gap: 18px; min-width: 0; }
+.hero-copy .kicker { font-size: 13px; font-weight: 600; color: var(--st-muted); }
+.hero-copy h3 {
+  margin: 0; font-size: clamp(30px, 4.2vw, 52px); line-height: 1.05; letter-spacing: -.03em;
+  font-weight: 800; text-wrap: balance;
+}
+.hero-copy p { color: var(--st-muted); max-width: 42ch; }
+.hero-ctas { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn {
+  font: 700 14px/1 var(--pg-font); padding: 14px 20px; border-radius: 10px; border: 1px solid transparent;
+}
+.btn-primary { background: #E1251B; color: #FFFFFF; }
+.btn-ghost { border-color: var(--st-line); color: var(--st-fg); background: transparent; }
+.hero-art { min-width: 0; }
+
+@media (max-width: 860px) {
+  .stage-inner { grid-template-columns: minmax(0, 1fr); }
+}
+
+.notes {
+  display: grid; gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+}
+.note {
+  background: var(--pg-panel); border: 1px solid var(--pg-line); border-radius: 14px;
+  padding: 20px 22px; display: grid; gap: 10px; align-content: start; min-width: 0;
+}
+.note h4 { margin: 0; font-size: 15px; }
+.note ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; color: var(--pg-muted); }
+.note strong { color: var(--pg-fg); }
+code { font-family: var(--pg-mono); font-size: .88em; }
+
+
+/* ==========================================================================
+   SHARED SNIPPET BASE: copy this block once, alongside any variant.
+   Colours: replace the --bh-red values with the exact Webflow swatches.
+   Type: the snippets inherit the site's font (font-family: inherit).
+   ========================================================================== */
+.bh {
+  --bh-red: #E1251B;
+  --bh-red-deep: #A3150E;
+  --bh-red-rim: #7E0F09;
+  --bh-on-red: #FFFFFF;
+  --bh-fg: #16181D;
+  --bh-muted: #5E5A5D;
+  --bh-card: #FFFFFF;
+  --bh-card-2: #F6F3F2;
+  --bh-rim: #DCD5D3;
+  --bh-line: rgba(22, 24, 29, .10);
+  --bh-shadow: rgba(60, 20, 16, .16);
+  font-family: inherit;
+  color: var(--bh-fg);
+  container-type: inline-size;
+  width: 100%;
+  margin-inline: auto;
+}
+/* Dark header: set data-surface="dark" on the .bh element. */
+.bh[data-surface="dark"] {
+  --bh-fg: #F5F3F2;
+  --bh-muted: #A6A1A4;
+  --bh-card: #22252C;
+  --bh-card-2: #1A1C22;
+  --bh-rim: #0A0B0E;
+  --bh-line: rgba(255, 255, 255, .09);
+  --bh-shadow: rgba(0, 0, 0, .55);
+}
+.bh-sr {
+  position: absolute !important; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+}
+.bh-num {
+  display: block; font-weight: 800; line-height: .95; letter-spacing: -.035em;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+.bh-unit { font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.bh-lab { display: block; color: var(--bh-muted); font-weight: 500; line-height: 1.3; }
+.bh-eyebrow {
+  display: block; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--bh-muted);
+}
+.bh-mark { display: block; font-weight: 700; line-height: 1.2; letter-spacing: -.005em; }
+.bh-eand {
+  display: inline-grid; place-items: center; border-radius: 50%;
+  background: var(--bh-red); color: var(--bh-on-red); font-weight: 800; letter-spacing: -.04em;
+}
+/* Offscreen or hidden tab: freeze every animation (set by the tiny script). */
+.bh[data-paused] *, .bh[data-paused] *::before, .bh[data-paused] *::after { animation-play-state: paused !important; }
+@media (prefers-reduced-motion: reduce) {
+  .bh *, .bh *::before, .bh *::after { animation: none !important; transition: none !important; }
+}
+
+
+/* ==========================================================================
+   VARIANT A · "HIVE STACK"
+   Four slabs floating at different depths in one tilted 3D scene.
+   ========================================================================== */
+.bh-a { max-width: 560px; }
+.bh-a-scene { position: relative; aspect-ratio: 1 / .88; perspective: 1400px; perspective-origin: 40% 30%; }
+.bh-a-rig {
+  position: absolute; inset: 0; transform-style: preserve-3d;
+  transform: rotateX(calc(10deg + var(--ty, 0deg))) rotateY(calc(-18deg + var(--tx, 0deg)));
+  transition: transform .8s cubic-bezier(.2, .7, .2, 1);
+}
+/* Honeycomb lattice far behind the slabs, faded at the edges. */
+.bh-a-hive {
+  position: absolute; inset: -4% -2% 0 6%; transform: translateZ(-140px);
+  -webkit-mask-image: radial-gradient(closest-side, #000 30%, transparent 100%);
+          mask-image: radial-gradient(closest-side, #000 30%, transparent 100%);
+}
+.bh-a-hive::before {
+  content: ""; position: absolute; inset: 0; background: var(--bh-red); opacity: .32;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100'%3E%3Cpath d='M28 66L0 50V16L28 0l28 16v34L28 66v34M28 0v0' fill='none' stroke='%23000' stroke-width='1.2'/%3E%3Cpath d='M28 34L0 50v34l28 16 28-16V50z' fill='none' stroke='%23000' stroke-width='1.2'/%3E%3C/svg%3E") 0 0 / 40px 71px;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100'%3E%3Cpath d='M28 66L0 50V16L28 0l28 16v34L28 66v34M28 0v0' fill='none' stroke='%23000' stroke-width='1.2'/%3E%3Cpath d='M28 34L0 50v34l28 16 28-16V50z' fill='none' stroke='%23000' stroke-width='1.2'/%3E%3C/svg%3E") 0 0 / 40px 71px;
+}
+.bh-a-slab { position: absolute; transform: translateZ(var(--z)); transform-style: preserve-3d; }
+.bh-a-float { animation: bh-a-float 7s ease-in-out var(--d, 0s) infinite alternate; }
+@keyframes bh-a-float {
+  from { transform: translate3d(0, -1.1cqi, 0); }
+  to   { transform: translate3d(0, 1.1cqi, 0); }
+}
+.bh-a-face {
+  position: relative; overflow: hidden;
+  padding: 4cqi 4.4cqi;
+  border-radius: 2.6cqi;
+  background: linear-gradient(160deg, var(--bh-card), var(--bh-card-2));
+  border: 1px solid var(--bh-line);
+  /* hard rim = slab thickness, soft shadow = height above the hive */
+  box-shadow: 0 .9cqi 0 0 var(--bh-rim), 0 4cqi 7cqi -2cqi var(--bh-shadow);
+}
+.bh-a-face .bh-num { font-size: clamp(30px, 10cqi, 58px); }
+.bh-a-face .bh-lab { font-size: clamp(12px, 3cqi, 16px); margin-top: 1.4cqi; }
+.bh-a-face .bh-eyebrow { font-size: clamp(10px, 2.1cqi, 12px); margin-bottom: 1.6cqi; }
+
+.bh-a-1 { --z: 40px;  --d: -1s;   left: 0;   top: 7%;  width: 50%; }
+.bh-a-2 { --z: 120px; --d: -3.5s; left: 34%; top: 32%; width: 64%; }
+.bh-a-3 { --z: 70px;  --d: -5s;   left: 5%;  top: 66%; width: 60%; }
+.bh-a-4 { --z: 175px; --d: -2s;   left: 66%; top: 3%;  width: 32%; }
+
+.bh-a-2 .bh-a-face {
+  background: linear-gradient(150deg, var(--bh-red), var(--bh-red-deep));
+  border-color: transparent; color: var(--bh-on-red);
+  box-shadow: 0 .9cqi 0 0 var(--bh-red-rim), 0 5cqi 9cqi -2cqi rgba(160, 20, 12, .45);
+}
+.bh-a-2 .bh-lab, .bh-a-2 .bh-unit { color: rgba(255, 255, 255, .82); }
+.bh-a-2 .bh-unit { display: block; font-size: clamp(11px, 2.6cqi, 14px); margin-bottom: 1cqi; }
+.bh-a-2 .bh-num { font-size: clamp(38px, 13.5cqi, 78px); }
+/* light sweep across the red slab, once every 9s */
+.bh-a-2 .bh-a-face::after {
+  content: ""; position: absolute; inset: -20% auto -20% 0; width: 40%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .22), transparent);
+  transform: translateX(-120%) skewX(-12deg);
+  animation: bh-a-sweep 9s ease-in-out 1.5s infinite;
+}
+@keyframes bh-a-sweep { 0% { transform: translateX(-120%) skewX(-12deg); } 22%, 100% { transform: translateX(330%) skewX(-12deg); } }
+
+.bh-a-3 .bh-mark { font-size: clamp(13px, 3.4cqi, 18px); }
+.bh-a-3 .bh-a-marks { display: grid; gap: 1.2cqi; }
+.bh-a-3 .bh-a-rule { height: 1px; background: var(--bh-line); }
+
+.bh-a-4 .bh-a-face { display: grid; justify-items: start; gap: 1.6cqi; padding: 3.4cqi; }
+.bh-a-4 .bh-eand { width: clamp(34px, 9cqi, 50px); height: clamp(34px, 9cqi, 50px); font-size: clamp(14px, 3.8cqi, 21px); }
+.bh-a-4 .bh-lab { margin: 0; font-size: clamp(11px, 2.6cqi, 14px); color: var(--bh-fg); font-weight: 600; }
+
+@container (max-width: 440px) {
+  .bh-a-scene { aspect-ratio: 1 / 1.08; }
+  .bh-a-1 { top: 9%; width: 54%; }
+  .bh-a-2 { top: 34%; }
+  .bh-a-3 { top: 68%; width: 66%; }
+  .bh-a-4 { width: 34%; }
+}
+@media (prefers-reduced-motion: reduce) { .bh-a-rig { transform: rotateX(10deg) rotateY(-18deg); } }
+
+
+/* ==========================================================================
+   VARIANT B · "HONEYCOMB"
+   A seven-cell hive. Each cell is an extruded hexagon; faces rise and settle
+   in a slow wave so the side walls grow and shrink.
+   ========================================================================== */
+.bh-b { max-width: 540px; }
+.bh-b-field { position: relative; height: 108cqi; }
+.bh-b-cell { position: absolute; width: 40cqi; height: 34.64cqi; }
+.bh-b-side, .bh-b-face {
+  position: absolute; inset: 3%;
+  clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+}
+.bh-b-side { transform: translateY(2.6cqi); background: var(--bh-rim); }
+.bh-b-face {
+  display: grid; place-content: center; text-align: center; padding: 0 15%;
+  background: linear-gradient(170deg, var(--bh-card), var(--bh-card-2));
+  animation: bh-b-lift 6.4s ease-in-out var(--d, 0s) infinite;
+}
+@keyframes bh-b-lift { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-1.8cqi); } }
+
+/* flat-top honeycomb: columns step 30cqi, rows step 34.64cqi */
+.bh-b-c0 { left: 0; }   .bh-b-c1 { left: 30cqi; }   .bh-b-c2 { left: 60cqi; }
+.bh-b-r0  { top: 0; }
+.bh-b-r05 { top: 17.32cqi; }
+.bh-b-r1  { top: 34.64cqi; }
+.bh-b-r15 { top: 51.96cqi; }
+.bh-b-r2  { top: 69.28cqi; }
+
+.bh-b-face .bh-num { font-size: clamp(24px, 8cqi, 44px); }
+.bh-b-face .bh-lab { font-size: clamp(11px, 2.7cqi, 14px); margin-top: 1cqi; }
+.bh-b-face .bh-eyebrow { font-size: clamp(9px, 1.9cqi, 11px); margin-bottom: 1.2cqi; }
+.bh-b-face .bh-mark { font-size: clamp(11px, 2.8cqi, 15px); }
+.bh-b-face .bh-amp { display: block; color: var(--bh-muted); font-size: clamp(10px, 2.2cqi, 12px); margin-block: .5cqi; }
+
+.bh-b-hero .bh-b-side { background: var(--bh-red-rim); }
+.bh-b-hero .bh-b-face { background: linear-gradient(160deg, var(--bh-red), var(--bh-red-deep)); color: var(--bh-on-red); }
+.bh-b-hero .bh-lab { color: rgba(255, 255, 255, .84); }
+.bh-b-hero .bh-unit { display: block; font-size: clamp(10px, 2.3cqi, 13px); margin-bottom: .6cqi; color: rgba(255, 255, 255, .84); }
+.bh-b-hero .bh-num { font-size: clamp(30px, 10cqi, 56px); }
+
+.bh-b-eand-face .bh-eand { justify-self: center; width: clamp(30px, 8cqi, 44px); height: clamp(30px, 8cqi, 44px); font-size: clamp(13px, 3.4cqi, 19px); margin: 0 auto 1.2cqi; }
+.bh-b-eand-face .bh-lab { color: var(--bh-fg); font-weight: 600; }
+
+/* empty cells: faint, honey-tinted, smaller lift */
+.bh-b-empty .bh-b-face { background: linear-gradient(170deg, var(--bh-card), var(--bh-card-2)); opacity: .5; animation-name: bh-b-lift-sm; }
+.bh-b-empty .bh-b-side { opacity: .5; }
+.bh-b-empty.bh-b-tint .bh-b-face { background: linear-gradient(170deg, rgba(225, 37, 27, .22), rgba(225, 37, 27, .08)); opacity: 1; }
+@keyframes bh-b-lift-sm { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-.9cqi); } }
+.bh-b-floor {
+  position: absolute; left: 10%; right: 10%; bottom: 0; height: 8cqi; border-radius: 50%;
+  background: radial-gradient(closest-side, var(--bh-shadow), transparent);
+}
+
+
+/* ==========================================================================
+   VARIANT C · "ORBIT"
+   The AED figure is a coin that sways in 3D; the other three facts ride a
+   tilted orbit around it, passing in front of and behind it.
+   ========================================================================== */
+.bh-c { max-width: 560px; }
+.bh-c-scene {
+  --R: 36cqi; --chip: 27cqi; --tilt: 66deg; --lap: 60s; --coin: 32cqi; --coinY: 30cqi; --orbitY: 38cqi;
+  position: relative; height: 68cqi; perspective: 1100px; perspective-origin: 50% 20%; }
+/* narrow column: bigger chips, so drop the orbit lower and open the tilt */
+@container (max-width: 440px) { .bh-c-scene { --R: 31cqi; --chip: 37cqi; --tilt: 58deg; --orbitY: 46cqi; height: 84cqi; } }
+.bh-c-world {
+  position: absolute; inset: 0; transform-style: preserve-3d;
+  transform: rotateX(var(--ty, 0deg)) rotateY(var(--tx, 0deg));
+  transition: transform .8s cubic-bezier(.2, .7, .2, 1);
+}
+.bh-c-core {
+  position: absolute; left: 50%; top: var(--coinY); width: var(--coin); height: var(--coin); margin: calc(var(--coin) / -2) 0 0 calc(var(--coin) / -2);
+  transform-style: preserve-3d;
+  animation: bh-c-sway 11s ease-in-out infinite alternate;
+}
+@keyframes bh-c-sway { from { transform: rotateY(-14deg) rotateX(4deg); } to { transform: rotateY(14deg) rotateX(-4deg); } }
+/* coin edge: two darker discs stacked behind the face */
+.bh-c-core::before, .bh-c-core::after {
+  content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--bh-red-rim);
+}
+.bh-c-core::before { transform: translateZ(-1.4cqi); }
+.bh-c-core::after  { transform: translateZ(-.7cqi); }
+.bh-c-coin {
+  position: absolute; inset: 0; border-radius: 50%; transform: translateZ(.2cqi);
+  display: grid; place-content: center; text-align: center;
+  background: radial-gradient(circle at 32% 28%, #F2453B, var(--bh-red) 45%, var(--bh-red-deep));
+  color: var(--bh-on-red);
+  box-shadow: inset 0 0 0 1.2cqi rgba(255, 255, 255, .09);
+}
+.bh-c-coin .bh-unit { font-size: clamp(10px, 2.4cqi, 13px); color: rgba(255, 255, 255, .85); }
+.bh-c-coin .bh-num { font-size: clamp(26px, 8cqi, 46px); margin-block: .8cqi; }
+.bh-c-coin .bh-lab { font-size: clamp(10px, 2.4cqi, 13px); color: rgba(255, 255, 255, .85); max-width: 22cqi; }
+
+.bh-c-orbit {
+  position: absolute; left: 50%; top: var(--orbitY); width: 0; height: 0;
+  transform-style: preserve-3d; transform: rotateX(var(--tilt));
+}
+.bh-c-ring {
+  position: absolute; border-radius: 50%; border: 1px solid var(--bh-line);
+  width: calc(var(--R) * 2); height: calc(var(--R) * 2);
+  left: calc(var(--R) * -1); top: calc(var(--R) * -1);
+}
+.bh-c-ring-2 {
+  border: 1.5px dashed rgba(225, 37, 27, .35);
+  width: calc(var(--R) * 2.7); height: calc(var(--R) * 2.7);
+  left: calc(var(--R) * -1.35); top: calc(var(--R) * -1.35);
+}
+.bh-c-slot {
+  position: absolute; left: 0; top: 0; transform-style: preserve-3d;
+  animation: bh-c-orbit var(--lap) linear calc(var(--i) * var(--lap) / -3) infinite;
+}
+@keyframes bh-c-orbit {
+  from { transform: rotateZ(0deg)   translateX(var(--R)) rotateZ(0deg); }
+  to   { transform: rotateZ(360deg) translateX(var(--R)) rotateZ(-360deg); }
+}
+/* the chip undoes the plane tilt so it always faces the viewer */
+.bh-c-chip {
+  position: absolute; width: var(--chip); transform: translate(-50%, -50%) rotateX(calc(var(--tilt) * -1));
+  padding: 2.6cqi 3cqi; border-radius: 2.2cqi;
+  background: linear-gradient(160deg, var(--bh-card), var(--bh-card-2));
+  border: 1px solid var(--bh-line);
+  box-shadow: 0 .7cqi 0 0 var(--bh-rim), 0 3cqi 6cqi -2cqi var(--bh-shadow);
+  animation: bh-c-fog var(--lap) linear calc(var(--i) * var(--lap) / -3) infinite;
+}
+/* chips dim on the far side of the orbit */
+@keyframes bh-c-fog { 0%, 100% { opacity: .9; } 25% { opacity: 1; } 50% { opacity: .9; } 75% { opacity: .5; } }
+.bh-c-chip .bh-num { font-size: clamp(22px, 6cqi, 32px); }
+.bh-c-chip .bh-lab { font-size: clamp(11px, 2.5cqi, 13px); margin-top: .6cqi; }
+.bh-c-chip .bh-eyebrow { font-size: clamp(9px, 1.8cqi, 11px); margin-bottom: .8cqi; }
+.bh-c-chip .bh-mark { font-size: clamp(11px, 2.6cqi, 14px); }
+.bh-c-chip .bh-eand { width: clamp(26px, 6cqi, 34px); height: clamp(26px, 6cqi, 34px); font-size: clamp(11px, 2.6cqi, 15px); }
+.bh-c-row { display: flex; align-items: center; gap: 2cqi; }
+.bh-c-row .bh-lab { margin: 0; color: var(--bh-fg); font-weight: 600; }
+/* hover or keyboard focus parks the orbit so a chip can be read */
+.bh-c:hover .bh-c-slot, .bh-c:hover .bh-c-chip, .bh-c:focus-within .bh-c-slot, .bh-c:focus-within .bh-c-chip { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .bh-c-slot:nth-child(3) { transform: rotateZ(200deg) translateX(var(--R)) rotateZ(-200deg); }
+  .bh-c-slot:nth-child(4) { transform: rotateZ(90deg)  translateX(var(--R)) rotateZ(-90deg); }
+  .bh-c-slot:nth-child(5) { transform: rotateZ(-20deg) translateX(var(--R)) rotateZ(20deg); }
+}
+
+
+/* ==========================================================================
+   VARIANT D · "PRISM"
+   A four-sided prism that turns to each fact in sequence. The rail below
+   lists all four so nothing is hidden at rest; it tracks the active face.
+   ========================================================================== */
+.bh-d { max-width: 540px; --h: 46cqi; --cycle: 16s; display: grid; gap: 7cqi; }
+.bh-d-stage { position: relative; height: var(--h); perspective: 1200px; perspective-origin: 30% 10%; }
+.bh-d-tilt { position: absolute; inset: 0 10cqi 0 0; transform-style: preserve-3d; transform: rotateY(-12deg) rotateX(5deg); }
+.bh-d-prism {
+  position: absolute; inset: 0; transform-style: preserve-3d;
+  transform: translateZ(calc(var(--h) / -2));
+  animation: bh-d-turn var(--cycle) infinite;
+}
+@keyframes bh-d-turn {
+  0%, 21%  { transform: translateZ(calc(var(--h) / -2)) rotateX(0deg);   animation-timing-function: cubic-bezier(.7, 0, .2, 1); }
+  25%, 46% { transform: translateZ(calc(var(--h) / -2)) rotateX(90deg);  animation-timing-function: cubic-bezier(.7, 0, .2, 1); }
+  50%, 71% { transform: translateZ(calc(var(--h) / -2)) rotateX(180deg); animation-timing-function: cubic-bezier(.7, 0, .2, 1); }
+  75%, 96% { transform: translateZ(calc(var(--h) / -2)) rotateX(270deg); animation-timing-function: cubic-bezier(.7, 0, .2, 1); }
+  100%     { transform: translateZ(calc(var(--h) / -2)) rotateX(360deg); }
+}
+.bh-d-face {
+  position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  transform: rotateX(calc(var(--i) * -90deg)) translateZ(calc(var(--h) / 2));
+  display: grid; align-content: center; gap: 1.6cqi; padding: 0 6cqi;
+  background: linear-gradient(165deg, var(--bh-card), var(--bh-card-2));
+  border: 1px solid var(--bh-line);
+  border-radius: 1.4cqi;
+}
+.bh-d-face .bh-num { font-size: clamp(36px, 15cqi, 84px); }
+.bh-d-face .bh-lab { font-size: clamp(13px, 3.4cqi, 18px); }
+.bh-d-face .bh-eyebrow { font-size: clamp(10px, 2.2cqi, 12px); }
+.bh-d-face .bh-mark { font-size: clamp(16px, 5cqi, 28px); }
+.bh-d-face .bh-amp { color: var(--bh-muted); font-size: clamp(12px, 3cqi, 16px); }
+.bh-d-red { background: linear-gradient(155deg, var(--bh-red), var(--bh-red-deep)); color: var(--bh-on-red); border-color: transparent; }
+.bh-d-red .bh-lab, .bh-d-red .bh-unit { color: rgba(255, 255, 255, .84); }
+.bh-d-red .bh-unit { font-size: clamp(11px, 3cqi, 16px); }
+.bh-d-eandrow { display: flex; align-items: center; gap: 3cqi; }
+.bh-d-eandrow .bh-eand { width: clamp(44px, 14cqi, 76px); height: clamp(44px, 14cqi, 76px); font-size: clamp(18px, 6cqi, 32px); flex: none; }
+.bh-d-eandrow .bh-lab { color: var(--bh-fg); font-weight: 700; font-size: clamp(16px, 4.6cqi, 26px); line-height: 1.15; }
+/* square end cap on the near side, so the solid reads as a prism */
+.bh-d-cap {
+  position: absolute; top: 0; width: var(--h); height: var(--h); left: calc(100% - var(--h) / 2);
+  transform: rotateY(90deg); border-radius: 1.4cqi;
+  background: linear-gradient(135deg, var(--bh-red-deep), var(--bh-red-rim));
+}
+.bh-d-floor {
+  position: absolute; left: 4%; right: 18%; bottom: -6cqi; height: 6cqi; border-radius: 50%;
+  background: radial-gradient(closest-side, var(--bh-shadow), transparent);
+}
+.bh-d-rail { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2.4cqi; }
+.bh-d-rail li { display: grid; gap: 1.4cqi; font-size: clamp(11px, 2.5cqi, 13px); font-weight: 600; color: var(--bh-muted); line-height: 1.25; }
+.bh-d-bar { position: relative; height: 3px; border-radius: 3px; background: var(--bh-line); overflow: hidden; }
+.bh-d-bar::after {
+  content: ""; position: absolute; inset: 0; background: var(--bh-red);
+  transform-origin: left; transform: scaleX(0);
+  animation: bh-d-fill var(--cycle) linear calc(var(--i) * var(--cycle) / 4) infinite backwards;
+}
+@keyframes bh-d-fill { 0% { transform: scaleX(0); } 24.9% { transform: scaleX(1); } 25%, 100% { transform: scaleX(0); } }
+.bh-d-rail span { animation: bh-d-lit var(--cycle) linear calc(var(--i) * var(--cycle) / 4) infinite backwards; }
+@keyframes bh-d-lit { 0%, 24.9% { color: var(--bh-fg); } 25%, 100% { color: var(--bh-muted); } }
+.bh-d:hover *, .bh-d:hover *::after, .bh-d:focus-within *, .bh-d:focus-within *::after { animation-play-state: paused; }
+/* reduced motion: unfold the prism into a flat 2 × 2 grid */
+@media (prefers-reduced-motion: reduce) {
+  .bh-d-stage { height: auto; perspective: none; }
+  .bh-d-tilt { position: static; transform: none; }
+  .bh-d-prism { position: static; transform: none; display: grid; grid-template-columns: 1fr 1fr; gap: 2.4cqi; }
+  .bh-d-face { position: static; transform: none; padding: 4cqi; min-height: 26cqi; }
+  .bh-d-face .bh-num { font-size: clamp(26px, 8cqi, 44px); }
+  .bh-d-cap, .bh-d-floor, .bh-d-rail { display: none; }
+}
+</style>
+
+<div class="wrap">
+
+  <header class="intro">
+    <span class="eyebrow">Homepage header · right-hand graphic</span>
+    <h1>Four ways to show Beehive's track record in the hero</h1>
+    <p class="muted">Each variant is a self-contained HTML/CSS block that sits to the right of the hero copy. The motion runs entirely on the GPU (transform and opacity only), with no images, fonts or libraries to download. Use the toggle on each one to preview it on a light or a dark header.</p>
+  </header>
+
+  <!-- ================= VARIANT A ================= -->
+  <section class="variant" aria-labelledby="va">
+    <div class="variant-head">
+      <div>
+        <span class="eyebrow">Variant A</span>
+        <h2 id="va">Hive Stack</h2>
+        <p class="muted">Four slabs float at different depths over a faint honeycomb. The scene tilts slightly toward the cursor on desktop. It's the most editorial option, and the AED figure leads.</p>
+        <span class="spec">~2.6 KB CSS · 0.6 KB JS (optional tilt) · 0 requests</span>
+      </div>
+      <div class="toggle" role="group" aria-label="Header surface for Variant A">
+        <button type="button" data-surface="light" aria-pressed="true">Light hero</button>
+        <button type="button" data-surface="dark" aria-pressed="false">Dark hero</button>
+      </div>
+    </div>
+    <div class="stage" data-surface="light">
+      <div class="stage-inner">
+        <div class="hero-copy">
+          <span class="kicker">Business funding for UAE SMEs</span>
+          <h3>Your partner in business growth</h3>
+          <p>Flexible term finance from AED 200K to 2M, with a decision in days.</p>
+          <div class="hero-ctas"><span class="btn btn-primary">Check your eligibility</span><span class="btn btn-ghost">Explore funding options</span></div>
+        </div>
+        <div class="hero-art">
+
+<!-- ▼ COPY FROM HERE: Variant A markup -->
+<section class="bh bh-a" data-bh-tilt aria-label="Beehive at a glance">
+  <ul class="bh-sr">
+    <li>3,300+ SMEs funded</li>
+    <li>AED 5.4bn+ disbursed to SMEs</li>
+    <li>Backed by Goldman Sachs Bank USA and Magellan Capital</li>
+    <li>Part of the e&amp; group</li>
+  </ul>
+  <div class="bh-a-scene" aria-hidden="true">
+    <div class="bh-a-rig">
+      <div class="bh-a-hive"></div>
+      <div class="bh-a-slab bh-a-1"><div class="bh-a-float"><div class="bh-a-face">
+        <span class="bh-num">3,300+</span><span class="bh-lab">SMEs funded</span>
+      </div></div></div>
+      <div class="bh-a-slab bh-a-3"><div class="bh-a-float"><div class="bh-a-face">
+        <span class="bh-eyebrow">Backed by</span>
+        <div class="bh-a-marks"><span class="bh-mark">Goldman Sachs Bank USA</span><span class="bh-a-rule"></span><span class="bh-mark">Magellan Capital</span></div>
+      </div></div></div>
+      <div class="bh-a-slab bh-a-2"><div class="bh-a-float"><div class="bh-a-face">
+        <span class="bh-unit">AED</span><span class="bh-num">5.4bn+</span><span class="bh-lab">disbursed to SMEs</span>
+      </div></div></div>
+      <div class="bh-a-slab bh-a-4"><div class="bh-a-float"><div class="bh-a-face">
+        <span class="bh-eand">e&amp;</span><span class="bh-lab">Part of the e&amp;&nbsp;group</span>
+      </div></div></div>
+    </div>
+  </div>
+</section>
+<!-- ▲ TO HERE -->
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= VARIANT B ================= -->
+  <section class="variant" aria-labelledby="vb">
+    <div class="variant-head">
+      <div>
+        <span class="eyebrow">Variant B</span>
+        <h2 id="vb">Honeycomb</h2>
+        <p class="muted">The facts sit in extruded hexagon cells that rise and settle in a slow wave. It's the most on-brand option, because it uses the hive metaphor directly. All four facts stay readable at all times.</p>
+        <span class="spec">~2.4 KB CSS · no JS · 0 requests</span>
+      </div>
+      <div class="toggle" role="group" aria-label="Header surface for Variant B">
+        <button type="button" data-surface="light" aria-pressed="true">Light hero</button>
+        <button type="button" data-surface="dark" aria-pressed="false">Dark hero</button>
+      </div>
+    </div>
+    <div class="stage" data-surface="light">
+      <div class="stage-inner">
+        <div class="hero-copy">
+          <span class="kicker">Business funding for UAE SMEs</span>
+          <h3>Your partner in business growth</h3>
+          <p>Flexible term finance from AED 200K to 2M, with a decision in days.</p>
+          <div class="hero-ctas"><span class="btn btn-primary">Check your eligibility</span><span class="btn btn-ghost">Explore funding options</span></div>
+        </div>
+        <div class="hero-art">
+
+<!-- ▼ COPY FROM HERE: Variant B markup -->
+<section class="bh bh-b" aria-label="Beehive at a glance">
+  <ul class="bh-sr">
+    <li>3,300+ SMEs funded</li>
+    <li>AED 5.4bn+ disbursed to SMEs</li>
+    <li>Backed by Goldman Sachs Bank USA and Magellan Capital</li>
+    <li>Part of the e&amp; group</li>
+  </ul>
+  <div class="bh-b-field" aria-hidden="true">
+    <div class="bh-b-floor"></div>
+    <div class="bh-b-cell bh-b-empty bh-b-tint bh-b-c0 bh-b-r05" style="--d:-0.4s"><div class="bh-b-side"></div><div class="bh-b-face"></div></div>
+    <div class="bh-b-cell bh-b-empty bh-b-c2 bh-b-r05" style="--d:-2.4s"><div class="bh-b-side"></div><div class="bh-b-face"></div></div>
+    <div class="bh-b-cell bh-b-c1 bh-b-r0" style="--d:-1.2s"><div class="bh-b-side"></div><div class="bh-b-face">
+      <span class="bh-num">3,300+</span><span class="bh-lab">SMEs funded</span>
+    </div></div>
+    <div class="bh-b-cell bh-b-c0 bh-b-r15" style="--d:-3.2s"><div class="bh-b-side"></div><div class="bh-b-face">
+      <span class="bh-eyebrow">Backed by</span><span class="bh-mark">Goldman Sachs Bank USA</span><span class="bh-amp">&amp;</span><span class="bh-mark">Magellan Capital</span>
+    </div></div>
+    <div class="bh-b-cell bh-b-c2 bh-b-r15" style="--d:-4.4s"><div class="bh-b-side"></div><div class="bh-b-face bh-b-eand-face">
+      <span class="bh-eand">e&amp;</span><span class="bh-lab">Part of the e&amp;&nbsp;group</span>
+    </div></div>
+    <div class="bh-b-cell bh-b-empty bh-b-c1 bh-b-r2" style="--d:-5.2s"><div class="bh-b-side"></div><div class="bh-b-face"></div></div>
+    <div class="bh-b-cell bh-b-hero bh-b-c1 bh-b-r1" style="--d:-2s"><div class="bh-b-side"></div><div class="bh-b-face">
+      <span class="bh-unit">AED</span><span class="bh-num">5.4bn+</span><span class="bh-lab">disbursed to SMEs</span>
+    </div></div>
+  </div>
+</section>
+<!-- ▲ TO HERE -->
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= VARIANT C ================= -->
+  <section class="variant" aria-labelledby="vc">
+    <div class="variant-head">
+      <div>
+        <span class="eyebrow">Variant C</span>
+        <h2 id="vc">Orbit</h2>
+        <p class="muted">The AED figure is a coin that sways in 3D, and the other three facts circle it on a tilted orbit, passing in front of and behind it. A full lap takes 60 seconds, and hovering pauses it. This is the strongest depth effect of the four.</p>
+        <span class="spec">~2.5 KB CSS · 0.6 KB JS (optional tilt) · 0 requests</span>
+      </div>
+      <div class="toggle" role="group" aria-label="Header surface for Variant C">
+        <button type="button" data-surface="light" aria-pressed="false">Light hero</button>
+        <button type="button" data-surface="dark" aria-pressed="true">Dark hero</button>
+      </div>
+    </div>
+    <div class="stage" data-surface="dark">
+      <div class="stage-inner">
+        <div class="hero-copy">
+          <span class="kicker">Business funding for UAE SMEs</span>
+          <h3>Your partner in business growth</h3>
+          <p>Flexible term finance from AED 200K to 2M, with a decision in days.</p>
+          <div class="hero-ctas"><span class="btn btn-primary">Check your eligibility</span><span class="btn btn-ghost">Explore funding options</span></div>
+        </div>
+        <div class="hero-art">
+
+<!-- ▼ COPY FROM HERE: Variant C markup -->
+<section class="bh bh-c" data-bh-tilt data-surface="dark" aria-label="Beehive at a glance">
+  <ul class="bh-sr">
+    <li>AED 5.4bn+ disbursed to SMEs</li>
+    <li>3,300+ SMEs funded</li>
+    <li>Backed by Goldman Sachs Bank USA and Magellan Capital</li>
+    <li>Part of the e&amp; group</li>
+  </ul>
+  <div class="bh-c-scene" aria-hidden="true">
+    <div class="bh-c-world">
+      <div class="bh-c-orbit">
+        <div class="bh-c-ring bh-c-ring-2"></div>
+        <div class="bh-c-ring"></div>
+        <div class="bh-c-slot" style="--i:0"><div class="bh-c-chip">
+          <span class="bh-num">3,300+</span><span class="bh-lab">SMEs funded</span>
+        </div></div>
+        <div class="bh-c-slot" style="--i:1"><div class="bh-c-chip">
+          <span class="bh-eyebrow">Backed by</span><span class="bh-mark">Goldman Sachs Bank USA</span><span class="bh-mark">Magellan Capital</span>
+        </div></div>
+        <div class="bh-c-slot" style="--i:2"><div class="bh-c-chip">
+          <div class="bh-c-row"><span class="bh-eand">e&amp;</span><span class="bh-lab">Part of the e&amp;&nbsp;group</span></div>
+        </div></div>
+      </div>
+      <div class="bh-c-core"><div class="bh-c-coin">
+        <span class="bh-unit">AED</span><span class="bh-num">5.4bn+</span><span class="bh-lab">disbursed to SMEs</span>
+      </div></div>
+    </div>
+  </div>
+</section>
+<!-- ▲ TO HERE -->
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= VARIANT D ================= -->
+  <section class="variant" aria-labelledby="vd">
+    <div class="variant-head">
+      <div>
+        <span class="eyebrow">Variant D</span>
+        <h2 id="vd">Prism</h2>
+        <p class="muted">A solid four-sided prism turns to each fact every four seconds, and the rail underneath tracks the one in view. It's the most restrained option: one object, big numbers, and the calmest motion when it sits next to the hero headline.</p>
+        <span class="spec">~2.3 KB CSS · no JS · 0 requests</span>
+      </div>
+      <div class="toggle" role="group" aria-label="Header surface for Variant D">
+        <button type="button" data-surface="light" aria-pressed="true">Light hero</button>
+        <button type="button" data-surface="dark" aria-pressed="false">Dark hero</button>
+      </div>
+    </div>
+    <div class="stage" data-surface="light">
+      <div class="stage-inner">
+        <div class="hero-copy">
+          <span class="kicker">Business funding for UAE SMEs</span>
+          <h3>Your partner in business growth</h3>
+          <p>Flexible term finance from AED 200K to 2M, with a decision in days.</p>
+          <div class="hero-ctas"><span class="btn btn-primary">Check your eligibility</span><span class="btn btn-ghost">Explore funding options</span></div>
+        </div>
+        <div class="hero-art">
+
+<!-- ▼ COPY FROM HERE: Variant D markup -->
+<section class="bh bh-d" aria-label="Beehive at a glance">
+  <div class="bh-d-stage">
+    <div class="bh-d-floor" aria-hidden="true"></div>
+    <div class="bh-d-tilt">
+      <ul class="bh-d-prism" role="list" style="list-style:none;margin:0;padding:0">
+        <li class="bh-d-face" style="--i:0"><span class="bh-num">3,300+</span><span class="bh-lab">SMEs funded</span></li>
+        <li class="bh-d-face bh-d-red" style="--i:1"><span class="bh-unit">AED</span><span class="bh-num">5.4bn+</span><span class="bh-lab">disbursed to SMEs</span></li>
+        <li class="bh-d-face" style="--i:2"><span class="bh-eyebrow">Backed by</span><span class="bh-mark">Goldman Sachs Bank USA</span><span class="bh-amp">&amp;</span><span class="bh-mark">Magellan Capital</span></li>
+        <li class="bh-d-face" style="--i:3"><div class="bh-d-eandrow"><span class="bh-eand">e&amp;</span><span class="bh-lab">Part of the e&amp;&nbsp;group</span></div></li>
+      </ul>
+      <div class="bh-d-cap" aria-hidden="true"></div>
+    </div>
+  </div>
+  <ol class="bh-d-rail" aria-hidden="true">
+    <li style="--i:0"><i class="bh-d-bar"></i><span>SMEs funded</span></li>
+    <li style="--i:1"><i class="bh-d-bar"></i><span>AED disbursed</span></li>
+    <li style="--i:2"><i class="bh-d-bar"></i><span>Our backers</span></li>
+    <li style="--i:3"><i class="bh-d-bar"></i><span>e&amp; group</span></li>
+  </ol>
+</section>
+<!-- ▲ TO HERE -->
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="notes" aria-label="Implementation notes">
+    <div class="note">
+      <h4>Page speed</h4>
+      <ul>
+        <li>Each variant is about 2.5 KB of CSS plus about 2 KB of markup. It makes no network requests and uses no images or web fonts of its own.</li>
+        <li>Only <code>transform</code> and <code>opacity</code> are animated, so the browser composites them off the main thread. That means no layout shift and no repaint.</li>
+        <li>The optional script (about 0.6 KB) pauses all motion while the graphic is offscreen and adds the cursor tilt. Load it with <code>defer</code>.</li>
+        <li>Under <code>prefers-reduced-motion</code>, every variant renders as a still composition. The prism unfolds into a 2 × 2 grid.</li>
+      </ul>
+    </div>
+    <div class="note">
+      <h4>Copy to confirm before launch</h4>
+      <ul>
+        <li><strong>"disbursed", not "dispersed".</strong> Disbursed is the lending term for money paid out to borrowers.</li>
+        <li><strong>e&amp; or etisalat:</strong> Etisalat Group rebranded as e&amp; in 2022, and the site already says "an e&amp; enterprise company", so I've used e&amp;. Switching the wording is a one-word change.</li>
+        <li><strong>Backers:</strong> the names are set as plain type. Swap in the approved logo SVGs, and get compliance sign-off on the wording "Backed by" before it goes live.</li>
+        <li>The live site still shows "5,000+ SMEs" and "4.3bn" elsewhere. Align those with 3,300+ and AED 5.4bn+ so the hero doesn't contradict the rest of the site.</li>
+      </ul>
+    </div>
+    <div class="note">
+      <h4>Webflow build</h4>
+      <ul>
+        <li>Paste the shared base CSS and the chosen variant's CSS into the page's custom code (head). Then paste the markup between the ▼/▲ comments into an Embed element in the hero's right-hand column.</li>
+        <li>On a dark header, add <code>data-surface="dark"</code> to the <code>.bh</code> element.</li>
+        <li>Everything scales with the column width (container units), so it keeps working down to a 343px phone column. On mobile it sits under the CTA.</li>
+        <li>Replace the red hex values with the exact Webflow swatches. The snippets inherit the site's typeface.</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<!-- ▼ OPTIONAL SCRIPT (~0.6 KB minified): pause offscreen + cursor tilt for [data-bh-tilt] -->
+<script>
+(function () {
+  var els = document.querySelectorAll('.bh');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { e.target.toggleAttribute('data-paused', !e.isIntersecting); });
+    });
+    els.forEach(function (el) { io.observe(el); });
+  }
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (still || !fine) return;
+  document.querySelectorAll('[data-bh-tilt]').forEach(function (el) {
+    var raf = 0, x = 0, y = 0;
+    el.addEventListener('pointermove', function (ev) {
+      var r = el.getBoundingClientRect();
+      x = (ev.clientX - r.left) / r.width - .5;
+      y = (ev.clientY - r.top) / r.height - .5;
+      if (!raf) raf = requestAnimationFrame(function () {
+        raf = 0;
+        el.style.setProperty('--tx', (x * 10).toFixed(2) + 'deg');
+        el.style.setProperty('--ty', (y * -8).toFixed(2) + 'deg');
+      });
+    });
+    el.addEventListener('pointerleave', function () {
+      el.style.setProperty('--tx', '0deg');
+      el.style.setProperty('--ty', '0deg');
+    });
+  });
+})();
+</script>
+<!-- ▲ END OPTIONAL SCRIPT -->
+
+<!-- Showcase only: light/dark header toggle -->
+<script>
+document.querySelectorAll('.variant').forEach(function (v) {
+  var stage = v.querySelector('.stage'), bh = v.querySelector('.bh');
+  v.querySelectorAll('.toggle button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var s = b.getAttribute('data-surface');
+      stage.setAttribute('data-surface', s);
+      if (s === 'dark') bh.setAttribute('data-surface', 'dark'); else bh.removeAttribute('data-surface');
+      v.querySelectorAll('.toggle button').forEach(function (o) { o.setAttribute('aria-pressed', String(o === b)); });
+    });
+  });
+});
+</script>
