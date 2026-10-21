@@ -21,7 +21,7 @@ Use this if the Embed element refuses the one-paste version, or to keep CSS in t
 - **Dark header:** add `data-surface="dark"` to the opening `<section class="bh bh-a" …>` tag.
 - **Size:** fills its column up to 560px wide and scales down to phone width. Give the column a sensible width (about 45–50% of the hero on desktop); on mobile it stacks under the CTA.
 - **Colours:** Beehive red (`#C20700`) and navy (`#1B2152`), taken from the current homepage embed; tokens are at the top of the CSS.
-- **Type:** inherits the site font; uses weights 500, 600, 700 and 800.
+- **Type:** Inter at light weights (200 numbers, 300 labels, 400–500 small caps), matching the current homepage graphic. Uses the Inter the site already loads; the embed loads no fonts itself.
 - **Motion:** previews as static in the Designer; the script (tilt and offscreen pause) only runs on the published site. Visitors with reduced motion get a still version.
 
 All paste-ready files are generated from `../index.html`.

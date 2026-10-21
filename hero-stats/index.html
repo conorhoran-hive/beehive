@@ -2,7 +2,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
 
 <style>
 /* ==========================================================================
@@ -17,7 +17,7 @@
   --pg-line: #E4DFDD;
   --pg-panel: #FFFFFF;
   --pg-accent: #C81E16;
-  --pg-font: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
+  --pg-font: "Inter", system-ui, "Segoe UI", sans-serif;
   --pg-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 }
 @media (prefers-color-scheme: dark) {
@@ -98,7 +98,7 @@ p { margin: 0; }
 .hero-copy .kicker { font-size: 13px; font-weight: 600; color: var(--st-muted); }
 .hero-copy h3 {
   margin: 0; font-size: clamp(30px, 4.2vw, 52px); line-height: 1.05; letter-spacing: -.03em;
-  font-weight: 800; text-wrap: balance;
+  font-weight: 300; text-wrap: balance;
 }
 .hero-copy p { color: var(--st-muted); max-width: 42ch; }
 .hero-ctas { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -130,7 +130,7 @@ code { font-family: var(--pg-mono); font-size: .88em; }
 /* ==========================================================================
    SHARED SNIPPET BASE: copy this block once, alongside any variant.
    Colours: Beehive red and navy, taken from the current homepage embed.
-   Type: the snippets inherit the site's font (font-family: inherit).
+   Type: Inter, light weights (200 numbers, 300 labels), matching the current homepage embed.
    ========================================================================== */
 .bh {
   --bh-red: #C20700;
@@ -144,7 +144,7 @@ code { font-family: var(--pg-mono); font-size: .88em; }
   --bh-rim: #D9DCE8;
   --bh-line: rgba(27, 33, 82, .10);
   --bh-shadow: rgba(18, 22, 58, .20);
-  font-family: inherit;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   color: var(--bh-fg);
   container-type: inline-size;
   width: 100%;
@@ -165,16 +165,16 @@ code { font-family: var(--pg-mono); font-size: .88em; }
   clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
 }
 .bh-num {
-  display: block; font-weight: 800; line-height: .95; letter-spacing: -.035em;
+  display: block; font-weight: 200; line-height: .92; letter-spacing: -.04em;
   font-variant-numeric: tabular-nums lining-nums;
 }
-.bh-unit { font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
-.bh-lab { display: block; color: var(--bh-muted); font-weight: 500; line-height: 1.3; }
+.bh-unit { font-weight: 500; letter-spacing: .08em; text-transform: uppercase; }
+.bh-lab { display: block; color: var(--bh-muted); font-weight: 300; line-height: 1.3; }
 .bh-eyebrow {
-  display: block; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  display: block; font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
   color: var(--bh-muted);
 }
-.bh-mark { display: block; font-weight: 700; line-height: 1.2; letter-spacing: -.005em; }
+.bh-mark { display: block; font-weight: 400; line-height: 1.2; letter-spacing: -.01em; }
 .bh-logo { display: block; width: 100%; height: auto; }
 .bh-eand {
   display: inline-grid; place-items: center; border-radius: 50%;
@@ -240,7 +240,11 @@ code { font-family: var(--pg-mono); font-size: .88em; }
 }
 .bh-a-2 .bh-lab, .bh-a-2 .bh-unit { color: rgba(255, 255, 255, .82); }
 .bh-a-2 .bh-unit { display: block; font-size: clamp(11px, 2.6cqi, 14px); margin-bottom: 1cqi; }
-.bh-a-2 .bh-num { font-size: clamp(38px, 13.5cqi, 78px); }
+.bh-a-2 .bh-num {
+  font-size: clamp(38px, 13.5cqi, 78px);
+  background: linear-gradient(180deg, #FFFFFF 50%, rgba(255, 255, 255, .45) 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
 /* light sweep across the red slab, once every 9s */
 .bh-a-2 .bh-a-face::after {
   content: ""; position: absolute; inset: -20% auto -20% 0; width: 40%;
@@ -258,7 +262,7 @@ code { font-family: var(--pg-mono); font-size: .88em; }
 .bh-a-4 .bh-eyebrow { margin: 0; }
 .bh-a-4 .bh-a-group { display: flex; align-items: center; gap: 1.6cqi; }
 .bh-a-4 .bh-logo { width: auto; height: clamp(18px, 5.4cqi, 30px); }
-.bh-a-4 .bh-lab { margin: 0; font-size: clamp(12px, 3cqi, 16px); color: var(--bh-fg); font-weight: 600; }
+.bh-a-4 .bh-lab { margin: 0; font-size: clamp(12px, 3cqi, 16px); color: var(--bh-fg); font-weight: 400; }
 
 @container (max-width: 440px) {
   .bh-a-scene { aspect-ratio: 1 / 1.08; }
@@ -312,7 +316,7 @@ code { font-family: var(--pg-mono); font-size: .88em; }
 .bh-b-hero .bh-num { font-size: clamp(30px, 10cqi, 56px); }
 
 .bh-b-group-face .bh-logo { width: 100%; max-width: 26cqi; margin: .4cqi auto .8cqi; }
-.bh-b-group-face .bh-lab { color: var(--bh-fg); font-weight: 600; margin: 0; }
+.bh-b-group-face .bh-lab { color: var(--bh-fg); font-weight: 400; margin: 0; }
 
 /* empty cells: faint, honey-tinted, smaller lift */
 .bh-b-empty .bh-b-face { background: linear-gradient(170deg, var(--bh-card), var(--bh-card-2)); opacity: .5; animation-name: bh-b-lift-sm; }
@@ -408,7 +412,7 @@ code { font-family: var(--pg-mono); font-size: .88em; }
 .bh-c-chip .bh-mark { font-size: clamp(11px, 2.6cqi, 14px); }
 .bh-c-chip .bh-eand { width: clamp(26px, 6cqi, 34px); height: clamp(26px, 6cqi, 34px); font-size: clamp(11px, 2.6cqi, 15px); }
 .bh-c-row { display: flex; align-items: center; gap: 2cqi; }
-.bh-c-row .bh-lab { margin: 0; color: var(--bh-fg); font-weight: 600; }
+.bh-c-row .bh-lab { margin: 0; color: var(--bh-fg); font-weight: 400; }
 /* hover or keyboard focus parks the orbit so a chip can be read */
 .bh-c:hover .bh-c-slot, .bh-c:hover .bh-c-chip, .bh-c:focus-within .bh-c-slot, .bh-c:focus-within .bh-c-chip { animation-play-state: paused; }
 @media (prefers-reduced-motion: reduce) {
@@ -456,7 +460,7 @@ code { font-family: var(--pg-mono); font-size: .88em; }
 .bh-d-red .bh-unit { font-size: clamp(11px, 3cqi, 16px); }
 .bh-d-eandrow { display: flex; align-items: center; gap: 3cqi; }
 .bh-d-eandrow .bh-eand { width: clamp(44px, 14cqi, 76px); height: clamp(44px, 14cqi, 76px); font-size: clamp(18px, 6cqi, 32px); flex: none; }
-.bh-d-eandrow .bh-lab { color: var(--bh-fg); font-weight: 700; font-size: clamp(16px, 4.6cqi, 26px); line-height: 1.15; }
+.bh-d-eandrow .bh-lab { color: var(--bh-fg); font-weight: 300; font-size: clamp(16px, 4.6cqi, 26px); line-height: 1.15; }
 /* square end cap on the near side, so the solid reads as a prism */
 .bh-d-cap {
   position: absolute; top: 0; width: var(--h); height: var(--h); left: calc(100% - var(--h) / 2);
@@ -468,7 +472,7 @@ code { font-family: var(--pg-mono); font-size: .88em; }
   background: radial-gradient(closest-side, var(--bh-shadow), transparent);
 }
 .bh-d-rail { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2.4cqi; }
-.bh-d-rail li { display: grid; gap: 1.4cqi; font-size: clamp(11px, 2.5cqi, 13px); font-weight: 600; color: var(--bh-muted); line-height: 1.25; }
+.bh-d-rail li { display: grid; gap: 1.4cqi; font-size: clamp(11px, 2.5cqi, 13px); font-weight: 400; color: var(--bh-muted); line-height: 1.25; }
 .bh-d-bar { position: relative; height: 3px; border-radius: 3px; background: var(--bh-line); overflow: hidden; }
 .bh-d-bar::after {
   content: ""; position: absolute; inset: 0; background: var(--bh-red);
@@ -731,7 +735,7 @@ code { font-family: var(--pg-mono); font-size: .88em; }
     <div class="note">
       <h4>Page speed</h4>
       <ul>
-        <li>Each variant is about 2.5 KB of CSS plus about 2 KB of markup. It makes no network requests and uses no images or web fonts of its own.</li>
+        <li>Each variant is about 2.5 KB of CSS plus about 2 KB of markup. It makes no network requests and uses no images; it uses the Inter font the site already loads.</li>
         <li>Only <code>transform</code> and <code>opacity</code> are animated, so the browser composites them off the main thread. That means no layout shift and no repaint.</li>
         <li>The optional script (about 0.6 KB) pauses all motion while the graphic is offscreen and adds the cursor tilt. Load it with <code>defer</code>.</li>
         <li>Under <code>prefers-reduced-motion</code>, every variant renders as a still composition. The prism unfolds into a 2 × 2 grid.</li>
@@ -752,7 +756,7 @@ code { font-family: var(--pg-mono); font-size: .88em; }
         <li>Paste the shared base CSS and the chosen variant's CSS into the page's custom code (head). Then paste the markup between the ▼/▲ comments into an Embed element in the hero's right-hand column.</li>
         <li>On a dark header, add <code>data-surface="dark"</code> to the <code>.bh</code> element.</li>
         <li>Everything scales with the column width (container units), so it keeps working down to a 343px phone column. On mobile it sits under the CTA.</li>
-        <li>Replace the red hex values with the exact Webflow swatches. The snippets inherit the site's typeface.</li>
+        <li>Colours are Beehive red and navy from the current homepage embed. Type is Inter at light weights, as on the current graphic.</li>
       </ul>
     </div>
   </section>
