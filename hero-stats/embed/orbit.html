@@ -55,20 +55,22 @@
   .bh *, .bh *::before, .bh *::after { animation: none !important; transition: none !important; }
 }
 
-.bh-c { max-width: 560px; }
+.bh-c {
+  max-width: 560px;
+  /* the Beehive icon's hexagon, traced from the design system (flat top, soft corners) */
+  --bh-c-hex: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 52.29 47.87' preserveAspectRatio='none'%3E%3Cpath d='M18.84 47.87C14.89 47.87 11.25 45.74 9.28 42.29L1.97 29.50C0.00 26.06 0.00 21.81 1.97 18.36L9.28 5.57C11.25 2.12 14.89 0.00 18.84 0.00L33.46 0.00C37.40 0.00 41.04 2.12 43.01 5.57L50.32 18.36C52.29 21.81 52.29 26.06 50.32 29.50L43.01 42.29C41.04 45.74 37.40 47.87 33.46 47.87Z'/%3E%3C/svg%3E");
+}
 .bh-c-scene {
-  --R: 37cqi; --chip: 26cqi; --tilt: 66deg; --lap: 60s; --hex: 40cqi; --coinY: 30cqi; --orbitY: 38cqi;
+  --bh-r: 37cqi; --chip: 26cqi; --tilt: 66deg; --lap: 60s; --hex: 40cqi; --coinY: 30cqi; --orbitY: 38cqi;
   position: relative; height: 76cqi; perspective: 1100px; perspective-origin: 50% 20%; }
 /* narrow column: bigger chips, so drop the orbit lower and open the tilt */
-@container (max-width: 440px) { .bh-c-scene { --R: 31cqi; --chip: 37cqi; --tilt: 58deg; --orbitY: 46cqi; height: 92cqi; } }
+@container (max-width: 440px) { .bh-c-scene { --bh-r: 31cqi; --chip: 37cqi; --tilt: 58deg; --orbitY: 46cqi; height: 92cqi; } }
 .bh-c-world {
   position: absolute; inset: 0; transform-style: preserve-3d;
   transform: rotateX(var(--ty, 0deg)) rotateY(var(--tx, 0deg));
   transition: transform .8s cubic-bezier(.2, .7, .2, 1);
 }
 .bh-c-core {
-  /* the Beehive icon's hexagon, traced from the design system (flat top, soft corners) */
-  --bh-c-hex: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 52.29 47.87' preserveAspectRatio='none'%3E%3Cpath d='M18.84 47.87C14.89 47.87 11.25 45.74 9.28 42.29L1.97 29.50C0.00 26.06 0.00 21.81 1.97 18.36L9.28 5.57C11.25 2.12 14.89 0.00 18.84 0.00L33.46 0.00C37.40 0.00 41.04 2.12 43.01 5.57L50.32 18.36C52.29 21.81 52.29 26.06 50.32 29.50L43.01 42.29C41.04 45.74 37.40 47.87 33.46 47.87Z'/%3E%3C/svg%3E");
   position: absolute; left: 50%; top: var(--coinY);
   width: var(--hex); height: calc(var(--hex) * 0.9154);
   margin: calc(var(--hex) * -0.4577) 0 0 calc(var(--hex) / -2);
@@ -113,8 +115,8 @@
   animation: bh-c-orbit var(--lap) linear calc(var(--i) * var(--lap) / -3) infinite;
 }
 @keyframes bh-c-orbit {
-  from { transform: rotateZ(0deg)   translateX(var(--R)) rotateZ(0deg); }
-  to   { transform: rotateZ(360deg) translateX(var(--R)) rotateZ(-360deg); }
+  from { transform: rotateZ(0deg)   translateX(var(--bh-r)) rotateZ(0deg); }
+  to   { transform: rotateZ(360deg) translateX(var(--bh-r)) rotateZ(-360deg); }
 }
 /* the chip undoes the plane tilt so it always faces the viewer */
 .bh-c-chip {
@@ -137,9 +139,9 @@
 /* hover or keyboard focus parks the orbit so a chip can be read */
 .bh-c:hover .bh-c-slot, .bh-c:hover .bh-c-chip, .bh-c:focus-within .bh-c-slot, .bh-c:focus-within .bh-c-chip { animation-play-state: paused; }
 @media (prefers-reduced-motion: reduce) {
-  .bh-c-slot:nth-child(1) { transform: rotateZ(200deg) translateX(var(--R)) rotateZ(-200deg); }
-  .bh-c-slot:nth-child(2) { transform: rotateZ(90deg)  translateX(var(--R)) rotateZ(-90deg); }
-  .bh-c-slot:nth-child(3) { transform: rotateZ(-20deg) translateX(var(--R)) rotateZ(20deg); }
+  .bh-c-slot:nth-child(1) { transform: rotateZ(200deg) translateX(var(--bh-r)) rotateZ(-200deg); }
+  .bh-c-slot:nth-child(2) { transform: rotateZ(90deg)  translateX(var(--bh-r)) rotateZ(-90deg); }
+  .bh-c-slot:nth-child(3) { transform: rotateZ(-20deg) translateX(var(--bh-r)) rotateZ(20deg); }
 }
 </style>
 
@@ -172,18 +174,46 @@
 </section>
 
 <script>
-(function () {
-  var el = document.currentScript && document.currentScript.previousElementSibling;
-  if (!el || !el.classList.contains('bh')) return;
-  /* pause all motion while the graphic is offscreen */
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) { e.target.toggleAttribute('data-paused', !e.isIntersecting); });
-    }).observe(el);
+(function (el) {
+  if (!el || !el.classList || !el.classList.contains('bh')) return;
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var counts = el.querySelectorAll('[data-bh-count]'), counted = false;
+
+  /* numbers count up from zero the first time the graphic is on screen */
+  function show(n, t) {
+    var to = parseFloat(n.getAttribute('data-bh-count')), dec = +(n.getAttribute('data-bh-dec') || 0);
+    n.textContent = (to * t).toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec }) +
+      (n.getAttribute('data-bh-suffix') || '');
   }
+  function count() {
+    if (counted || !counts.length || still) return;
+    counted = true;
+    counts.forEach(function (n) { show(n, 0); });
+    setTimeout(function () {
+      var t0 = performance.now();
+      (function step(now) {
+        var t = Math.min(1, (now - t0) / 1800), e = 1 - Math.pow(1 - t, 3);
+        counts.forEach(function (n) { show(n, e); });
+        if (t < 1) requestAnimationFrame(step);
+      })(t0);
+    }, +(el.getAttribute('data-bh-count-delay') || 0));
+  }
+  el.addEventListener('bh:replay', function () { counted = false; count(); });
+
+  /* hold motion until the graphic is on screen, and pause it again offscreen */
+  if ('IntersectionObserver' in window) {
+    el.setAttribute('data-paused', '');
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        e.target.toggleAttribute('data-paused', !e.isIntersecting);
+        if (e.isIntersecting) count();
+      });
+    }).observe(el);
+  } else count();
+
   /* gentle tilt toward the cursor, desktop only */
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  if (still || !el.hasAttribute('data-bh-tilt')) return;
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
   var raf = 0, x = 0, y = 0;
   el.addEventListener('pointermove', function (ev) {
     var r = el.getBoundingClientRect();
@@ -199,6 +229,6 @@
     el.style.setProperty('--tx', '0deg');
     el.style.setProperty('--ty', '0deg');
   });
-})();
+})(document.currentScript && document.currentScript.previousElementSibling);
 </script>
 </div>

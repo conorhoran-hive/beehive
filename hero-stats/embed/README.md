@@ -1,6 +1,15 @@
 # Hero graphic — Webflow embeds
 
-Two homepage hero graphics are packaged here: Variant A **Hive Stack** (`hive-stack.*`) and Variant C **Orbit** (`orbit.*`). The steps are the same for both; swap the file name.
+Homepage hero graphics packaged here (the steps are the same for each; swap the file name):
+
+| Files | Variant |
+|---|---|
+| `hive-stack.*` | A · Hive Stack |
+| `orbit.*` | C · Orbit |
+| `orbit-launch.*` | C2 · Orbit Launch: hexagon assembles, numbers count up, cards spiral out |
+| `orbit-full.*` | C3 · Orbit Full: Launch plus drifting logo hexagons and the icon's "b" |
+
+All embeds share one script, `bh-init.js` (count-up, pause offscreen, cursor tilt); the build inlines it into each file.
 
 Homepage hero graphic. No images, fonts or libraries; one inline SVG (etisalat logo).
 
