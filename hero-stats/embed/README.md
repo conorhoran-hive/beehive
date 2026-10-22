@@ -7,6 +7,8 @@ Homepage hero graphics packaged here (the steps are the same for each; swap the 
 | `hive-stack.*` | A · Hive Stack |
 | `orbit.*` | C · Orbit |
 | `orbit-launch.*` | C2 · Orbit Launch: hexagon assembles, numbers count up, cards spiral out |
+| `orbit-launch-grid.*` | C2 · A · Launch on a faint honeycomb grid |
+| `orbit-launch-cells.*` | C2 · B · Launch with pale floating hexagons |
 | `orbit-full.*` | C3 · Orbit Full: Launch plus drifting logo hexagons and the icon's "b" |
 
 All embeds share one script, `bh-init.js` (count-up, pause offscreen, cursor tilt); the build inlines it into each file.
