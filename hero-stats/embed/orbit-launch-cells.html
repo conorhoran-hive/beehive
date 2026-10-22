@@ -200,15 +200,16 @@
   --bh-c-bg-fill: rgba(224, 8, 0, .14);
   --bh-c-bg-glow: rgba(224, 8, 0, .22);
 }
-.bh-c-bg { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+/* nothing here is clipped: every shape stays inside the box and fades or ends on its own */
+.bh-c-bg { position: absolute; inset: 0; pointer-events: none; }
 .bh-c--launch .bh-c-bg { animation: bh-c-fade 1.4s ease-out .2s backwards; }
 
-/* grid: the honeycomb is masked twice, by its own pattern and by a fade that
-   clears the middle and softens the outer edge */
+/* grid: the honeycomb is masked twice, by its own pattern and by an oval fade
+   that clears the middle and reaches zero before every edge of the box */
 .bh-c-hive {
   position: absolute; inset: 0;
-  -webkit-mask: radial-gradient(ellipse 62% 58% at 50% 42%, transparent 34%, #000 62%, #000 82%, transparent 100%);
-          mask: radial-gradient(ellipse 62% 58% at 50% 42%, transparent 34%, #000 62%, #000 82%, transparent 100%);
+  -webkit-mask: radial-gradient(closest-side at 50% 50%, transparent 40%, #000 64%, #000 76%, transparent 97%);
+          mask: radial-gradient(closest-side at 50% 50%, transparent 40%, #000 64%, #000 76%, transparent 97%);
 }
 .bh-c-hive::before {
   content: ""; position: absolute; inset: 0; background: var(--bh-c-bg-line);
@@ -254,14 +255,14 @@
   </ul>
   <div class="bh-c-scene" aria-hidden="true">
     <div class="bh-c-bg">
-      <i class="bh-c-cell bh-c-cell--fill" style="--x:-5%;--y:2%;--w:22cqi;--r:-8deg;--t:18s;--dl:-3s"></i>
-      <i class="bh-c-cell bh-c-cell--line" style="--x:76%;--y:-7%;--w:17cqi;--r:6deg;--t:22s;--dl:-9s"></i>
-      <i class="bh-c-cell bh-c-cell--fill" style="--x:84%;--y:56%;--w:24cqi;--r:10deg;--t:20s;--dl:-5s"></i>
-      <i class="bh-c-cell bh-c-cell--line" style="--x:1%;--y:60%;--w:15cqi;--r:-4deg;--t:16s;--dl:-11s"></i>
-      <i class="bh-c-cell bh-c-cell--fill" style="--x:30%;--y:82%;--w:11cqi;--r:0deg;--t:19s;--dl:-7s"></i>
-      <i class="bh-c-cell bh-c-cell--line" style="--x:62%;--y:80%;--w:9cqi;--r:12deg;--t:17s;--dl:-2s"></i>
-      <i class="bh-c-cell bh-c-cell--fill" style="--x:20%;--y:5%;--w:7cqi;--r:0deg;--t:15s;--dl:-6s"></i>
-      <i class="bh-c-cell bh-c-cell--line" style="--x:92%;--y:30%;--w:7cqi;--r:0deg;--t:21s;--dl:-13s"></i>
+      <i class="bh-c-cell bh-c-cell--fill" style="--x:2%;--y:4%;--w:18cqi;--r:-8deg;--t:18s;--dl:-3s"></i>
+      <i class="bh-c-cell bh-c-cell--line" style="--x:74%;--y:2%;--w:15cqi;--r:6deg;--t:22s;--dl:-9s"></i>
+      <i class="bh-c-cell bh-c-cell--fill" style="--x:77%;--y:52%;--w:18cqi;--r:10deg;--t:20s;--dl:-5s"></i>
+      <i class="bh-c-cell bh-c-cell--line" style="--x:3%;--y:57%;--w:13cqi;--r:-4deg;--t:16s;--dl:-11s"></i>
+      <i class="bh-c-cell bh-c-cell--fill" style="--x:28%;--y:79%;--w:10cqi;--r:0deg;--t:19s;--dl:-7s"></i>
+      <i class="bh-c-cell bh-c-cell--line" style="--x:60%;--y:80%;--w:9cqi;--r:12deg;--t:17s;--dl:-2s"></i>
+      <i class="bh-c-cell bh-c-cell--fill" style="--x:23%;--y:7%;--w:7cqi;--r:0deg;--t:15s;--dl:-6s"></i>
+      <i class="bh-c-cell bh-c-cell--line" style="--x:89%;--y:31%;--w:6cqi;--r:0deg;--t:21s;--dl:-13s"></i>
     </div>
     <div class="bh-c-world">
       <div class="bh-c-orbit">

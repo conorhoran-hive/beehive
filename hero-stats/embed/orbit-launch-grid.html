@@ -200,15 +200,16 @@
   --bh-c-bg-fill: rgba(224, 8, 0, .14);
   --bh-c-bg-glow: rgba(224, 8, 0, .22);
 }
-.bh-c-bg { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+/* nothing here is clipped: every shape stays inside the box and fades or ends on its own */
+.bh-c-bg { position: absolute; inset: 0; pointer-events: none; }
 .bh-c--launch .bh-c-bg { animation: bh-c-fade 1.4s ease-out .2s backwards; }
 
-/* grid: the honeycomb is masked twice, by its own pattern and by a fade that
-   clears the middle and softens the outer edge */
+/* grid: the honeycomb is masked twice, by its own pattern and by an oval fade
+   that clears the middle and reaches zero before every edge of the box */
 .bh-c-hive {
   position: absolute; inset: 0;
-  -webkit-mask: radial-gradient(ellipse 62% 58% at 50% 42%, transparent 34%, #000 62%, #000 82%, transparent 100%);
-          mask: radial-gradient(ellipse 62% 58% at 50% 42%, transparent 34%, #000 62%, #000 82%, transparent 100%);
+  -webkit-mask: radial-gradient(closest-side at 50% 50%, transparent 40%, #000 64%, #000 76%, transparent 97%);
+          mask: radial-gradient(closest-side at 50% 50%, transparent 40%, #000 64%, #000 76%, transparent 97%);
 }
 .bh-c-hive::before {
   content: ""; position: absolute; inset: 0; background: var(--bh-c-bg-line);
@@ -254,12 +255,12 @@
   </ul>
   <div class="bh-c-scene" aria-hidden="true">
     <div class="bh-c-bg"><div class="bh-c-hive">
-      <i class="bh-c-lit" style="--x:4.33cqi;--y:11.90cqi;--dl:0s"></i>
-      <i class="bh-c-lit" style="--x:75.83cqi;--y:7.93cqi;--dl:-2s"></i>
-      <i class="bh-c-lit" style="--x:82.33cqi;--y:51.57cqi;--dl:-4s"></i>
-      <i class="bh-c-lit" style="--x:23.83cqi;--y:63.47cqi;--dl:-6s"></i>
-      <i class="bh-c-lit" style="--x:82.33cqi;--y:19.83cqi;--dl:-8s"></i>
-      <i class="bh-c-lit" style="--x:17.33cqi;--y:35.70cqi;--dl:-10s"></i>
+      <i class="bh-c-lit" style="--x:17.33cqi;--y:35.70cqi;--dl:0s"></i>
+      <i class="bh-c-lit" style="--x:36.83cqi;--y:15.87cqi;--dl:-2s"></i>
+      <i class="bh-c-lit" style="--x:62.83cqi;--y:15.87cqi;--dl:-4s"></i>
+      <i class="bh-c-lit" style="--x:82.33cqi;--y:43.63cqi;--dl:-6s"></i>
+      <i class="bh-c-lit" style="--x:69.33cqi;--y:59.50cqi;--dl:-8s"></i>
+      <i class="bh-c-lit" style="--x:36.83cqi;--y:63.47cqi;--dl:-10s"></i>
     </div></div>
     <div class="bh-c-world">
       <div class="bh-c-orbit">
