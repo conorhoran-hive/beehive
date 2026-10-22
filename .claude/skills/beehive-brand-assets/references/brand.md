@@ -41,6 +41,21 @@ Rules:
   5. **Footer:** footnotes, the DFSA line, and `beehive.ae` with the reference, e.g. `BH-PG-01 · v1.1 · October 2026`.
 - Reference codes: `BH-PG` product guide, `BH-WB` why Beehive, `BH-CP` company profile. Pick a new two-letter code for a new document type and record it in `facts.md`.
 
+## Asset formats
+
+Every format uses the same colours, type and voice. Only the size and the amount of content change. The less space there is, the less you say.
+
+| Asset | Size | What goes on it |
+|---|---|---|
+| One-pager, product sheet, comparison, profile, fact sheet | A4 portrait, 210 × 297 mm | Full page structure (header, title block, body, CTA, footer). Built from `kit/templates/` |
+| Flyer | A5 portrait, 148 × 210 mm | Logo, title, three facts at most, CTA, DFSA line |
+| Presentation slide | 16:9, 1920 × 1080 px | One idea per slide. Logo bottom-left, light title top-left, a figure strip or a striped table for numbers. The DFSA line and rate footnote go on the closing slide, or on any slide showing a rate |
+| Social tile | 1080 × 1080 px (square) or 1200 × 627 px (LinkedIn landscape) | Logo, one headline (8 words or fewer), one figure or one line of support, and the URL. White or navy background; red only for the figure or a thin accent bar. If a rate appears, the rate footnote goes on the tile |
+| Email banner or signature | 600 px wide | Logo and one line. No tables |
+| Web section | Content width ~1120 px | The same components at web sizes: title 40px, body 16px, figures 32px |
+
+On navy backgrounds, use the white logo, white text and `#FF6B63` for small labels. Never place the red logo on red or navy.
+
 ## Components (classes in `beehive.css`)
 
 | Class | Use |
