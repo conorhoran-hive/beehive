@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Document title</title>
+<link rel="stylesheet" href="../beehive.css">
+</head>
+<body>
+<div class="page">
+
+  <!-- 1. Header: logo + document type. Always present. -->
+  <header class="doc-header">
+    <img class="logo" src="../assets/beehive-logo.png" alt="beehive, an e& enterprise company">
+    <div class="doc-type">Document type <span>/</span> Subtype</div>
+  </header>
+
+  <main>
+    <!-- 2. Title block: eyebrow (red), title (light), lede. Always present.
+            Use <section class="hero"> + a .panel for a side panel. -->
+    <section class="hero no-panel">
+      <div>
+        <p class="eyebrow">You move fast. Your funding should, too.</p>
+        <h1 class="title">One clear headline, sentence case</h1>
+        <p class="lede">One or two sentences that tell the reader what this document is for.</p>
+      </div>
+    </section>
+
+    <!-- 3. Body: pick from the components below. Delete what you don't use. -->
+
+    <section class="stats">
+      <div class="stat"><div class="value">13 years</div><div class="label">operating in the GCC</div></div>
+      <div class="stat"><div class="value">3,300+</div><div class="label">SMEs funded</div></div>
+      <div class="stat"><div class="value">AED 5.4bn+</div><div class="label">provided to SMEs</div></div>
+      <div class="stat"><div class="value">&lt;2%</div><div class="label">non-performing financing since inception</div></div>
+    </section>
+
+    <section class="cards">
+      <div class="card"><h3 class="h3">Card title</h3><p>Short supporting line, two lines at most.</p></div>
+      <div class="card"><h3 class="h3">Card title</h3><p>Short supporting line, two lines at most.</p></div>
+      <div class="card"><h3 class="h3">Card title</h3><p>Short supporting line, two lines at most.</p></div>
+    </section>
+
+    <section>
+      <h2 class="h2">Section title</h2>
+      <table class="table">
+        <thead><tr><th></th><th>Column A</th><th class="hl">Column B (highlight)</th></tr></thead>
+        <tbody>
+          <tr><th>Row label</th><td class="dim">Value</td><td class="hl">Value</td></tr>
+          <tr><th>Row label</th><td class="dim">Value</td><td class="hl">Value</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 4. Call to action: one per page, at the bottom. Red by default, .cta.navy for variety. -->
+    <aside class="cta">
+      <p class="message">One sentence telling the reader what to do next.</p>
+      <p class="contact">sme@beehive.ae<br>+971 4 550 6700</p>
+    </aside>
+  </main>
+
+  <!-- 5. Footer: footnotes, regulatory line, reference. Always present, never shortened. -->
+  <footer class="doc-footer">
+    <p>*Rate is the percentage used to calculate your share of profit in a Sharia-compliant transaction. It is not an interest rate.</p>
+    <p>Beehive P2P Limited is an e&amp; enterprise company, regulated by the DFSA (licence F004422) and certified by the Shariyah Review Bureau.</p>
+    <div class="meta"><span>beehive.ae</span><span>BH-XX-00 · v1.0 · Month YYYY</span></div>
+  </footer>
+
+</div>
+</body>
+</html>

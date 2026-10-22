@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Beehive Company Profile</title>
+<link rel="stylesheet" href="../beehive.css">
+<style>
+  /* Profile-specific: denser layout to carry more content on one page */
+  .page > main { gap: 4.5mm; }
+  .profile-intro .stat-stack .value { font-size: 15pt; }
+  .stat-stack .item { padding: 2mm 0; }
+  .profile-intro .title { font-size: 19pt; color: var(--bh-white); }
+  .profile-intro .sub { font-size: 12pt; font-weight: 300; color: #FF6B63; margin-top: 2mm; line-height: 1.25; }
+  .creds { margin: 4mm 0; font-size: var(--fs-small); }
+  .qr { width: 20mm; height: 20mm; background: var(--bh-white); border-radius: 1.5mm; display: grid; place-items: center; color: var(--bh-mute); font-size: 6pt; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="doc-header">
+    <img class="logo" src="../assets/beehive-logo.png" alt="beehive, an e& enterprise company">
+    <div class="doc-type">Company profile <span>/</span> UAE</div>
+  </header>
+
+  <main>
+    <section class="grid-sidebar">
+      <!-- Sidebar: positioning and proof points -->
+      <div class="panel panel-navy profile-intro">
+        <h1 class="title">Fast &amp; straightforward SME funding</h1>
+        <p class="sub">The GCC financier built for SMEs.</p>
+        <ul class="ticks creds">
+          <li>Regulated by the DFSA</li>
+          <li>An e&amp; enterprise company</li>
+          <li>Funding across the GCC</li>
+        </ul>
+        <div class="stat-stack">
+          <div class="item"><div class="kicker">Track record</div><div class="value">13 years</div><div class="label">funding SMEs in the GCC</div></div>
+          <div class="item"><div class="kicker">Reach</div><div class="value">3,300+</div><div class="label">SMEs funded</div></div>
+          <div class="item"><div class="kicker">Scale</div><div class="value">AED 5.4bn+</div><div class="label">provided to SMEs</div></div>
+          <div class="item"><div class="kicker">Credit quality</div><div class="value">&lt;2%</div><div class="label">non-performing financing since inception</div></div>
+        </div>
+      </div>
+
+      <!-- Products -->
+      <div class="stack">
+        <div>
+          <p class="eyebrow">You move fast. Your funding should, too.</p>
+          <p class="lede" style="margin-top:0">Two products, built for how SMEs actually grow.</p>
+        </div>
+
+        <div class="product">
+          <h3 class="h3">Term Finance</h3>
+          <p class="intro">Buying equipment. Opening a new branch. Growing the business. Term Finance gets you the funds to make it happen.</p>
+          <div class="facts">
+            <div><h4>Pricing</h4><dl><dt>Rate*</dt><dd>~11% per year</dd><dt>Fee</dt><dd>3.5% one-time</dd><dt>Tenor</dt><dd>12 or 24 months</dd></dl></div>
+            <div><h4>Eligibility</h4><dl><dt>Revenue</dt><dd>AED 2M+ a year</dd><dt>Facility</dt><dd>AED 200K – 2M</dd><dt>History</dt><dd>2+ years trading</dd></dl></div>
+          </div>
+          <div class="foot"><span>Funds received 48 hours after approval</span><a href="https://beehive.ae">Find out more →</a></div>
+        </div>
+
+        <div class="product">
+          <h3 class="h3">Working Capital Finance</h3>
+          <p class="intro">Unpaid invoices. Supplier payments. Payroll due. Working Capital Finance gets you the funds now, not when clients finally pay.</p>
+          <div class="facts">
+            <div><h4>Pricing</h4><dl><dt>Rate*</dt><dd>~1.25% per month</dd><dt>Fee</dt><dd>3.5% one-time</dd><dt>Tenor</dt><dd>90–120 days</dd></dl></div>
+            <div><h4>Eligibility</h4><dl><dt>Revenue</dt><dd>AED 7M+ a year</dd><dt>Facility</dt><dd>AED 500K – 2.5M</dd><dt>Invoices</dt><dd>B2B trading</dd></dl></div>
+          </div>
+          <div class="foot"><span>Funds received 48 hours after approval</span><a href="https://beehive.ae/wcf-smes">Find out more →</a></div>
+        </div>
+        <div>
+          <h2 class="h2">Application to funding in three steps</h2>
+          <div class="steps">
+            <div class="step"><div class="num">01</div><h3 class="h3">Speak to us</h3><p>A straight talk about your SME and what you need the funds for.</p></div>
+            <div class="step"><div class="num">02</div><h3 class="h3">Assess the business</h3><p>We assess your SME's standing and what you've built, and support what's next.</p></div>
+            <div class="step"><div class="num">03</div><h3 class="h3">Get the funds you need</h3><p>Once approved, funds are in your account within 48 hours.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stack" style="gap:2mm">
+      <div class="logo-strip">
+        <div class="label">Funded by Beehive</div>
+        <div class="logos">
+          <!-- Replace each slot with <img src="../assets/clients/name.png" alt="Name"> -->
+          <span class="logo-slot">KOTA</span><span class="logo-slot">ZONE</span><span class="logo-slot">SQUATWOLF</span><span class="logo-slot">TRUKKER</span><span class="logo-slot">BOVARABIA</span><span class="logo-slot">D1 MILANO</span>
+        </div>
+      </div>
+      <div class="logo-strip" style="border-top:0">
+        <div class="label">Backed by</div>
+        <div class="logos">
+          <span class="logo-slot">GIB</span><span class="logo-slot">ahlibank</span><span class="logo-slot">Goldman Sachs</span><span class="logo-slot">Magellan Capital</span><span class="logo-slot">EDB</span><span class="logo-slot">Riyad Capital</span>
+        </div>
+      </div>
+    </section>
+
+    <aside class="cta navy">
+      <div>
+        <p class="message">Get funded. It starts with a 2-minute form.</p>
+        <p style="margin-top:1.5mm;opacity:.8">Check your SME eligibility at beehive.ae · sme@beehive.ae · +971 4 550 6700</p>
+      </div>
+      <div class="qr">QR code</div>
+    </aside>
+  </main>
+
+  <footer class="doc-footer">
+    <p>*Rate is the percentage used to calculate your share of profit in a Sharia-compliant transaction. It is not an interest rate.</p>
+    <p>Beehive P2P Limited is an e&amp; enterprise company, regulated by the DFSA (licence F004422) and certified by the Shariyah Review Bureau.</p>
+    <div class="meta"><span>beehive.ae</span><span>BH-CP-01 · v1.0 · October 2026</span></div>
+  </footer>
+
+</div>
+</body>
+</html>
