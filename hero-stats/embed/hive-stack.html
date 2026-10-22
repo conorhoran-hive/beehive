@@ -56,10 +56,10 @@
 
 .bh-a { max-width: 560px; }
 /* eye level sits at the bottom edge so every slab leans the same way */
-.bh-a-scene { position: relative; aspect-ratio: 1 / .88; perspective: 1600px; perspective-origin: 30% 100%; }
+.bh-a-scene { position: relative; aspect-ratio: 1 / .88; perspective: 2000px; perspective-origin: 30% 100%; }
 .bh-a-rig {
   position: absolute; inset: 0; transform-style: preserve-3d;
-  transform: translateY(6%) rotateX(calc(8deg + var(--ty, 0deg))) rotateY(calc(-18deg + var(--tx, 0deg)));
+  transform: translateY(4%) rotateX(calc(6deg + var(--ty, 0deg))) rotateY(calc(-12deg + var(--tx, 0deg)));
   transition: transform .8s cubic-bezier(.2, .7, .2, 1);
 }
 /* Honeycomb lattice far behind the slabs, faded at the edges. */
@@ -135,7 +135,7 @@
   .bh-a-3 { top: 70%; width: 66%; }
   .bh-a-4 { left: 52%; top: 8%; width: 46%; }
 }
-@media (prefers-reduced-motion: reduce) { .bh-a-rig { transform: translateY(6%) rotateX(8deg) rotateY(-18deg); } }
+@media (prefers-reduced-motion: reduce) { .bh-a-rig { transform: translateY(4%) rotateX(6deg) rotateY(-12deg); } }
 </style>
 
 <section class="bh bh-a" data-bh-tilt aria-label="Beehive at a glance">
