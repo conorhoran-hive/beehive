@@ -5,14 +5,12 @@
 <title>Beehive Company Profile</title>
 <link rel="stylesheet" href="../beehive.css">
 <style>
-  /* Profile-specific: denser layout to carry more content on one page */
-  .page > main { gap: 4.5mm; }
-  .profile-intro .stat-stack .value { font-size: 15pt; }
-  .stat-stack .item { padding: 2mm 0; }
-  .profile-intro .title { font-size: 19pt; color: var(--bh-white); }
-  .profile-intro .sub { font-size: 12pt; font-weight: 300; color: #FF6B63; margin-top: 2mm; line-height: 1.25; }
-  .creds { margin: 4mm 0; font-size: var(--fs-small); }
-  .qr { width: 20mm; height: 20mm; background: var(--bh-white); border-radius: 1.5mm; display: grid; place-items: center; color: var(--bh-mute); font-size: 6pt; }
+  /* Profile-specific: credentials line under the intro */
+  .creds-row { display: flex; gap: 0; margin-top: 4mm; font-size: var(--fs-small); font-weight: 500; color: var(--bh-navy); }
+  .creds-row span { padding: 0 4mm; border-left: 1px solid var(--bh-rule); }
+  .creds-row span:first-child { padding-left: 0; border-left: 0; }
+  .creds-row span::before { content: ""; display: inline-block; width: 1.4mm; height: 1.4mm; border-radius: 50%; background: var(--bh-red); margin-right: 2mm; vertical-align: middle; position: relative; top: -.2mm; }
+  .qr { width: 19mm; height: 19mm; background: var(--bh-white); border-radius: 1.5mm; display: grid; place-items: center; color: var(--bh-mute); font-size: 6pt; flex: none; }
 </style>
 </head>
 <body>
@@ -24,62 +22,57 @@
   </header>
 
   <main>
-    <section class="grid-sidebar">
-      <!-- Sidebar: positioning and proof points -->
-      <div class="panel panel-navy profile-intro">
-        <h1 class="title">Fast &amp; straightforward SME funding</h1>
-        <p class="sub">The GCC financier built for SMEs.</p>
-        <ul class="ticks creds">
-          <li>Regulated by the DFSA</li>
-          <li>An e&amp; enterprise company</li>
-          <li>Funding across the GCC</li>
-        </ul>
-        <div class="stat-stack">
-          <div class="item"><div class="kicker">Track record</div><div class="value">12 years</div><div class="label">funding SMEs in the GCC</div></div>
-          <div class="item"><div class="kicker">Reach</div><div class="value">3,300+</div><div class="label">SMEs funded</div></div>
-          <div class="item"><div class="kicker">Scale</div><div class="value">AED 5.4bn+</div><div class="label">provided to SMEs</div></div>
-          <div class="item"><div class="kicker">Credit quality</div><div class="value">&lt;2%</div><div class="label">non-performing financing since inception</div></div>
-        </div>
-      </div>
-
-      <!-- Products -->
-      <div class="stack">
-        <div>
-          <p class="eyebrow">You move fast. Your funding should, too.</p>
-          <p class="lede" style="margin-top:0">Two products, built for how SMEs actually grow.</p>
-        </div>
-
-        <div class="product">
-          <h3 class="h3">Term Finance</h3>
-          <p class="intro">Buying equipment. Opening a new branch. Growing the business. Term Finance gets you the funds to make it happen.</p>
-          <div class="facts">
-            <div><h4>Pricing</h4><dl><dt>Rate*</dt><dd>~11% per year</dd><dt>Fee</dt><dd>3.5% one-time</dd><dt>Tenor</dt><dd>12 or 24 months</dd></dl></div>
-            <div><h4>Eligibility</h4><dl><dt>Revenue</dt><dd>AED 2M+ a year</dd><dt>Facility</dt><dd>AED 200K – 2M</dd><dt>History</dt><dd>2+ years trading</dd></dl></div>
-          </div>
-          <div class="foot"><span>Funds received 48 hours after approval</span><a href="https://beehive.ae">Find out more →</a></div>
-        </div>
-
-        <div class="product">
-          <h3 class="h3">Working Capital Finance</h3>
-          <p class="intro">Unpaid invoices. Supplier payments. Payroll due. Working Capital Finance gets you the funds now, not when clients finally pay.</p>
-          <div class="facts">
-            <div><h4>Pricing</h4><dl><dt>Rate*</dt><dd>~1.25% per month</dd><dt>Fee</dt><dd>3.5% one-time</dd><dt>Tenor</dt><dd>90–120 days</dd></dl></div>
-            <div><h4>Eligibility</h4><dl><dt>Revenue</dt><dd>AED 7M+ a year</dd><dt>Facility</dt><dd>AED 500K – 2.5M</dd><dt>Invoices</dt><dd>B2B trading</dd></dl></div>
-          </div>
-          <div class="foot"><span>Funds received 48 hours after approval</span><a href="https://beehive.ae/wcf-smes">Find out more →</a></div>
-        </div>
-        <div>
-          <h2 class="h2">Application to funding in three steps</h2>
-          <div class="steps">
-            <div class="step"><div class="num">01</div><h3 class="h3">Speak to us</h3><p>A straight talk about your SME and what you need the funds for.</p></div>
-            <div class="step"><div class="num">02</div><h3 class="h3">Assess the business</h3><p>We assess your SME's standing and what you've built, and support what's next.</p></div>
-            <div class="step"><div class="num">03</div><h3 class="h3">Get the funds you need</h3><p>Once approved, funds are in your account within 48 hours.</p></div>
-          </div>
-        </div>
+    <section>
+      <p class="eyebrow">The GCC financier built for SMEs</p>
+      <h1 class="title">Fast, straightforward SME funding</h1>
+      <p class="lede">Beehive has funded SMEs across the GCC since 2014. We assess how a business performs, not the assets behind it, and we fund SMEs only.</p>
+      <div class="creds-row">
+        <span>Regulated by the DFSA</span>
+        <span>An e&amp; enterprise company</span>
+        <span>Shariah-compliant Islamic Window</span>
+        <span>Funding across the GCC</span>
       </div>
     </section>
 
-    <section class="stack" style="gap:2mm">
+    <section class="stats">
+      <div class="stat"><div class="value">12 years</div><div class="label">funding SMEs in the GCC</div></div>
+      <div class="stat"><div class="value">3,300+</div><div class="label">SMEs funded</div></div>
+      <div class="stat"><div class="value">AED 5.4bn+</div><div class="label">provided to SMEs</div></div>
+      <div class="stat"><div class="value">&lt;2%</div><div class="label">non-performing financing since inception</div></div>
+    </section>
+
+    <section>
+      <h2 class="h2">Our products</h2>
+      <table class="table compact">
+        <thead>
+          <tr>
+            <th></th>
+            <th class="hl">Term finance<span class="col-title">Build what's next</span></th>
+            <th class="hl">Working capital finance<span class="col-title">Bridge the wait</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th>Best for</th><td>Buying equipment, opening a new branch, growing the business</td><td>Unpaid invoices, supplier payments, payroll</td></tr>
+          <tr><th>Facility size</th><td>AED 200K – 2M</td><td>AED 500K – 2.5M</td></tr>
+          <tr><th>Rate*</th><td>~11% per year</td><td>~1.25% per month</td></tr>
+          <tr><th>Processing fee</th><td>3.5%, one-time</td><td>3.5%, one-time</td></tr>
+          <tr><th>Tenor</th><td>12 or 24 months</td><td>90–120 days</td></tr>
+          <tr><th>Eligibility</th><td>AED 2M+ annual revenue. 2+ years trading.</td><td>AED 7M+ annual revenue. B2B invoices.</td></tr>
+          <tr><th>Funds received</th><td>Within 48 hours of approval</td><td>Within 48 hours of approval</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2 class="h2">Application to funding in three steps</h2>
+      <div class="steps">
+        <div class="step"><div class="num">01</div><h3 class="h3">Speak to us</h3><p>A straight talk about your SME and what you need the funds for.</p></div>
+        <div class="step"><div class="num">02</div><h3 class="h3">Assess the business</h3><p>We assess your SME's standing and what you've built, and support what's next.</p></div>
+        <div class="step"><div class="num">03</div><h3 class="h3">Get the funds you need</h3><p>Once approved, funds are in your account within 48 hours.</p></div>
+      </div>
+    </section>
+
+    <section>
       <div class="logo-strip">
         <div class="label">Funded by Beehive</div>
         <div class="logos">
@@ -107,7 +100,7 @@
   <footer class="doc-footer">
     <p>*Rate is the percentage used to calculate your share of profit in a Shariah-compliant transaction. It is not an interest rate.</p>
     <p>Beehive P2P Limited is an e&amp; enterprise company, regulated by the DFSA (licence F004422) and certified by the Shariyah Review Bureau.</p>
-    <div class="meta"><span>beehive.ae</span><span>BH-CP-01 · v1.0 · October 2026</span></div>
+    <div class="meta"><span>beehive.ae</span><span>BH-CP-01 · v1.1 · October 2026</span></div>
   </footer>
 
 </div>
