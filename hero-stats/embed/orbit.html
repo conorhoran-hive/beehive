@@ -66,7 +66,8 @@
   transition: transform .8s cubic-bezier(.2, .7, .2, 1);
 }
 .bh-c-core {
-  /* flat-top hexagon: height = width × 0.866 */
+  /* flat-top hexagon with softened corners: height = width × 0.866 */
+  --bh-c-hex: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 86.6' preserveAspectRatio='none'%3E%3Cpath d='M19.5 9.5Q25.0 0.0 36.0 0.0L64.0 0.0Q75.0 0.0 80.5 9.5L94.5 33.8Q100.0 43.3 94.5 52.8L80.5 77.1Q75.0 86.6 64.0 86.6L36.0 86.6Q25.0 86.6 19.5 77.1L5.5 52.8Q0.0 43.3 5.5 33.8Z'/%3E%3C/svg%3E");
   position: absolute; left: 50%; top: var(--coinY);
   width: var(--hex); height: calc(var(--hex) * .866);
   margin: calc(var(--hex) * -.433) 0 0 calc(var(--hex) / -2);
@@ -77,15 +78,15 @@
 /* hexagon thickness: two darker layers stacked behind the face */
 .bh-c-core::before, .bh-c-core::after {
   content: ""; position: absolute; inset: 0; background: var(--bh-red-rim);
-  clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+  -webkit-mask: var(--bh-c-hex) center / 100% 100% no-repeat; mask: var(--bh-c-hex) center / 100% 100% no-repeat;
 }
 .bh-c-core::before { transform: translateZ(-1.4cqi); }
 .bh-c-core::after  { transform: translateZ(-.7cqi); }
 .bh-c-coin {
   position: absolute; inset: 0; transform: translateZ(.2cqi);
-  clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+  -webkit-mask: var(--bh-c-hex) center / 100% 100% no-repeat; mask: var(--bh-c-hex) center / 100% 100% no-repeat;
   display: grid; align-content: center; justify-items: center; text-align: center;
-  background: radial-gradient(circle at 32% 28%, #E0241B, var(--bh-red) 45%, var(--bh-red-deep));
+  background: linear-gradient(160deg, #D60A02, var(--bh-red) 55%, #A80600);
   color: var(--bh-on-red);
 }
 /* soft red glow on the surface behind the hexagon */
