@@ -44,6 +44,8 @@ A page has at most **one** solid red block (the CTA band or the statement panel)
 - Write "~11% per year", not "only 11%!". Avoid exclamation marks and superlatives.
 - Mark every rate with `*` and keep the rate footnote on the page. Rates are profit rates, not interest.
 - Keep money in one format: `AED 500K – 2.5M`, `AED 5.4bn+`.
+- Spell it "Shariah" (Shariah-compliant, Shariah Supervisory Board). The one exception is the certifier's proper name: "Shariyah Review Bureau".
+- Track record is counted from 2014 (12 years in 2026). Update it each January.
 
 **Always on the page:** the logo, the document-type label, the DFSA regulatory line, the reference and date.
 
