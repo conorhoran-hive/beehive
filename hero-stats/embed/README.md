@@ -1,6 +1,8 @@
-# Hive Stack — Webflow embed
+# Hero graphic — Webflow embeds
 
-Homepage hero graphic, Variant A. No images, fonts or libraries; one inline SVG (etisalat logo).
+Two homepage hero graphics are packaged here: Variant A **Hive Stack** (`hive-stack.*`) and Variant C **Orbit** (`orbit.*`). The steps are the same for both; swap the file name.
+
+Homepage hero graphic. No images, fonts or libraries; one inline SVG (etisalat logo).
 
 ## Option 1 — replace the current embed (recommended)
 
