@@ -8,6 +8,7 @@
   --bh-red: #C20700;
   --bh-red-deep: #8A0400;
   --bh-red-rim: #4E0200;
+  --bh-logo-red: #E00800;
   --bh-on-red: #FFFFFF;
   --bh-fg: #1B2152;
   --bh-muted: #5C6080;
@@ -66,11 +67,11 @@
   transition: transform .8s cubic-bezier(.2, .7, .2, 1);
 }
 .bh-c-core {
-  /* flat-top hexagon with softened corners: height = width × 0.866 */
-  --bh-c-hex: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 86.6' preserveAspectRatio='none'%3E%3Cpath d='M19.5 9.5Q25.0 0.0 36.0 0.0L64.0 0.0Q75.0 0.0 80.5 9.5L94.5 33.8Q100.0 43.3 94.5 52.8L80.5 77.1Q75.0 86.6 64.0 86.6L36.0 86.6Q25.0 86.6 19.5 77.1L5.5 52.8Q0.0 43.3 5.5 33.8Z'/%3E%3C/svg%3E");
+  /* the Beehive icon's hexagon, traced from the design system (flat top, soft corners) */
+  --bh-c-hex: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 52.29 47.87' preserveAspectRatio='none'%3E%3Cpath d='M18.84 47.87C14.89 47.87 11.25 45.74 9.28 42.29L1.97 29.50C0.00 26.06 0.00 21.81 1.97 18.36L9.28 5.57C11.25 2.12 14.89 0.00 18.84 0.00L33.46 0.00C37.40 0.00 41.04 2.12 43.01 5.57L50.32 18.36C52.29 21.81 52.29 26.06 50.32 29.50L43.01 42.29C41.04 45.74 37.40 47.87 33.46 47.87Z'/%3E%3C/svg%3E");
   position: absolute; left: 50%; top: var(--coinY);
-  width: var(--hex); height: calc(var(--hex) * .866);
-  margin: calc(var(--hex) * -.433) 0 0 calc(var(--hex) / -2);
+  width: var(--hex); height: calc(var(--hex) * 0.9154);
+  margin: calc(var(--hex) * -0.4577) 0 0 calc(var(--hex) / -2);
   transform-style: preserve-3d;
   animation: bh-c-sway 11s ease-in-out infinite alternate;
 }
@@ -86,14 +87,14 @@
   position: absolute; inset: 0; transform: translateZ(.2cqi);
   -webkit-mask: var(--bh-c-hex) center / 100% 100% no-repeat; mask: var(--bh-c-hex) center / 100% 100% no-repeat;
   display: grid; align-content: center; justify-items: center; text-align: center;
-  background: linear-gradient(160deg, #D60A02, var(--bh-red) 55%, #A80600);
+  background: var(--bh-logo-red);
   color: var(--bh-on-red);
 }
 /* soft red glow on the surface behind the hexagon */
 .bh-c-glow {
   position: absolute; left: 50%; top: var(--coinY); width: calc(var(--hex) * 1.5); height: calc(var(--hex) * 1.1);
   margin: calc(var(--hex) * -.45) 0 0 calc(var(--hex) * -.75); transform: translateZ(-4cqi);
-  background: radial-gradient(closest-side, rgba(194, 7, 0, .38), transparent);
+  background: radial-gradient(closest-side, rgba(224, 8, 0, .34), transparent);
 }
 .bh-c-coin .bh-unit { font-size: clamp(10px, 2.6cqi, 14px); color: rgba(255, 255, 255, .85); }
 .bh-c-coin .bh-num {
