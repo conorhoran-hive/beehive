@@ -47,6 +47,33 @@ A page has at most **one** solid red block (the CTA band or the statement panel)
 - Spell it "Shariah" (Shariah-compliant, Shariah Supervisory Board). The one exception is the certifier's proper name: "Shariyah Review Bureau".
 - Track record is counted from 2014 (12 years in 2026). Update it each January.
 
+**Plain English.** Write for someone who has never borrowed for a business. If a word needs a finance background, swap it or explain it in brackets the first time.
+- Short sentences, one idea each. Talk to the reader as "you" and about Beehive as "we".
+- Spell out abbreviations once per document: small and medium-sized businesses (SMEs), Dubai Financial Services Authority (DFSA).
+- Never shorten or reword the DFSA regulatory line. Any change to the rate footnote must be approved by Compliance first.
+
+| Instead of | Write |
+|---|---|
+| Facility size | How much |
+| Tenor | Time to repay |
+| Eligibility | Who can apply |
+| Annual revenue | Yearly sales |
+| Collateral / security / unsecured | Property or other assets / No property or other assets needed |
+| Cash margin | Cash deposit |
+| Assignment of invoices | Signing your invoices over to us |
+| Early settlement charges | A fee to repay early |
+| Disbursement / funds transferred | Money in your account |
+| Credit decision / assessment | An answer / we review your business |
+| Ageing reports | Lists of money owed to you and money you owe (ageing reports) |
+| Management accounts | Accounts signed by your management |
+| MoA | Company founding document (MoA) |
+| Tenancy contract | Office lease |
+| Non-performing financing | Funding not repaid as agreed |
+| B2B | Other businesses |
+| Since inception | Since 2014 |
+
+**Tables.** Every table needs something that separates its rows. `.table` shades every other row automatically. A head-to-head comparison uses `.table.versus` instead, which shades the Beehive column and groups rows under small headings. Use only one of the two on a table, never both.
+
 **Always on the page:** the logo, the document-type label, the DFSA regulatory line, the reference and date.
 
 ## Components
@@ -56,7 +83,7 @@ A page has at most **one** solid red block (the CTA band or the statement panel)
 | `.hero` + `.panel-red.statement` | Title with the brand statement panel |
 | `.stats` | Row of key figures (set `style="--cols:3"` for three) |
 | `.cards` | Grey benefit cards |
-| `.table` / `.table.compact` | Comparison table; `th.hl` / `td.hl` highlight the Beehive column, `td.dim` mutes the comparison |
+| `.table` / `.table.compact` | Table with every other row shaded; `th.hl` / `td.hl` highlight a column, `td.dim` mutes one. Add `.even-cols` to line up stacked tables, or `.no-stripe` to turn shading off |
 | `.table.versus` | Head-to-head table: tinted Beehive column with a red cap, rows grouped with `tr.group` (see `why-beehive.html`) |
 | `.summary` | Product summaries under a navy rule |
 | `.product` | Product card with pricing and eligibility |

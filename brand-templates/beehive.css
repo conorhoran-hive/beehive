@@ -16,6 +16,7 @@
   --bh-mute: #9A9DAA;         /* Captions, footnotes */
   --bh-rule: #E0E1E5;         /* Hairlines */
   --bh-surface: #F2F2F4;      /* Cards, panels */
+  --bh-stripe: #F4F4F7;       /* Alternate table rows */
   --bh-white: #FFFFFF;
 
   /* Type — swap --bh-font for the licensed brand face when available */
@@ -225,6 +226,13 @@ body {
 .table tbody th { font-weight: 400; color: var(--bh-slate); width: 27%; }
 .table td.hl { color: var(--bh-navy); font-weight: 500; }
 .table td.dim { color: var(--bh-slate); }
+/* Every other row has a light fill so rows are easy to follow.
+   Opt out with .table.no-stripe. .table.versus fills a column instead. */
+.table th:first-child, .table td:first-child { padding-left: 3mm; }
+.table:not(.no-stripe):not(.versus) tbody tr:nth-child(even) > * { background: var(--bh-stripe); }
+/* .even-cols: label column plus equal value columns, so stacked tables line up */
+.table.even-cols tbody th { width: 24%; }
+.table.even-cols td, .table.even-cols thead th:not(:first-child) { width: 38%; }
 .table.compact th, .table.compact td { padding-top: 1.3mm; padding-bottom: 1.3mm; }
 
 /* ---------- Product summary ---------------------------------------------- */
