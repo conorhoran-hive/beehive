@@ -304,3 +304,28 @@ body {
 .grid-sidebar { display: grid; grid-template-columns: 64mm 1fr; gap: var(--gap); }
 .stack { display: flex; flex-direction: column; gap: var(--gap); }
 .mt-auto { margin-top: auto; }
+
+/* ---------- Head-to-head comparison -------------------------------------- */
+/* .table.versus: the highlighted column sits on a tinted band with a red cap,
+   rows are grouped under small section labels. */
+
+.table.versus { border-collapse: separate; border-spacing: 0; }
+.table.versus th.hl, .table.versus td.hl { background: var(--bh-surface); padding-left: 4mm; padding-right: 4mm; }
+.table.versus thead th { vertical-align: bottom; }
+.table.versus thead th .col-title { margin-top: .8mm; }
+.table.versus thead th.hl { border-top: 2px solid var(--bh-red); border-radius: 0; padding-top: 3mm; }
+.table.versus thead th.hl .col-title { color: var(--bh-navy); font-weight: 400; }
+.table.versus tbody tr:last-child td.hl { border-bottom: 1px solid var(--bh-navy); }
+.table.versus tr.group th {
+  font-size: var(--fs-small);
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--bh-navy);
+  padding-top: 3.2mm;
+  padding-bottom: 1.2mm;
+  border-bottom: 1px solid var(--bh-rule);
+}
+.table.versus tr.group td.hl { padding-top: 3.2mm; padding-bottom: 1.2mm; }
+.table.versus tbody th { width: 22%; }
+.table.versus td.dim { width: 36%; }

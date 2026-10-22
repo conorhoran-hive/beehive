@@ -57,6 +57,7 @@ A page has at most **one** solid red block (the CTA band or the statement panel)
 | `.stats` | Row of key figures (set `style="--cols:3"` for three) |
 | `.cards` | Grey benefit cards |
 | `.table` / `.table.compact` | Comparison table; `th.hl` / `td.hl` highlight the Beehive column, `td.dim` mutes the comparison |
+| `.table.versus` | Head-to-head table: tinted Beehive column with a red cap, rows grouped with `tr.group` (see `why-beehive.html`) |
 | `.summary` | Product summaries under a navy rule |
 | `.product` | Product card with pricing and eligibility |
 | `.steps` | Numbered 01 / 02 / 03 process |
