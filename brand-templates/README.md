@@ -1,5 +1,7 @@
 # Beehive document templates
 
+> These rules and templates are also packaged as the `beehive-documents` skill in `.claude/skills/beehive-documents/` (zip in `dist/`), so Claude follows them in chat, design and code. When you change a template, the stylesheet or a figure here, copy the change into the skill's `kit/` and `references/facts.md`, then rebuild the zip.
+
 One design system for every printed or PDF collateral piece: product guides, comparisons, company profiles, fact sheets and internal briefs. Every document is a single A4 page (or several) built from the same stylesheet, so the colour, type and layout stay consistent.
 
 ```

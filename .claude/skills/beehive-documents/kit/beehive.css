@@ -1,0 +1,339 @@
+/* ==========================================================================
+   Beehive document system
+   One stylesheet for every printed / PDF collateral piece (A4).
+   Change a token here and every template follows.
+   ========================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap");
+
+:root {
+  /* Brand colour — sampled from current collateral */
+  --bh-red: #E00800;          /* Primary accent: eyebrows, highlights, CTA band */
+  --bh-red-tint: #FCEBEB;     /* Soft red surface, used sparingly */
+  --bh-navy: #0F1430;         /* Ink: headings and body text */
+  --bh-navy-deep: #181F49;    /* Dark panels */
+  --bh-slate: #626678;        /* Secondary text, table labels */
+  --bh-mute: #9A9DAA;         /* Captions, footnotes */
+  --bh-rule: #E0E1E5;         /* Hairlines */
+  --bh-surface: #F2F2F4;      /* Cards, panels */
+  --bh-stripe: #F4F4F7;       /* Alternate table rows */
+  --bh-white: #FFFFFF;
+
+  /* Type — swap --bh-font for the licensed brand face when available */
+  --bh-font: "Inter", "Helvetica Neue", Arial, sans-serif;
+
+  --fs-display: 26pt;   /* Page title */
+  --fs-h2: 13pt;        /* Section title */
+  --fs-h3: 9.5pt;      /* Card / column title */
+  --fs-lede: 10pt;      /* Intro paragraph */
+  --fs-body: 8pt;    /* Body and tables */
+  --fs-small: 7pt;    /* Captions */
+  --fs-legal: 6pt;    /* Footnotes, disclosures */
+  --fs-stat: 17pt;      /* Key figures */
+
+  /* Layout */
+  --page-w: 210mm;
+  --page-h: 297mm;
+  --margin-x: 17mm;
+  --margin-top: 12mm;
+  --margin-bottom: 11mm;
+  --gap: 5mm;
+  --radius: 3.5mm;
+}
+
+@page { size: A4; margin: 0; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+body {
+  font-family: var(--bh-font);
+  font-size: var(--fs-body);
+  line-height: 1.45;
+  color: var(--bh-navy);
+  background: #D9DAE0;
+}
+
+/* ---------- Page frame ---------------------------------------------------- */
+
+.page {
+  width: var(--page-w);
+  height: var(--page-h);
+  margin: 10mm auto;
+  padding: var(--margin-top) var(--margin-x) var(--margin-bottom);
+  background: var(--bh-white);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 2px 18px rgba(15, 20, 48, .12);
+}
+@media print {
+  body { background: none; }
+  .page { margin: 0; box-shadow: none; break-after: page; }
+}
+
+.page > main { flex: 1; display: flex; flex-direction: column; gap: 5.5mm; }
+
+/* Tabular figures where numbers line up */
+.stat .value { font-feature-settings: "tnum" 1; }
+
+/* ---------- Header -------------------------------------------------------- */
+
+.doc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 7mm;
+}
+.doc-header .logo { height: 10.5mm; display: block; }
+.doc-type {
+  font-size: var(--fs-small);
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--bh-slate);
+  padding-top: 1mm;
+  text-align: right;
+}
+.doc-type span { color: var(--bh-red); }
+
+/* ---------- Titles -------------------------------------------------------- */
+
+.eyebrow {
+  font-size: var(--fs-small);
+  font-weight: 500;
+  letter-spacing: .02em;
+  color: var(--bh-red);
+  margin-bottom: 2mm;
+}
+.title {
+  font-size: var(--fs-display);
+  font-weight: 300;
+  line-height: 1.08;
+  letter-spacing: -.02em;
+  max-width: 150mm;
+}
+.lede {
+  font-size: var(--fs-lede);
+  font-weight: 400;
+  line-height: 1.45;
+  color: var(--bh-navy);
+  max-width: 140mm;
+  margin-top: 4mm;
+}
+.h2 {
+  font-size: var(--fs-h2);
+  font-weight: 400;
+  letter-spacing: -.01em;
+  margin-bottom: 3mm;
+}
+.h3 { font-size: var(--fs-h3); font-weight: 500; margin-bottom: 1.2mm; }
+.muted { color: var(--bh-slate); }
+.red { color: var(--bh-red); }
+.strong { font-weight: 500; }
+
+/* Hero: title block + optional side panel */
+.hero { display: grid; grid-template-columns: 1fr 58mm; gap: 8mm; align-items: stretch; }
+.hero.no-panel { grid-template-columns: 1fr; }
+
+/* ---------- Panels -------------------------------------------------------- */
+
+.panel {
+  border-radius: var(--radius);
+  padding: 6mm;
+  background: var(--bh-surface);
+}
+.panel-navy { background: var(--bh-navy-deep); color: var(--bh-white); }
+.panel-red  { background: var(--bh-red); color: var(--bh-white); }
+.panel-tint { background: var(--bh-red-tint); }
+
+/* Statement panel: three-word brand line, bottom-aligned */
+.statement {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  font-size: 13pt;
+  font-weight: 300;
+  line-height: 1.15;
+  letter-spacing: -.01em;
+  position: relative;
+  overflow: hidden;
+}
+.statement::before {           /* brand facet — navy corner shape */
+  content: "";
+  position: absolute;
+  top: 0; right: 0;
+  width: 62%; height: 58%;
+  background: var(--bh-navy-deep);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 70%);
+}
+.statement > * { position: relative; }
+
+/* ---------- Key figures --------------------------------------------------- */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 4), 1fr);
+  border-top: 1px solid var(--bh-navy);
+  border-bottom: 1px solid var(--bh-rule);
+}
+.stat { padding: 3mm 3mm 3mm 0; }
+.stat + .stat { padding-left: 3.5mm; border-left: 1px solid var(--bh-rule); }
+.stat .value { font-size: var(--fs-stat); font-weight: 300; letter-spacing: -.02em; line-height: 1.1; white-space: nowrap; }
+.stat .label { font-size: var(--fs-small); color: var(--bh-slate); margin-top: 1.5mm; }
+
+/* On dark panels stats stack vertically */
+.panel-navy .stat-stack .value { font-size: var(--fs-stat); font-weight: 300; }
+.stat-stack { display: flex; flex-direction: column; }
+.stat-stack .item { padding: 2.5mm 0; border-top: 1px solid rgba(255,255,255,.18); }
+.stat-stack .item:first-child { border-top: 0; padding-top: 0; }
+.stat-stack .kicker { font-size: var(--fs-small); color: #FF6B63; font-weight: 500; }
+.stat-stack .label { font-size: var(--fs-small); opacity: .78; margin-top: .6mm; }
+
+/* ---------- Cards --------------------------------------------------------- */
+
+.cards { display: grid; grid-template-columns: repeat(var(--cols, 3), 1fr); gap: 4mm; }
+.card { background: var(--bh-surface); border-radius: var(--radius); padding: 3.5mm 4.5mm; }
+.card p { color: var(--bh-slate); }
+
+/* ---------- Tables -------------------------------------------------------- */
+
+.table { width: 100%; border-collapse: collapse; }
+.table th, .table td {
+  text-align: left;
+  vertical-align: top;
+  padding: 1.7mm 4mm 1.7mm 0;
+  border-bottom: 1px solid var(--bh-rule);
+}
+.table thead th {
+  font-size: var(--fs-small);
+  font-weight: 500;
+  color: var(--bh-slate);
+  border-bottom: 1px solid var(--bh-navy);
+  padding-bottom: 2mm;
+}
+.table thead th.hl { color: var(--bh-red); }
+.table thead th .col-title {          /* large column headline, optional */
+  display: block;
+  font-size: 12.5pt;
+  font-weight: 300;
+  color: var(--bh-navy);
+  letter-spacing: -.01em;
+  margin-top: 1.2mm;
+}
+.table tbody th { font-weight: 400; color: var(--bh-slate); width: 27%; }
+.table td.hl { color: var(--bh-navy); font-weight: 500; }
+.table td.dim { color: var(--bh-slate); }
+/* Every other row has a light fill so rows are easy to follow.
+   Opt out with .table.no-stripe. .table.versus fills a column instead. */
+.table th:first-child, .table td:first-child { padding-left: 3mm; }
+.table:not(.no-stripe):not(.versus) tbody tr:nth-child(even) > * { background: var(--bh-stripe); }
+/* .even-cols: label column plus equal value columns, so stacked tables line up */
+.table.even-cols tbody th { width: 24%; }
+.table.even-cols td, .table.even-cols thead th:not(:first-child) { width: 38%; }
+.table.compact th, .table.compact td { padding-top: 1.3mm; padding-bottom: 1.3mm; }
+
+/* ---------- Product summary ---------------------------------------------- */
+
+.summary { display: grid; grid-template-columns: repeat(var(--cols, 2), 1fr); gap: 8mm; }
+.summary > div { border-top: 1px solid var(--bh-navy); padding-top: 3mm; }
+.summary p { color: var(--bh-slate); }
+
+/* Product card: title, facts and eligibility in two columns */
+.product { background: var(--bh-surface); border-radius: var(--radius); padding: 4mm 5mm; }
+.product .h3 { font-size: 11pt; color: var(--bh-red); font-weight: 500; }
+.product .intro { color: var(--bh-slate); margin-bottom: 2.5mm; }
+.product .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+.product .facts h4 { font-size: var(--fs-small); font-weight: 600; margin-bottom: 1mm; }
+.product dl { display: grid; grid-template-columns: 16mm 1fr; column-gap: 3mm; row-gap: .8mm; }
+.product dt { color: var(--bh-slate); }
+.product dd { font-weight: 500; }
+.product .foot {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 2.5mm; padding-top: 2mm; border-top: 1px solid var(--bh-rule);
+  font-size: var(--fs-small); color: var(--bh-slate);
+}
+.product .foot a { color: var(--bh-red); font-weight: 500; text-decoration: none; }
+
+/* ---------- Steps --------------------------------------------------------- */
+
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; counter-reset: step; }
+.step { border-top: 1px solid var(--bh-navy); padding-top: 3mm; }
+.step .num { font-size: var(--fs-small); font-weight: 600; color: var(--bh-red); letter-spacing: .06em; }
+.step .h3 { margin-top: 1.5mm; }
+.step p { color: var(--bh-slate); }
+
+/* ---------- Lists --------------------------------------------------------- */
+
+.ticks { list-style: none; display: grid; gap: 1.6mm; }
+.ticks li { padding-left: 4.5mm; position: relative; }
+.ticks li::before {
+  content: ""; position: absolute; left: 0; top: 1.5mm;
+  width: 1.8mm; height: 1.8mm; border-radius: 50%; background: var(--bh-red);
+}
+.panel-navy .ticks li::before { background: #FF6B63; }
+
+/* ---------- Logo strip ---------------------------------------------------- */
+
+.logo-strip { display: flex; align-items: center; gap: 6mm; border-top: 1px solid var(--bh-rule); border-bottom: 1px solid var(--bh-rule); padding: 3mm 0; }
+.logo-strip .label { font-size: var(--fs-small); color: var(--bh-slate); white-space: nowrap; padding-right: 5mm; border-right: 1px solid var(--bh-rule); }
+.logo-strip .logos { display: flex; flex: 1; justify-content: space-between; align-items: center; gap: 4mm; }
+.logo-strip img { height: 6mm; filter: grayscale(1); opacity: .75; }
+.logo-slot { font-size: var(--fs-small); font-weight: 600; color: var(--bh-mute); letter-spacing: .02em; white-space: nowrap; }
+
+/* ---------- Call to action ----------------------------------------------- */
+
+.cta {
+  display: flex; justify-content: space-between; align-items: center; gap: 8mm;
+  background: var(--bh-red); color: var(--bh-white);
+  border-radius: var(--radius);
+  padding: 5mm 6mm;
+  margin-top: auto;
+}
+.cta .message { font-size: 11.5pt; font-weight: 400; line-height: 1.3; max-width: 115mm; }
+.cta .contact { font-size: var(--fs-body); font-weight: 500; text-align: right; line-height: 1.6; white-space: nowrap; }
+.cta.navy { background: var(--bh-navy-deep); }
+
+/* ---------- Footer -------------------------------------------------------- */
+
+.doc-footer {
+  margin-top: 4mm;
+  font-size: var(--fs-legal);
+  line-height: 1.55;
+  color: var(--bh-mute);
+}
+.doc-footer .meta { display: flex; justify-content: space-between; margin-top: 1.5mm; }
+
+/* ---------- Utilities ----------------------------------------------------- */
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); }
+.grid-sidebar { display: grid; grid-template-columns: 64mm 1fr; gap: var(--gap); }
+.stack { display: flex; flex-direction: column; gap: var(--gap); }
+.mt-auto { margin-top: auto; }
+
+/* ---------- Head-to-head comparison -------------------------------------- */
+/* .table.versus: the highlighted column sits on a tinted band with a red cap,
+   rows are grouped under small section labels. */
+
+.table.versus { border-collapse: separate; border-spacing: 0; }
+.table.versus th.hl, .table.versus td.hl { background: var(--bh-surface); padding-left: 4mm; padding-right: 4mm; }
+.table.versus thead th { vertical-align: bottom; }
+.table.versus thead th .col-title { margin-top: .8mm; }
+.table.versus thead th.hl { border-top: 2px solid var(--bh-red); border-radius: 0; padding-top: 3mm; }
+.table.versus thead th.hl .col-title { color: var(--bh-navy); font-weight: 400; }
+.table.versus tbody tr:last-child td.hl { border-bottom: 1px solid var(--bh-navy); }
+.table.versus tr.group th {
+  font-size: var(--fs-small);
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--bh-navy);
+  padding-top: 3.2mm;
+  padding-bottom: 1.2mm;
+  border-bottom: 1px solid var(--bh-rule);
+}
+.table.versus tr.group td.hl { padding-top: 3.2mm; padding-bottom: 1.2mm; }
+.table.versus tbody th { width: 22%; }
+.table.versus td.dim { width: 36%; }
