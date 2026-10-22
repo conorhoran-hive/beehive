@@ -54,17 +54,18 @@
   .bh *, .bh *::before, .bh *::after { animation: none !important; transition: none !important; }
 }
 
-.bh-a { max-width: 560px; }
-/* eye level sits at the bottom edge so every slab leans the same way */
-.bh-a-scene { position: relative; aspect-ratio: 1 / .88; perspective: 2000px; perspective-origin: 30% 100%; }
-.bh-a-rig {
-  position: absolute; inset: 0; transform-style: preserve-3d;
-  transform: translateY(4%) rotateX(calc(6deg + var(--ty, 0deg))) rotateY(calc(-12deg + var(--tx, 0deg)));
-  transition: transform .8s cubic-bezier(.2, .7, .2, 1);
+/* Each slab carries its own perspective(), so all four share exactly the
+   same angle wherever they sit. --tx / --ty come from the cursor script. */
+.bh-a {
+  max-width: 560px;
+  --bh-a-tilt: perspective(700px) rotateX(calc(6deg + var(--ty, 0deg))) rotateY(calc(-12deg + var(--tx, 0deg)));
 }
+.bh-a-scene { position: relative; aspect-ratio: 1 / .88; }
+.bh-a-rig { position: absolute; inset: 0; }
 /* Honeycomb lattice far behind the slabs, faded at the edges. */
 .bh-a-hive {
-  position: absolute; inset: -4% -2% 0 6%; transform: translateZ(-140px);
+  position: absolute; inset: -4% -2% 0 6%; z-index: 0;
+  transform: var(--bh-a-tilt) scale(.94); transition: transform .8s cubic-bezier(.2, .7, .2, 1);
   -webkit-mask-image: radial-gradient(closest-side, #000 30%, transparent 100%);
           mask-image: radial-gradient(closest-side, #000 30%, transparent 100%);
 }
@@ -73,7 +74,11 @@
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100'%3E%3Cpath d='M28 66L0 50V16L28 0l28 16v34L28 66v34M28 0v0' fill='none' stroke='%23000' stroke-width='1.2'/%3E%3Cpath d='M28 34L0 50v34l28 16 28-16V50z' fill='none' stroke='%23000' stroke-width='1.2'/%3E%3C/svg%3E") 0 0 / 40px 71px;
           mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100'%3E%3Cpath d='M28 66L0 50V16L28 0l28 16v34L28 66v34M28 0v0' fill='none' stroke='%23000' stroke-width='1.2'/%3E%3Cpath d='M28 34L0 50v34l28 16 28-16V50z' fill='none' stroke='%23000' stroke-width='1.2'/%3E%3C/svg%3E") 0 0 / 40px 71px;
 }
-.bh-a-slab { position: absolute; transform: translateZ(var(--z)); transform-style: preserve-3d; }
+.bh-a-slab {
+  position: absolute; z-index: var(--layer);
+  transform: var(--bh-a-tilt) scale(var(--s, 1));
+  transition: transform .8s cubic-bezier(.2, .7, .2, 1);
+}
 .bh-a-float { animation: bh-a-float 7s ease-in-out var(--d, 0s) infinite alternate; }
 @keyframes bh-a-float {
   from { transform: translate3d(0, -1.1cqi, 0); }
@@ -92,10 +97,10 @@
 .bh-a-face .bh-lab { font-size: clamp(12px, 3cqi, 16px); margin-top: 1.4cqi; }
 .bh-a-face .bh-eyebrow { font-size: clamp(10px, 2.1cqi, 12px); margin-bottom: 1.6cqi; }
 
-.bh-a-1 { --z: 40px;  --d: -1s;   left: 0;   top: 7%;  width: 50%; }
-.bh-a-2 { --z: 120px; --d: -3.5s; left: 34%; top: 32%; width: 64%; }
-.bh-a-3 { --z: 70px;  --d: -5s;   left: 5%;  top: 66%; width: 60%; }
-.bh-a-4 { --z: 140px; --d: -2s;   left: 57%; top: 10%; width: 41%; }
+.bh-a-1 { --layer: 1; --s: .97;  --d: -1s;   left: 0;   top: 7%;  width: 50%; }
+.bh-a-2 { --layer: 3; --s: 1.02; --d: -3.5s; left: 34%; top: 32%; width: 62%; }
+.bh-a-3 { --layer: 2; --s: .99;  --d: -5s;   left: 5%;  top: 66%; width: 60%; }
+.bh-a-4 { --layer: 4; --s: 1;    --d: -2s;   left: 57%; top: 10%; width: 41%; }
 
 .bh-a-2 .bh-a-face {
   background: linear-gradient(150deg, var(--bh-red), var(--bh-red-deep));
@@ -135,7 +140,6 @@
   .bh-a-3 { top: 70%; width: 66%; }
   .bh-a-4 { left: 52%; top: 8%; width: 46%; }
 }
-@media (prefers-reduced-motion: reduce) { .bh-a-rig { transform: translateY(4%) rotateX(6deg) rotateY(-12deg); } }
 </style>
 
 <section class="bh bh-a" data-bh-tilt aria-label="Beehive at a glance">
