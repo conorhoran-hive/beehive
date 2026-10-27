@@ -1,0 +1,2854 @@
+<!DOCTYPE html><html lang="en" style="--accent: #E00800;"><head>
+<!-- Google Tag Manager -->
+<!-- GTM intentionally NOT loaded inside the iframe — it would load the same
+     container (GTM-WBNWW2X9) as the parent site and double-count. Events are
+     relayed to the parent page's dataLayer via postMessage instead. -->
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Beehive — Business Eligibility Check</title>
+<script src="https://t.contentsquare.net/uxa/24e5fc3c98aa4.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>html,body{overflow:hidden}</style>
+
+<!--
+  ============================================================================
+  BEEHIVE LEAD MAGNET — Eligibility Check Form (Webflow Self-Contained)
+  ============================================================================
+  Single-file build. All JSX components inlined below.
+  - Fonts: uses Suisse Intl from the Webflow site (no @font-face needed).
+  - HUBSPOT CONFIG: search "HUBSPOT_CONFIG" below to set portal + form GUID.
+  - Eligibility logic: search "qualifyLead" below.
+  Paste this entire file into a Webflow Embed (or page Custom Code).
+  ============================================================================
+-->
+
+<style>
+  :root {
+    /* Beehive palette */
+    --shine-white: #FFFFFF;
+    --sunrise-red: #E00800;
+    --deep-ocean: #0F1430;
+    --emerald: #47CB6C;
+    --burgundy: #4B0F1E;
+
+    /* Theme tokens — overridden by Tweaks */
+    --bg: var(--deep-ocean);
+    --surface: rgba(255,255,255,0.04);
+    --surface-hover: rgba(255,255,255,0.08);
+    --surface-selected: rgba(224,8,0,0.12);
+    --border: rgba(255,255,255,0.12);
+    --border-strong: rgba(255,255,255,0.22);
+    --border-selected: var(--sunrise-red);
+    --text: #FFFFFF;
+    --text-muted: rgba(255,255,255,0.62);
+    --text-faint: rgba(255,255,255,0.42);
+    --accent: var(--sunrise-red);
+    --accent-text: #FFFFFF;
+    --success: var(--emerald);
+
+    --radius-sm: 10px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-xl: 32px;
+
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+
+    --ease-onward: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  * { box-sizing: border-box; }
+
+  /* Scope all styles to #beehive-form so Webflow's page styles aren't affected */
+  #beehive-form {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    /* Subtle hexagon graphic — brand spec: never show more than 2 corners */
+    background-image:
+      radial-gradient(ellipse at 100% -10%, rgba(224,8,0,0.18) 0%, transparent 55%),
+      radial-gradient(ellipse at -10% 110%, rgba(71,203,108,0.08) 0%, transparent 50%);
+    background-attachment: fixed;
+  }
+
+  body.theme-light {
+    --bg: #FFFFFF;
+    --surface: #FFFFFF;
+    --surface-hover: #F7F6F2;
+    --surface-selected: rgba(224,8,0,0.05);
+    --border: rgba(15,20,48,0.10);
+    --border-strong: rgba(15,20,48,0.18);
+    --border-selected: var(--sunrise-red);
+    --text: var(--deep-ocean);
+    --text-muted: rgba(15,20,48,0.64);
+    --text-faint: rgba(15,20,48,0.44);
+    --accent: var(--sunrise-red);
+    background-image: none;
+  }
+
+  /* Form container — sized to fit inside Webflow page flow, not full viewport */
+  #beehive-form .stage {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
+    padding-top: 72px;
+  }
+  #beehive-form .main {
+    padding-bottom: 24px !important;
+  }
+  #beehive-form .footer-nav {
+    position: static !important;
+    background: transparent !important;
+    padding-top: 8px !important;
+  }
+
+  /* Restart row (shown above progress when going back is possible) */
+  .restart-row {
+    display: flex;
+    justify-content: flex-end;
+    padding: 14px 20px 0;
+  }
+  .restart-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 200ms;
+  }
+  .restart-btn:hover {
+    color: var(--text);
+    border-color: var(--border-strong);
+    background: var(--surface);
+  }
+
+  /* Progress */
+  .progress-wrap {
+    padding: 0 20px 8px;
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 12px;
+    color: var(--text-faint);
+    margin-bottom: 8px;
+  }
+  #beehive-form .stage.is-done{min-height:600px;box-sizing:border-box;justify-content:center}
+  #beehive-form .stage.is-done > .main{flex:0 0 auto}
+  .progress-meta strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+  .progress-bar {
+    height: 3px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 999px;
+    transition: width 600ms var(--ease-onward);
+    position: relative;
+  }
+  .progress-fill::after {
+    /* Onward Motion glow */
+    content: '';
+    position: absolute;
+    right: -8px; top: -3px; bottom: -3px;
+    width: 16px;
+    background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+    opacity: 0.6;
+  }
+
+  /* Stepper variant */
+  .stepper {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .stepper-dot {
+    flex: 1;
+    height: 3px;
+    background: var(--border);
+    border-radius: 999px;
+    transition: background 400ms var(--ease-onward);
+  }
+  .stepper-dot.done { background: var(--accent); }
+  .stepper-dot.current { background: var(--text); }
+
+  /* Main content */
+  #beehive-form .main {
+    flex: 1;
+    padding: 40px 20px 60px;
+    max-width: 560px;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .step {
+    animation: stepFade 500ms var(--ease-onward) both;
+  }
+  @keyframes stepFade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  /* Smooth staggered rise of each element within a step */
+  @media (prefers-reduced-motion: no-preference) {
+    .step > * {
+      animation: stepRise 720ms var(--ease-onward) backwards;
+    }
+    .step > *:nth-child(1) { animation-delay: 60ms; }
+    .step > *:nth-child(2) { animation-delay: 180ms; }
+    .step > *:nth-child(3) { animation-delay: 300ms; }
+    .step > *:nth-child(4) { animation-delay: 410ms; }
+    .step > *:nth-child(5) { animation-delay: 510ms; }
+    .step > *:nth-child(n+6) { animation-delay: 590ms; }
+  }
+  @keyframes stepRise {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .eyebrow-dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--accent);
+  }
+
+  h1.q-title {
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    margin: 0 0 12px;
+    text-wrap: balance;
+  }
+  .q-sub {
+    color: var(--text-muted);
+    font-size: 17px;
+    line-height: 1.5;
+    margin: 0 0 32px;
+    text-wrap: pretty;
+  }
+
+  /* Card-style options */
+  .options {
+    display: grid;
+    gap: 10px;
+  }
+  .options.cols-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+  .opt {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 18px 18px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text);
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: all 200ms var(--ease-onward);
+    position: relative;
+    overflow: hidden;
+  }
+  .opt:hover {
+    background: var(--surface-hover);
+    border-color: var(--border-strong);
+    transform: translateY(-1px);
+  }
+  .opt.selected {
+    background: var(--surface-selected);
+    border-color: var(--border-selected);
+  }
+  .opt.selected::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 1px var(--border-selected);
+    pointer-events: none;
+  }
+  .opt-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: var(--surface-hover);
+    display: grid; place-items: center;
+    flex-shrink: 0;
+    color: var(--text);
+  }
+  .opt.selected .opt-icon {
+    background: var(--accent);
+    color: var(--accent-text);
+  }
+  .opt-label {
+    flex: 1;
+    line-height: 1.2;
+  }
+  .opt-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-top: 2px;
+  }
+  .opt-check {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border-strong);
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    transition: all 200ms;
+  }
+  .opt.selected .opt-check {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .opt.selected .opt-check::after {
+    content: '';
+    width: 6px; height: 10px;
+    border-right: 2px solid var(--accent-text);
+    border-bottom: 2px solid var(--accent-text);
+    transform: rotate(45deg) translate(-1px, -1px);
+  }
+
+  /* Slider */
+  .slider-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px 24px 24px;
+  }
+  .slider-value {
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 4px;
+    font-variant-numeric: tabular-nums;
+  }
+  .slider-value-prefix {
+    font-size: 22px;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-right: 4px;
+  }
+  .slider-value-suffix {
+    font-size: 18px;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-left: 6px;
+  }
+  .slider-caption {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+  }
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 4px;
+    background: var(--border);
+    border-radius: 999px;
+    outline: none;
+    margin: 0 0 12px;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--text);
+    cursor: grab;
+    border: 4px solid var(--bg);
+    box-shadow: 0 0 0 1px var(--border-strong), 0 4px 16px rgba(0,0,0,0.3);
+    transition: transform 150ms;
+  }
+  input[type="range"]::-webkit-slider-thumb:active { cursor: grabbing; transform: scale(1.1); }
+  input[type="range"]::-moz-range-thumb {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--text);
+    cursor: grab;
+    border: 4px solid var(--bg);
+    box-shadow: 0 0 0 1px var(--border-strong), 0 4px 16px rgba(0,0,0,0.3);
+  }
+  .slider-track-fill {
+    position: relative;
+    height: 4px;
+    margin-top: -16px;
+    margin-bottom: 12px;
+    pointer-events: none;
+    border-radius: 999px;
+    background: var(--accent);
+    transition: none;
+  }
+  .slider-bounds {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text-faint);
+  }
+
+  /* Segmented */
+  .segmented {
+    display: flex;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 4px;
+    gap: 4px;
+  }
+  .seg-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 12px 16px;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 200ms;
+  }
+  .seg-btn:hover { color: var(--text); }
+  .seg-btn.active {
+    background: var(--text);
+    color: var(--bg);
+  }
+
+  /* Text inputs */
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .field-label {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+  .input {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 16px 18px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    width: 100%;
+    transition: all 200ms;
+  }
+  .input::placeholder { color: var(--text-faint); }
+  .input:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: var(--surface-hover);
+  }
+  .input.error { border-color: var(--sunrise-red); }
+  .input-error {
+    color: var(--sunrise-red);
+    font-size: 12px;
+    margin-top: 4px;
+  }
+
+  .phone-row {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 8px;
+  }
+
+  /* Terms checkbox row */
+  .tc-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 14px 16px;
+    margin-top: 18px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    cursor: pointer;
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .tc-row:hover { border-color: var(--border-strong); }
+  .tc-row.has-err { border-color: var(--sunrise-red); }
+  .tc-row input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+    margin-top: 1px;
+    border: 1.5px solid var(--border-strong);
+    border-radius: 4px;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+    transition: all .12s ease;
+  }
+  .tc-row input[type="checkbox"]:checked {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .tc-row input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 4px; top: 1px;
+    width: 5px; height: 9px;
+    border: solid var(--accent-text);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  .tc-text {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  .tc-text a {
+    color: var(--text);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .tc-err {
+    color: var(--sunrise-red);
+    font-size: 12px;
+    margin-top: 6px;
+    padding-left: 4px;
+  }
+
+  /* Hide the step footer while the industry search sheet is open */
+  body.combo-open #beehive-form .footer-nav { display: none; }
+
+  /* Footer / nav — absolute inside .stage so it sits at the bottom of the form, not the viewport */
+  #beehive-form .footer-nav {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 16px 20px calc(16px + env(safe-area-inset-bottom));
+    background: linear-gradient(to top, var(--bg) 60%, transparent);
+    z-index: 10;
+    pointer-events: none;
+  }
+  .footer-inner-col {
+    max-width: 560px;
+    margin: 0 auto;
+    pointer-events: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .footer-inner {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .btn {
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 16px 24px;
+    border: none;
+    cursor: pointer;
+    transition: all 200ms var(--ease-onward);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    letter-spacing: -0.01em;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--accent-text);
+    flex: 1;
+    letter-spacing: 0.01em;
+    font-size: 15px;
+  }
+  .btn-primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(224,8,0,0.3);
+  }
+  .btn-primary:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    width: 52px; height: 52px;
+    padding: 0;
+    border-radius: 50%;
+  }
+  .btn-ghost:hover {
+    background: var(--surface);
+    color: var(--text);
+  }
+
+  .submit-hint {
+    font-size: 12px;
+    color: var(--text-faint);
+    text-align: center;
+    margin-top: 12px;
+  }
+
+  /* Intro / welcome screen */
+  #beehive-form .intro {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 96px 20px 120px;
+    min-height: 480px;
+  }
+  #beehive-form .intro-inner {
+    max-width: 560px;
+    width: 100%;
+  }
+  @keyframes beehiveFadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    #beehive-form .intro-inner > * {
+      opacity: 0;
+      animation: beehiveFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    #beehive-form .intro-title { animation-delay: 0.2s; }
+    #beehive-form .intro-text { animation-delay: 0.55s; }
+    #beehive-form .intro-cta { animation-delay: 0.9s; }
+  }
+
+  .intro-title {
+    font-size: 52px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin: 0 0 28px;
+    text-wrap: balance;
+  }
+  .intro-text {
+    color: var(--text-muted);
+    font-size: 19px;
+    line-height: 1.5;
+    margin: 0 0 44px;
+    text-wrap: pretty;
+    max-width: 460px;
+  }
+  .intro-cta {
+    flex: none;
+    align-self: flex-start;
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+  .intro-cta svg {
+    transition: transform 300ms var(--ease-onward);
+  }
+  .intro-cta:hover svg {
+    transform: translateX(5px);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .intro-cta svg {
+      animation: arrowNudge 2.2s ease-in-out infinite;
+    }
+    .intro-cta:hover svg {
+      animation: none;
+      transform: translateX(5px);
+    }
+  }
+  @keyframes arrowNudge {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(4px); }
+  }
+  @media (max-width: 480px) {
+    .intro-title { font-size: 34px; }
+    .intro-text { font-size: 16px; }
+    #beehive-form .intro { padding: 40px 20px; }
+  }
+
+  /* Preset chips under sliders — tap instead of drag */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .chip {
+    flex: 1 1 auto; min-width: 64px;
+    background: var(--surface); border: 1px solid var(--border); color: var(--text);
+    font-family: inherit; font-size: 13px; font-weight: 600;
+    padding: 9px 10px; border-radius: 999px; cursor: pointer;
+    transition: all 180ms var(--ease-onward);
+  }
+  .chip:hover { border-color: var(--border-strong); background: var(--surface-hover); }
+  .chip.active { background: var(--surface-selected); border-color: var(--accent); color: var(--accent); }
+
+  /* Result screens */
+  .result {
+    padding-top: 8px;
+  }
+  .result-hero {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .result-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(71,203,108,0.14);
+    color: var(--emerald);
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 28px;
+  }
+  .result-badge.warn {
+    background: rgba(255,255,255,0.06);
+    color: var(--text-muted);
+  }
+  body.theme-light .result-badge.warn {
+    background: rgba(15,20,48,0.05);
+  }
+  .result-title {
+    font-size: 60px;
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    font-weight: 600;
+    margin: 0 0 18px;
+    text-wrap: balance;
+  }
+  .result-lead {
+    color: var(--text-muted);
+    font-size: 17px;
+    line-height: 1.5;
+    margin: 0 auto 0;
+    max-width: 480px;
+    text-wrap: pretty;
+  }
+
+  /* Offer card */
+  .offer-card {
+    background: linear-gradient(135deg, rgba(224,8,0,0.10) 0%, rgba(224,8,0,0.02) 100%);
+    border: 1px solid rgba(224,8,0,0.30);
+    border-radius: var(--radius-xl);
+    padding: 28px 26px;
+    margin-bottom: 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .offer-card::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 160px; height: 160px;
+    background: radial-gradient(circle, rgba(224,8,0,0.18), transparent 70%);
+    pointer-events: none;
+  }
+  .offer-label {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .offer-amount {
+    font-size: 52px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+  .offer-prefix {
+    font-size: 18px;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+  .offer-terms {
+    color: var(--text-muted);
+    font-size: 15px;
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+  .offer-terms strong { color: var(--text); font-weight: 600; }
+  .offer-note {
+    font-size: 13px;
+    color: var(--text-muted);
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: 10px 14px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    text-align: left;
+    line-height: 1.45;
+  }
+  .offer-tnc {
+    font-size: 12px;
+    color: var(--text-faint);
+    margin-top: 8px;
+  }
+
+  .result p {
+    color: var(--text-muted);
+    font-size: 17px;
+    line-height: 1.5;
+  }
+  .summary-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px 22px;
+    margin-bottom: 20px;
+  }
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    gap: 16px;
+  }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-key {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .summary-val {
+    font-size: 15px;
+    font-weight: 500;
+    text-align: right;
+  }
+
+  /* Result actions (restart buttons) */
+  .result-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    padding-bottom: 40px;
+  }
+  .btn-back {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    padding: 18px 26px;
+    border-radius: 999px;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+  }
+  .btn-back:hover {
+    background: var(--surface);
+    color: var(--text);
+    border-color: var(--border-strong);
+  }
+  .btn-ghost-wide {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 14px 22px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 999px;
+  }
+  .btn-ghost-wide:hover {
+    background: var(--surface-hover);
+    border-color: var(--border-strong);
+  }
+  .btn-refer {
+    background: var(--text);
+    color: var(--bg);
+    padding: 14px 22px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 999px;
+    border: 1px solid var(--text);
+  }
+  .btn-refer:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  }
+  .btn-text {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-family: inherit;
+    font-size: 13px;
+    padding: 8px 12px;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .btn-text:hover { color: var(--text); }
+
+  /* Combobox */
+  .combobox { width: 100%; }
+  .combo-trigger {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 16px 18px;
+    color: var(--text-faint);
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    transition: all 200ms;
+  }
+  .combo-trigger:hover {
+    background: var(--surface-hover);
+    border-color: var(--border-strong);
+  }
+  .combo-trigger.has-value {
+    color: var(--text);
+    border-color: var(--border-selected);
+    background: var(--surface-selected);
+  }
+  .combo-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15,20,48,0.55);
+    backdrop-filter: blur(6px);
+    z-index: 1000;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    animation: fadeIn 200ms var(--ease-onward);
+  }
+  body.theme-light .combo-overlay { background: rgba(255,255,255,0.8); }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .combo-sheet {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    width: 100%;
+    max-width: 560px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    animation: slideUp 320ms var(--ease-onward);
+  }
+  @media (min-width: 600px) {
+    .combo-overlay { align-items: center; }
+    .combo-sheet { border-radius: var(--radius-xl); max-height: 70vh; }
+  }
+  @keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  .combo-search-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .combo-search {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 4px 0;
+  }
+  .combo-search::placeholder { color: var(--text-faint); }
+  .combo-close {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 8px;
+    display: grid; place-items: center;
+  }
+  .combo-close:hover { background: var(--surface); color: var(--text); }
+  .combo-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+  }
+  .combo-item {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 500;
+    text-align: left;
+    padding: 14px 14px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    transition: background 150ms;
+  }
+  .combo-item:hover { background: var(--surface-hover); }
+  .combo-item.selected { background: var(--surface-selected); color: var(--accent); }
+  .combo-empty {
+    padding: 32px 16px;
+    text-align: center;
+    color: var(--text-faint);
+    font-size: 14px;
+  }
+
+  .next-steps {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 32px;
+    display: grid;
+    gap: 12px;
+  }
+  .next-steps li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 14px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+  }
+  .next-num {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--accent-text);
+    display: grid; place-items: center;
+    font-size: 13px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .next-text {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  .next-text strong { display: block; font-size: 15px; margin-bottom: 2px; color: var(--text); font-weight: 500; }
+  .next-text span { color: var(--text-muted); }
+
+  /* Hexagon mark used as accent */
+  .hex-bg {
+    position: absolute;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+  }
+
+  /* Smaller screens */
+  @media (max-width: 480px) {
+    h1.q-title { font-size: 26px; }
+    .q-sub { font-size: 15px; margin-bottom: 24px; }
+    .result-title { font-size: 38px; }
+    .options.cols-2 { grid-template-columns: 1fr; }
+    .offer-amount { font-size: 36px; }
+  }
+
+  /* Loading spinner */
+  .spinner {
+    width: 16px; height: 16px;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Reduce motion */
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; transition-duration: 100ms !important; }
+  }
+</style>
+<template id="__bundler_thumbnail">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <rect width="100" height="100" fill="#FFFFFF"/>
+    <rect x="30" y="30" width="40" height="40" fill="#E00800" rx="6"/>
+    <text x="50" y="58" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="22" fill="#FFFFFF">b</text>
+  </svg>
+</template>
+<body class="theme-light">
+  <!-- GTM noscript removed — container runs on the parent page, not the iframe -->
+  <div id="beehive-form"><div id="root"></div></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <!-- All components inlined into a single Babel script block -->
+  <script type="text/babel" data-presets="react">
+const { useState, useEffect, useMemo, useCallback, useRef } = React;
+
+// === tweaks-panel.jsx ===
+
+
+// tweaks-panel.jsx
+// Reusable Tweaks shell + form-control helpers.
+//
+// Owns the host protocol (listens for __activate_edit_mode / __deactivate_edit_mode,
+// posts __edit_mode_available / __edit_mode_set_keys / __edit_mode_dismissed) so
+// individual prototypes don't re-roll it. Ships a consistent set of controls so you
+// don't hand-draw <input type="range">, segmented radios, steppers, etc.
+//
+// Usage (in an HTML file that loads React + Babel):
+//
+//   const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+//     "primaryColor": "#D97757",
+//     "fontSize": 16,
+//     "density": "regular",
+//     "dark": false
+//   }/*EDITMODE-END*/;
+//
+//   function App() {
+//     const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+//     return (
+//       <div style={{ fontSize: t.fontSize, color: t.primaryColor }}>
+//         Hello
+//         <TweaksPanel>
+//           <TweakSection label="Typography" />
+//           <TweakSlider label="Font size" value={t.fontSize} min={10} max={32} unit="px"
+//                        onChange={(v) => setTweak('fontSize', v)} />
+//           <TweakRadio  label="Density" value={t.density}
+//                        options={['compact', 'regular', 'comfy']}
+//                        onChange={(v) => setTweak('density', v)} />
+//           <TweakSection label="Theme" />
+//           <TweakColor  label="Primary" value={t.primaryColor}
+//                        onChange={(v) => setTweak('primaryColor', v)} />
+//           <TweakToggle label="Dark mode" value={t.dark}
+//                        onChange={(v) => setTweak('dark', v)} />
+//         </TweaksPanel>
+//       </div>
+//     );
+//   }
+//
+// ─────────────────────────────────────────────────────────────────────────────
+
+const __TWEAKS_STYLE = `
+  .twk-panel{position:fixed;right:16px;bottom:16px;z-index:2147483646;width:280px;
+    max-height:calc(100vh - 32px);display:flex;flex-direction:column;
+    background:rgba(250,249,247,.78);color:#29261b;
+    -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
+    border:.5px solid rgba(255,255,255,.6);border-radius:14px;
+    box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 12px 40px rgba(0,0,0,.18);
+    font:11.5px/1.4 ui-sans-serif,system-ui,-apple-system,sans-serif;overflow:hidden}
+  .twk-hd{display:flex;align-items:center;justify-content:space-between;
+    padding:10px 8px 10px 14px;cursor:move;user-select:none}
+  .twk-hd b{font-size:12px;font-weight:600;letter-spacing:.01em}
+  .twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);
+    width:22px;height:22px;border-radius:6px;cursor:default;font-size:13px;line-height:1}
+  .twk-x:hover{background:rgba(0,0,0,.06);color:#29261b}
+  .twk-body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px;
+    overflow-y:auto;overflow-x:hidden;min-height:0;
+    scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.15) transparent}
+  .twk-body::-webkit-scrollbar{width:8px}
+  .twk-body::-webkit-scrollbar-track{background:transparent;margin:2px}
+  .twk-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:4px;
+    border:2px solid transparent;background-clip:content-box}
+  .twk-body::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.25);
+    border:2px solid transparent;background-clip:content-box}
+  .twk-row{display:flex;flex-direction:column;gap:5px}
+  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+  .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;
+    color:rgba(41,38,27,.72)}
+  .twk-lbl>span:first-child{font-weight:500}
+  .twk-val{color:rgba(41,38,27,.5);font-variant-numeric:tabular-nums}
+
+  .twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    color:rgba(41,38,27,.45);padding:10px 0 0}
+  .twk-sect:first-child{padding-top:0}
+
+  .twk-field{appearance:none;width:100%;height:26px;padding:0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;
+    background:rgba(255,255,255,.6);color:inherit;font:inherit;outline:none}
+  .twk-field:focus{border-color:rgba(0,0,0,.25);background:rgba(255,255,255,.85)}
+  select.twk-field{padding-right:22px;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='rgba(0,0,0,.5)' d='M0 0h10L5 6z'/></svg>");
+    background-repeat:no-repeat;background-position:right 8px center}
+
+  .twk-slider{appearance:none;-webkit-appearance:none;width:100%;height:4px;margin:6px 0;
+    border-radius:999px;background:rgba(0,0,0,.12);outline:none}
+  .twk-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
+    width:14px;height:14px;border-radius:50%;background:#fff;
+    border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+  .twk-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;
+    background:#fff;border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+
+  .twk-seg{position:relative;display:flex;padding:2px;border-radius:8px;
+    background:rgba(0,0,0,.06);user-select:none}
+  .twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:6px;
+    background:rgba(255,255,255,.9);box-shadow:0 1px 2px rgba(0,0,0,.12);
+    transition:left .15s cubic-bezier(.3,.7,.4,1),width .15s}
+  .twk-seg.dragging .twk-seg-thumb{transition:none}
+  .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;
+    background:transparent;color:inherit;font:inherit;font-weight:500;min-height:22px;
+    border-radius:6px;cursor:default;padding:4px 6px;line-height:1.2;
+    overflow-wrap:anywhere}
+
+  .twk-toggle{position:relative;width:32px;height:18px;border:0;border-radius:999px;
+    background:rgba(0,0,0,.15);transition:background .15s;cursor:default;padding:0}
+  .twk-toggle[data-on="1"]{background:#34c759}
+  .twk-toggle i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
+    background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
+  .twk-toggle[data-on="1"] i{transform:translateX(14px)}
+
+  .twk-num{display:flex;align-items:center;height:26px;padding:0 0 0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;background:rgba(255,255,255,.6)}
+  .twk-num-lbl{font-weight:500;color:rgba(41,38,27,.6);cursor:ew-resize;
+    user-select:none;padding-right:8px}
+  .twk-num input{flex:1;min-width:0;height:100%;border:0;background:transparent;
+    font:inherit;font-variant-numeric:tabular-nums;text-align:right;padding:0 8px 0 0;
+    outline:none;color:inherit;-moz-appearance:textfield}
+  .twk-num input::-webkit-inner-spin-button,.twk-num input::-webkit-outer-spin-button{
+    -webkit-appearance:none;margin:0}
+  .twk-num-unit{padding-right:8px;color:rgba(41,38,27,.45)}
+
+  .twk-btn{appearance:none;height:26px;padding:0 12px;border:0;border-radius:7px;
+    background:rgba(0,0,0,.78);color:#fff;font:inherit;font-weight:500;cursor:default}
+  .twk-btn:hover{background:rgba(0,0,0,.88)}
+  .twk-btn.secondary{background:rgba(0,0,0,.06);color:inherit}
+  .twk-btn.secondary:hover{background:rgba(0,0,0,.1)}
+
+  .twk-swatch{appearance:none;-webkit-appearance:none;width:56px;height:22px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:6px;padding:0;cursor:default;
+    background:transparent;flex-shrink:0}
+  .twk-swatch::-webkit-color-swatch-wrapper{padding:0}
+  .twk-swatch::-webkit-color-swatch{border:0;border-radius:5.5px}
+  .twk-swatch::-moz-color-swatch{border:0;border-radius:5.5px}
+`;
+
+// ── useTweaks ───────────────────────────────────────────────────────────────
+// Single source of truth for tweak values. setTweak persists via the host
+// (__edit_mode_set_keys → host rewrites the EDITMODE block on disk).
+function useTweaks(defaults) {
+  const [values, setValues] = React.useState(defaults);
+  // Accepts either setTweak('key', value) or setTweak({ key: value, ... }) so a
+  // useState-style call doesn't write a "[object Object]" key into the persisted
+  // JSON block.
+  const setTweak = React.useCallback((keyOrEdits, val) => {
+    const edits = typeof keyOrEdits === 'object' && keyOrEdits !== null
+      ? keyOrEdits : { [keyOrEdits]: val };
+    setValues((prev) => ({ ...prev, ...edits }));
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits }, '*');
+  }, []);
+  return [values, setTweak];
+}
+
+// ── TweaksPanel ─────────────────────────────────────────────────────────────
+// Floating shell. Registers the protocol listener BEFORE announcing
+// availability — if the announce ran first, the host's activate could land
+// before our handler exists and the toolbar toggle would silently no-op.
+// The close button posts __edit_mode_dismissed so the host's toolbar toggle
+// flips off in lockstep; the host echoes __deactivate_edit_mode back which
+// is what actually hides the panel.
+function TweaksPanel({ title = 'Tweaks', children }) {
+  const [open, setOpen] = React.useState(false);
+  const dragRef = React.useRef(null);
+  const offsetRef = React.useRef({ x: 16, y: 16 });
+  const PAD = 16;
+
+  const clampToViewport = React.useCallback(() => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const w = panel.offsetWidth, h = panel.offsetHeight;
+    const maxRight = Math.max(PAD, window.innerWidth - w - PAD);
+    const maxBottom = Math.max(PAD, window.innerHeight - h - PAD);
+    offsetRef.current = {
+      x: Math.min(maxRight, Math.max(PAD, offsetRef.current.x)),
+      y: Math.min(maxBottom, Math.max(PAD, offsetRef.current.y)),
+    };
+    panel.style.right = offsetRef.current.x + 'px';
+    panel.style.bottom = offsetRef.current.y + 'px';
+  }, []);
+
+  React.useEffect(() => {
+    if (!open) return;
+    clampToViewport();
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', clampToViewport);
+      return () => window.removeEventListener('resize', clampToViewport);
+    }
+    const ro = new ResizeObserver(clampToViewport);
+    ro.observe(document.documentElement);
+    return () => ro.disconnect();
+  }, [open, clampToViewport]);
+
+  React.useEffect(() => {
+    const onMsg = (e) => {
+      const t = e?.data?.type;
+      if (t === '__activate_edit_mode') setOpen(true);
+      else if (t === '__deactivate_edit_mode') setOpen(false);
+    };
+    window.addEventListener('message', onMsg);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+
+  const dismiss = () => {
+    setOpen(false);
+    window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
+  };
+
+  const onDragStart = (e) => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const r = panel.getBoundingClientRect();
+    const sx = e.clientX, sy = e.clientY;
+    const startRight = window.innerWidth - r.right;
+    const startBottom = window.innerHeight - r.bottom;
+    const move = (ev) => {
+      offsetRef.current = {
+        x: startRight - (ev.clientX - sx),
+        y: startBottom - (ev.clientY - sy),
+      };
+      clampToViewport();
+    };
+    const up = () => {
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', up);
+    };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+  };
+
+  if (!open) return null;
+  return (
+    <>
+      <style>{__TWEAKS_STYLE}</style>
+      <div ref={dragRef} className="twk-panel" data-noncommentable=""
+           style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}>
+        <div className="twk-hd" onMouseDown={onDragStart}>
+          <b>{title}</b>
+          <button className="twk-x" aria-label="Close tweaks"
+                  onMouseDown={(e) => e.stopPropagation()}
+                  onClick={dismiss}>✕</button>
+        </div>
+        <div className="twk-body">{children}</div>
+      </div>
+    </>
+  );
+}
+
+// ── Layout helpers ──────────────────────────────────────────────────────────
+
+function TweakSection({ label, children }) {
+  return (
+    <>
+      <div className="twk-sect">{label}</div>
+      {children}
+    </>
+  );
+}
+
+function TweakRow({ label, value, children, inline = false }) {
+  return (
+    <div className={inline ? 'twk-row twk-row-h' : 'twk-row'}>
+      <div className="twk-lbl">
+        <span>{label}</span>
+        {value != null && <span className="twk-val">{value}</span>}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+// ── Controls ────────────────────────────────────────────────────────────────
+
+function TweakSlider({ label, value, min = 0, max = 100, step = 1, unit = '', onChange }) {
+  return (
+    <TweakRow label={label} value={`${value}${unit}`}>
+      <input type="range" className="twk-slider" min={min} max={max} step={step}
+             value={value} onChange={(e) => onChange(Number(e.target.value))} />
+    </TweakRow>
+  );
+}
+
+function TweakToggle({ label, value, onChange }) {
+  return (
+    <div className="twk-row twk-row-h">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <button type="button" className="twk-toggle" data-on={value ? '1' : '0'}
+              role="switch" aria-checked={!!value}
+              onClick={() => onChange(!value)}><i /></button>
+    </div>
+  );
+}
+
+function TweakRadio({ label, value, options, onChange }) {
+  const trackRef = React.useRef(null);
+  const [dragging, setDragging] = React.useState(false);
+  const opts = options.map((o) => (typeof o === 'object' ? o : { value: o, label: o }));
+  const idx = Math.max(0, opts.findIndex((o) => o.value === value));
+  const n = opts.length;
+
+  // The active value is read by pointer-move handlers attached for the lifetime
+  // of a drag — ref it so a stale closure doesn't fire onChange for every move.
+  const valueRef = React.useRef(value);
+  valueRef.current = value;
+
+  const segAt = (clientX) => {
+    const r = trackRef.current.getBoundingClientRect();
+    const inner = r.width - 4;
+    const i = Math.floor(((clientX - r.left - 2) / inner) * n);
+    return opts[Math.max(0, Math.min(n - 1, i))].value;
+  };
+
+  const onPointerDown = (e) => {
+    setDragging(true);
+    const v0 = segAt(e.clientX);
+    if (v0 !== valueRef.current) onChange(v0);
+    const move = (ev) => {
+      if (!trackRef.current) return;
+      const v = segAt(ev.clientX);
+      if (v !== valueRef.current) onChange(v);
+    };
+    const up = () => {
+      setDragging(false);
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+
+  return (
+    <TweakRow label={label}>
+      <div ref={trackRef} role="radiogroup" onPointerDown={onPointerDown}
+           className={dragging ? 'twk-seg dragging' : 'twk-seg'}>
+        <div className="twk-seg-thumb"
+             style={{ left: `calc(2px + ${idx} * (100% - 4px) / ${n})`,
+                      width: `calc((100% - 4px) / ${n})` }} />
+        {opts.map((o) => (
+          <button key={o.value} type="button" role="radio" aria-checked={o.value === value}>
+            {o.label}
+          </button>
+        ))}
+      </div>
+    </TweakRow>
+  );
+}
+
+function TweakSelect({ label, value, options, onChange }) {
+  return (
+    <TweakRow label={label}>
+      <select className="twk-field" value={value} onChange={(e) => onChange(e.target.value)}>
+        {options.map((o) => {
+          const v = typeof o === 'object' ? o.value : o;
+          const l = typeof o === 'object' ? o.label : o;
+          return <option key={v} value={v}>{l}</option>;
+        })}
+      </select>
+    </TweakRow>
+  );
+}
+
+function TweakText({ label, value, placeholder, onChange }) {
+  return (
+    <TweakRow label={label}>
+      <input className="twk-field" type="text" value={value} placeholder={placeholder}
+             onChange={(e) => onChange(e.target.value)} />
+    </TweakRow>
+  );
+}
+
+function TweakNumber({ label, value, min, max, step = 1, unit = '', onChange }) {
+  const clamp = (n) => {
+    if (min != null && n < min) return min;
+    if (max != null && n > max) return max;
+    return n;
+  };
+  const startRef = React.useRef({ x: 0, val: 0 });
+  const onScrubStart = (e) => {
+    e.preventDefault();
+    startRef.current = { x: e.clientX, val: value };
+    const decimals = (String(step).split('.')[1] || '').length;
+    const move = (ev) => {
+      const dx = ev.clientX - startRef.current.x;
+      const raw = startRef.current.val + dx * step;
+      const snapped = Math.round(raw / step) * step;
+      onChange(clamp(Number(snapped.toFixed(decimals))));
+    };
+    const up = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+  return (
+    <div className="twk-num">
+      <span className="twk-num-lbl" onPointerDown={onScrubStart}>{label}</span>
+      <input type="number" value={value} min={min} max={max} step={step}
+             onChange={(e) => onChange(clamp(Number(e.target.value)))} />
+      {unit && <span className="twk-num-unit">{unit}</span>}
+    </div>
+  );
+}
+
+function TweakColor({ label, value, onChange }) {
+  return (
+    <div className="twk-row twk-row-h">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <input type="color" className="twk-swatch" value={value}
+             onChange={(e) => onChange(e.target.value)} />
+    </div>
+  );
+}
+
+function TweakButton({ label, onClick, secondary = false }) {
+  return (
+    <button type="button" className={secondary ? 'twk-btn secondary' : 'twk-btn'}
+            onClick={onClick}>{label}</button>
+  );
+}
+
+Object.assign(window, {
+  useTweaks, TweaksPanel, TweakSection, TweakRow,
+  TweakSlider, TweakToggle, TweakRadio, TweakSelect,
+  TweakText, TweakNumber, TweakColor, TweakButton,
+});
+
+
+// === form-icons.jsx ===
+
+/* Iconoir icons (https://iconoir.com) — Beehive's official icon set.
+   24x24 viewBox, 1.5 stroke, round caps/joins, currentColor. */
+
+const Ico = {
+  // Geographic
+  flag: () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="22" height="22">
+      <path d="M4 21V4M4 4C4 4 5.5 3 8 3C10.5 3 13.5 5 16 5C18.5 5 20 4 20 4V14C20 14 18.5 15 16 15C13.5 15 10.5 13 8 13C5.5 13 4 14 4 14"/>
+    </svg>
+  ),
+  pin: () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="22" height="22">
+      <path d="M20 10C20 14.4183 12 22 12 22C12 22 4 14.4183 4 10C4 5.58172 7.58172 2 12 2C16.4183 2 20 5.58172 20 10Z"/>
+      <path d="M12 11C12.5523 11 13 10.5523 13 10C13 9.44772 12.5523 9 12 9C11.4477 9 11 9.44772 11 10C11 10.5523 11.4477 11 12 11Z"/>
+    </svg>
+  ),
+
+  // Industry / business
+  shop: () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="22" height="22">
+      <path d="M3 21V10.5M21 21V10.5"/>
+      <path d="M19 21H5"/>
+      <path d="M3 10.5L4.5 3H19.5L21 10.5"/>
+      <path d="M3 10.5C3 10.5 4 11 5 11C6 11 7 10.5 7 10.5C7 10.5 8 11 9 11C10 11 11 10.5 11 10.5C11 10.5 12 11 13 11C14 11 15 10.5 15 10.5C15 10.5 16 11 17 11C18 11 19 10.5 19 10.5C19 10.5 20 11 21 10.5"/>
+      <path d="M9 21V14H15V21"/>
+    </svg>
+  ),
+  food: () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="22" height="22">
+      <path d="M5 3V10C5 11.1046 5.89543 12 7 12H8C9.10457 12 10 11.1046 10 10V3"/>
+      <path d="M7.5 12V21"/>
+      <path d="M5 3V7"/>
+      <path d="M10 3V7"/>
+      <path d="M16.5 13H18V21"/>
+      <path d="M16.5 13C15.5 12 15 10 15 8C15 5 16.5 3 18 3V21"/>
+    </svg>
+  ),
+  truck: () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="22" height="22">
+      <path d="M14 17H3V7H14V17Z"/>
+      <path d="M14 10H18.5L21 12.5V17H14V10Z"/>
+      <path d="M7.5 19.5C8.60457 19.5 9.5 18.6046 9.5 17.5C9.5 16.3954 8.60457 15.5 7.5 15.5C6.39543 15.5 5.5 16.3954 5.5 17.5C5.5 18.6046 6.39543 19.5 7.5 19.5Z" fill="currentColor"/>
+      <path d="M16.5 19.5C17.6046 19.5 18.5 18.6046 18.5 17.5C18.5 16.3954 17.6046 15.5 16.5 15.5C15.3954 15.5 14.5 16.3954 14.5 17.5C14.5 18.6046 15.3954 19.5 16.5 19.5Z" fill="currentColor"/>
+    </svg>
+  ),
+  laptop: () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="22" height="22">
+      <path d="M3 18.4V7C3 5.89543 3.89543 5 5 5H19C20.1046 5 21 5.89543 21 7V18.4"/>
+      <path d="M2 19H22"/>
+    </svg>
+  ),
+  building: () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="22" height="22">
+      <path d="M3 21V5C3 3.89543 3.89543 3 5 3H13C14.1046 3 15 3.89543 15 5V21"/>
+      <path d="M15 9H19C20.1046 9 21 9.89543 21 11V21"/>
+      <path d="M2 21H22"/>
+      <path d="M7 7H11M7 11H11M7 15H11"/>
+      <path d="M18 13V13.01M18 17V17.01"/>
+    </svg>
+  ),
+  briefcase: () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="22" height="22">
+      <path d="M22 12V18C22 19.1046 21.1046 20 20 20H4C2.89543 20 2 19.1046 2 18V12"/>
+      <path d="M22 12V9C22 7.89543 21.1046 7 20 7H4C2.89543 7 2 7.89543 2 9V12"/>
+      <path d="M22 12C22 12 18 14 12 14C6 14 2 12 2 12"/>
+      <path d="M15 7V5C15 3.89543 14.1046 3 13 3H11C9.89543 3 9 3.89543 9 5V7"/>
+      <path d="M11 12H13"/>
+    </svg>
+  ),
+  spark: () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="22" height="22">
+      <path d="M12 2L13.5 8.5L20 10L13.5 11.5L12 18L10.5 11.5L4 10L10.5 8.5L12 2Z"/>
+      <path d="M19 18L19.5 20L21.5 20.5L19.5 21L19 23L18.5 21L16.5 20.5L18.5 20L19 18Z"/>
+    </svg>
+  ),
+
+  // Money
+  coin: () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="22" height="22">
+      <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"/>
+      <path d="M9 14.5C9 15.6 9.9 16.5 11 16.5H13.2C14.2 16.5 15 15.7 15 14.7C15 13.6 14.5 13.2 13.8 13L10.3 12C9.5 11.7 9 11.4 9 10.3C9 9.3 9.8 8.5 10.8 8.5H13C14.1 8.5 15 9.4 15 10.5"/>
+      <path d="M12 7.5V8.5M12 16.5V17.5"/>
+    </svg>
+  ),
+
+  // Calendar
+  calendar: () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="22" height="22">
+      <path d="M15 4V2M15 4V6M15 4H10.5M3 10V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V10H3Z"/>
+      <path d="M3 10V6C3 4.89543 3.89543 4 5 4H7"/>
+      <path d="M7 2V6"/>
+      <path d="M21 10V6C21 4.89543 20.1046 4 19 4H18.5"/>
+    </svg>
+  ),
+
+  // Misc
+  arrowRight: () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="18" height="18">
+      <path d="M15 6L21 12L15 18"/>
+      <path d="M21 12H3"/>
+    </svg>
+  ),
+  arrowLeft: () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="18" height="18">
+      <path d="M9 6L3 12L9 18"/>
+      <path d="M3 12H21"/>
+    </svg>
+  ),
+  check: () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="18" height="18">
+      <path d="M5 13L9 17L19 7"/>
+    </svg>
+  ),
+  shield: () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
+      <path d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z"/>
+    </svg>
+  ),
+};
+
+// Beehive logo mark — hexagon with stylised b
+const BeehiveLogo = () => (
+  <svg viewBox="0 0 32 32" fill="none">
+    <path d="M16 2.5l11.7 6.75v13.5L16 29.5 4.3 22.75V9.25L16 2.5z"
+          stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round"/>
+    <path d="M11.5 9v14M11.5 15.5h5a3.5 3.5 0 1 1 0 7h-5"
+          stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+Object.assign(window, { Ico, BeehiveLogo });
+
+
+// === form-industries.jsx ===
+
+// LinkedIn-style industry list, organised under 3 Beehive product market sectors.
+// Each industry: { value, label, sector }
+
+const SECTORS = [
+  { value: 'trading', label: 'Trading', sublabel: 'Buy and sell goods', icon: 'shop' },
+  { value: 'services', label: 'Services', sublabel: 'Sell expertise or labour', icon: 'briefcase' },
+  { value: 'manufacturing', label: 'Manufacturing', sublabel: 'Make or produce goods', icon: 'building' },
+];
+
+// Mapping LinkedIn industries to the three Beehive sectors.
+const INDUSTRIES = [
+  // ===== TRADING =====
+  { value: 'APPAREL_FASHION', label: 'Apparel & Fashion', sector: 'trading' },
+  { value: 'AUTOMOTIVE', label: 'Automotive', sector: 'trading' },
+  { value: 'BUILDING_MATERIALS', label: 'Building Materials', sector: 'trading' },
+  { value: 'BUSINESS_SUPPLIES_AND_EQUIPMENT', label: 'Business Supplies and Equipment', sector: 'trading' },
+  { value: 'CONSUMER_ELECTRONICS', label: 'Consumer Electronics', sector: 'trading' },
+  { value: 'CONSUMER_GOODS', label: 'Consumer Goods', sector: 'trading' },
+  { value: 'COSMETICS', label: 'Cosmetics', sector: 'trading' },
+  { value: 'DAIRY', label: 'Dairy', sector: 'trading' },
+  { value: 'FOOD_BEVERAGES', label: 'Food & Beverages', sector: 'trading' },
+  { value: 'FURNITURE', label: 'Furniture', sector: 'trading' },
+  { value: 'IMPORT_AND_EXPORT', label: 'Import and Export', sector: 'trading' },
+  { value: 'LUXURY_GOODS_JEWELRY', label: 'Luxury Goods & Jewelry', sector: 'trading' },
+  { value: 'RETAIL', label: 'Retail', sector: 'trading' },
+  { value: 'SPORTING_GOODS', label: 'Sporting Goods', sector: 'trading' },
+  { value: 'SUPERMARKETS', label: 'Supermarkets', sector: 'trading' },
+  { value: 'TOBACCO', label: 'Tobacco', sector: 'trading' },
+  { value: 'WHOLESALE', label: 'Wholesale', sector: 'trading' },
+  { value: 'WINE_AND_SPIRITS', label: 'Wine and Spirits', sector: 'trading' },
+
+  // ===== SERVICES =====
+  { value: 'ACCOUNTING', label: 'Accounting', sector: 'services' },
+  { value: 'AIRLINES_AVIATION', label: 'Airlines/Aviation', sector: 'services' },
+  { value: 'ALTERNATIVE_DISPUTE_RESOLUTION', label: 'Alternative Dispute Resolution', sector: 'services' },
+  { value: 'ALTERNATIVE_MEDICINE', label: 'Alternative Medicine', sector: 'services' },
+  { value: 'ANIMATION', label: 'Animation', sector: 'services' },
+  { value: 'ARCHITECTURE_PLANNING', label: 'Architecture & Planning', sector: 'services' },
+  { value: 'ARTS_AND_CRAFTS', label: 'Arts and Crafts', sector: 'services' },
+  { value: 'BANKING', label: 'Banking', sector: 'services' },
+  { value: 'BROADCAST_MEDIA', label: 'Broadcast Media', sector: 'services' },
+  { value: 'CAPITAL_MARKETS', label: 'Capital Markets', sector: 'services' },
+  { value: 'CIVIC_SOCIAL_ORGANIZATION', label: 'Civic & Social Organization', sector: 'services' },
+  { value: 'COMMERCIAL_REAL_ESTATE', label: 'Commercial Real Estate', sector: 'services' },
+  { value: 'COMPUTER_NETWORK_SECURITY', label: 'Computer & Network Security', sector: 'services' },
+  { value: 'COMPUTER_NETWORKING', label: 'Computer Networking', sector: 'services' },
+  { value: 'COMPUTER_SOFTWARE', label: 'Computer Software', sector: 'services' },
+  { value: 'INTERNET', label: 'Internet', sector: 'services' },
+  { value: 'CONSUMER_SERVICES', label: 'Consumer Services', sector: 'services' },
+  { value: 'DESIGN', label: 'Design', sector: 'services' },
+  { value: 'EDUCATION_MANAGEMENT', label: 'Education Management', sector: 'services' },
+  { value: 'E_LEARNING', label: 'E-Learning', sector: 'services' },
+  { value: 'ENTERTAINMENT', label: 'Entertainment', sector: 'services' },
+  { value: 'ENVIRONMENTAL_SERVICES', label: 'Environmental Services', sector: 'services' },
+  { value: 'EVENTS_SERVICES', label: 'Events Services', sector: 'services' },
+  { value: 'EXECUTIVE_OFFICE', label: 'Executive Office', sector: 'services' },
+  { value: 'FACILITIES_SERVICES', label: 'Facilities Services', sector: 'services' },
+  { value: 'FINANCIAL_SERVICES', label: 'Financial Services', sector: 'services' },
+  { value: 'FINE_ART', label: 'Fine Art', sector: 'services' },
+  { value: 'FUND_RAISING', label: 'Fund-Raising', sector: 'services' },
+  { value: 'GAMBLING_CASINOS', label: 'Gambling & Casinos', sector: 'services' },
+  { value: 'GOVERNMENT_ADMINISTRATION', label: 'Government Administration', sector: 'services' },
+  { value: 'GOVERNMENT_RELATIONS', label: 'Government Relations', sector: 'services' },
+  { value: 'GRAPHIC_DESIGN', label: 'Graphic Design', sector: 'services' },
+  { value: 'HEALTH_WELLNESS_AND_FITNESS', label: 'Health, Wellness and Fitness', sector: 'services' },
+  { value: 'HIGHER_EDUCATION', label: 'Higher Education', sector: 'services' },
+  { value: 'HOSPITAL_HEALTH_CARE', label: 'Hospital & Health Care', sector: 'services' },
+  { value: 'HOSPITALITY', label: 'Hospitality', sector: 'services' },
+  { value: 'HUMAN_RESOURCES', label: 'Human Resources', sector: 'services' },
+  { value: 'INDIVIDUAL_FAMILY_SERVICES', label: 'Individual & Family Services', sector: 'services' },
+  { value: 'INFORMATION_SERVICES', label: 'Information Services', sector: 'services' },
+  { value: 'INFORMATION_TECHNOLOGY_AND_SERVICES', label: 'Information Technology and Services', sector: 'services' },
+  { value: 'INSURANCE', label: 'Insurance', sector: 'services' },
+  { value: 'INTERNATIONAL_AFFAIRS', label: 'International Affairs', sector: 'services' },
+  { value: 'INTERNATIONAL_TRADE_AND_DEVELOPMENT', label: 'International Trade and Development', sector: 'services' },
+  { value: 'INVESTMENT_BANKING', label: 'Investment Banking', sector: 'services' },
+  { value: 'INVESTMENT_MANAGEMENT', label: 'Investment Management', sector: 'services' },
+  { value: 'JUDICIARY', label: 'Judiciary', sector: 'services' },
+  { value: 'LAW_ENFORCEMENT', label: 'Law Enforcement', sector: 'services' },
+  { value: 'LAW_PRACTICE', label: 'Law Practice', sector: 'services' },
+  { value: 'LEGAL_SERVICES', label: 'Legal Services', sector: 'services' },
+  { value: 'LEGISLATIVE_OFFICE', label: 'Legislative Office', sector: 'services' },
+  { value: 'LEISURE_TRAVEL_TOURISM', label: 'Leisure, Travel & Tourism', sector: 'services' },
+  { value: 'LIBRARIES', label: 'Libraries', sector: 'services' },
+  { value: 'LOGISTICS_AND_SUPPLY_CHAIN', label: 'Logistics and Supply Chain', sector: 'services' },
+  { value: 'MANAGEMENT_CONSULTING', label: 'Management Consulting', sector: 'services' },
+  { value: 'MARITIME', label: 'Maritime', sector: 'services' },
+  { value: 'MARKET_RESEARCH', label: 'Market Research', sector: 'services' },
+  { value: 'MARKETING_AND_ADVERTISING', label: 'Marketing and Advertising', sector: 'services' },
+  { value: 'MEDIA_PRODUCTION', label: 'Media Production', sector: 'services' },
+  { value: 'MEDICAL_PRACTICE', label: 'Medical Practice', sector: 'services' },
+  { value: 'MENTAL_HEALTH_CARE', label: 'Mental Health Care', sector: 'services' },
+  { value: 'MILITARY', label: 'Military', sector: 'services' },
+  { value: 'MOTION_PICTURES_AND_FILM', label: 'Motion Pictures and Film', sector: 'services' },
+  { value: 'MUSEUMS_AND_INSTITUTIONS', label: 'Museums and Institutions', sector: 'services' },
+  { value: 'MUSIC', label: 'Music', sector: 'services' },
+  { value: 'NEWSPAPERS', label: 'Newspapers', sector: 'services' },
+  { value: 'NON_PROFIT_ORGANIZATION_MANAGEMENT', label: 'Non-Profit Organization Management', sector: 'services' },
+  { value: 'ONLINE_MEDIA', label: 'Online Media', sector: 'services' },
+  { value: 'OUTSOURCING_OFFSHORING', label: 'Outsourcing/Offshoring', sector: 'services' },
+  { value: 'PACKAGE_FREIGHT_DELIVERY', label: 'Package/Freight Delivery', sector: 'services' },
+  { value: 'PERFORMING_ARTS', label: 'Performing Arts', sector: 'services' },
+  { value: 'PHILANTHROPY', label: 'Philanthropy', sector: 'services' },
+  { value: 'PHOTOGRAPHY', label: 'Photography', sector: 'services' },
+  { value: 'POLITICAL_ORGANIZATION', label: 'Political Organization', sector: 'services' },
+  { value: 'PRIMARY_SECONDARY_EDUCATION', label: 'Primary/Secondary Education', sector: 'services' },
+  { value: 'PROFESSIONAL_TRAINING_COACHING', label: 'Professional Training & Coaching', sector: 'services' },
+  { value: 'PROGRAM_DEVELOPMENT', label: 'Program Development', sector: 'services' },
+  { value: 'PUBLIC_POLICY', label: 'Public Policy', sector: 'services' },
+  { value: 'PUBLIC_RELATIONS_AND_COMMUNICATIONS', label: 'Public Relations and Communications', sector: 'services' },
+  { value: 'PUBLIC_SAFETY', label: 'Public Safety', sector: 'services' },
+  { value: 'PUBLISHING', label: 'Publishing', sector: 'services' },
+  { value: 'REAL_ESTATE', label: 'Real Estate', sector: 'services' },
+  { value: 'RECREATIONAL_FACILITIES_AND_SERVICES', label: 'Recreational Facilities and Services', sector: 'services' },
+  { value: 'RELIGIOUS_INSTITUTIONS', label: 'Religious Institutions', sector: 'services' },
+  { value: 'RESEARCH', label: 'Research', sector: 'services' },
+  { value: 'RESTAURANTS', label: 'Restaurants', sector: 'services' },
+  { value: 'SECURITY_AND_INVESTIGATIONS', label: 'Security and Investigations', sector: 'services' },
+  { value: 'SPORTS', label: 'Sports', sector: 'services' },
+  { value: 'STAFFING_AND_RECRUITING', label: 'Staffing and Recruiting', sector: 'services' },
+  { value: 'TELECOMMUNICATIONS', label: 'Telecommunications', sector: 'services' },
+  { value: 'THINK_TANKS', label: 'Think Tanks', sector: 'services' },
+  { value: 'TRANSLATION_AND_LOCALIZATION', label: 'Translation and Localization', sector: 'services' },
+  { value: 'TRANSPORTATION_TRUCKING_RAILROAD', label: 'Transportation/Trucking/Railroad', sector: 'services' },
+  { value: 'UTILITIES', label: 'Utilities', sector: 'services' },
+  { value: 'VENTURE_CAPITAL_PRIVATE_EQUITY', label: 'Venture Capital & Private Equity', sector: 'services' },
+  { value: 'VETERINARY', label: 'Veterinary', sector: 'services' },
+  { value: 'WAREHOUSING', label: 'Warehousing', sector: 'services' },
+  { value: 'WIRELESS', label: 'Wireless', sector: 'services' },
+  { value: 'WRITING_AND_EDITING', label: 'Writing and Editing', sector: 'services' },
+  { value: 'COMPUTER_GAMES', label: 'Computer Games', sector: 'services' },
+  { value: 'MOBILE_GAMES', label: 'Mobile Games', sector: 'services' },
+
+  // ===== MANUFACTURING =====
+  { value: 'AVIATION_AEROSPACE', label: 'Aviation & Aerospace', sector: 'manufacturing' },
+  { value: 'BIOTECHNOLOGY', label: 'Biotechnology', sector: 'manufacturing' },
+  { value: 'CHEMICALS', label: 'Chemicals', sector: 'manufacturing' },
+  { value: 'CIVIL_ENGINEERING', label: 'Civil Engineering', sector: 'manufacturing' },
+  { value: 'COMPUTER_HARDWARE', label: 'Computer Hardware', sector: 'manufacturing' },
+  { value: 'CONSTRUCTION', label: 'Construction', sector: 'manufacturing' },
+  { value: 'DEFENSE_SPACE', label: 'Defense & Space', sector: 'manufacturing' },
+  { value: 'ELECTRICAL_ELECTRONIC_MANUFACTURING', label: 'Electrical/Electronic Manufacturing', sector: 'manufacturing' },
+  { value: 'FARMING', label: 'Farming', sector: 'manufacturing' },
+  { value: 'FISHERY', label: 'Fishery', sector: 'manufacturing' },
+  { value: 'FOOD_PRODUCTION', label: 'Food Production', sector: 'manufacturing' },
+  { value: 'GLASS_CERAMICS_CONCRETE', label: 'Glass, Ceramics & Concrete', sector: 'manufacturing' },
+  { value: 'INDUSTRIAL_AUTOMATION', label: 'Industrial Automation', sector: 'manufacturing' },
+  { value: 'MACHINERY', label: 'Machinery', sector: 'manufacturing' },
+  { value: 'MECHANICAL_OR_INDUSTRIAL_ENGINEERING', label: 'Mechanical or Industrial Engineering', sector: 'manufacturing' },
+  { value: 'MEDICAL_DEVICES', label: 'Medical Devices', sector: 'manufacturing' },
+  { value: 'MINING_METALS', label: 'Mining & Metals', sector: 'manufacturing' },
+  { value: 'NANOTECHNOLOGY', label: 'Nanotechnology', sector: 'manufacturing' },
+  { value: 'OIL_ENERGY', label: 'Oil & Energy', sector: 'manufacturing' },
+  { value: 'PACKAGING_AND_CONTAINERS', label: 'Packaging and Containers', sector: 'manufacturing' },
+  { value: 'PAPER_FOREST_PRODUCTS', label: 'Paper & Forest Products', sector: 'manufacturing' },
+  { value: 'PHARMACEUTICALS', label: 'Pharmaceuticals', sector: 'manufacturing' },
+  { value: 'PLASTICS', label: 'Plastics', sector: 'manufacturing' },
+  { value: 'PRINTING', label: 'Printing', sector: 'manufacturing' },
+  { value: 'RAILROAD_MANUFACTURE', label: 'Railroad Manufacture', sector: 'manufacturing' },
+  { value: 'RANCHING', label: 'Ranching', sector: 'manufacturing' },
+  { value: 'RENEWABLES_ENVIRONMENT', label: 'Renewables & Environment', sector: 'manufacturing' },
+  { value: 'SEMICONDUCTORS', label: 'Semiconductors', sector: 'manufacturing' },
+  { value: 'SHIPBUILDING', label: 'Shipbuilding', sector: 'manufacturing' },
+  { value: 'TEXTILES', label: 'Textiles', sector: 'manufacturing' },
+];
+
+const labelForIndustry = (v) => (INDUSTRIES.find((i) => i.value === v) || {}).label || '';
+const labelForSector = (v) => (SECTORS.find((s) => s.value === v) || {}).label || '';
+
+Object.assign(window, { SECTORS, INDUSTRIES, labelForIndustry, labelForSector });
+
+
+// === form-controls.jsx ===
+
+// Reusable form controls — option cards, slider, segmented, text inputs.
+
+// ----- OptionCard: big tappable card, optional icon, auto-advance support -----
+const OptionCard = ({ icon, label, sublabel, selected, onClick, showCheck = true }) => (
+  <button
+    type="button"
+    className={`opt ${selected ? 'selected' : ''}`}
+    onClick={onClick}
+  >
+    {icon && <span className="opt-icon">{icon}</span>}
+    <span className="opt-label">
+      {label}
+      {sublabel && <div className="opt-sub">{sublabel}</div>}
+    </span>
+    {showCheck && <span className="opt-check" aria-hidden></span>}
+  </button>
+);
+
+// ----- OptionGroup -----
+const OptionGroup = ({ options, value, onChange, cols = 1, autoAdvance, onAutoAdvance, skipAdvanceFor = [] }) => {
+  const handleClick = (val) => {
+    onChange(val);
+    if (autoAdvance && onAutoAdvance && !skipAdvanceFor.includes(val)) {
+      // Small delay so user sees the selection feedback before advancing
+      setTimeout(() => onAutoAdvance(), 280);
+    }
+  };
+  return (
+    <div className={`options ${cols === 2 ? 'cols-2' : ''}`}>
+      {options.map((o) => (
+        <OptionCard
+          key={o.value}
+          icon={o.icon}
+          label={o.label}
+          sublabel={o.sublabel}
+          selected={value === o.value}
+          onClick={() => handleClick(o.value)}
+          showCheck={!autoAdvance}
+        />
+      ))}
+    </div>
+  );
+};
+
+// ----- Slider with formatted value, fill, bounds -----
+const Slider = ({
+  value,
+  onChange,
+  min,
+  max,
+  step = 1,
+  prefix = '',
+  suffix = '',
+  caption,
+  format = (v) => v.toLocaleString(),
+  formatBound,
+  scale,
+}) => {
+  const clampedValue = Math.max(min, Math.min(max, value));
+  const pct = scale ? (scale.toPos(clampedValue) / scale.maxPos) * 100 : ((clampedValue - min) / (max - min)) * 100;
+  const fmtBound = formatBound || ((v) => `${prefix}${format(v)}${suffix}`);
+  return (
+    <div className="slider-wrap">
+      <div className="slider-value">
+        {prefix && <span className="slider-value-prefix">{prefix}</span>}
+        {format(clampedValue)}
+        {suffix && <span className="slider-value-suffix">{suffix}</span>}
+      </div>
+      {caption && <div className="slider-caption">{caption}</div>}
+      <input
+        type="range"
+        min={scale ? 0 : min}
+        max={scale ? scale.maxPos : max}
+        step={scale ? 1 : step}
+        value={scale ? scale.toPos(clampedValue) : clampedValue}
+        onChange={(e) => onChange(scale ? scale.fromPos(Number(e.target.value)) : Number(e.target.value))}
+      />
+      <div className="slider-track-fill" style={{ width: `calc(${pct}% - ${pct * 0.28}px)` }} />
+      <div className="slider-bounds">
+        <span>{fmtBound(min)}</span>
+        <span>{fmtBound(max)}</span>
+      </div>
+    </div>
+  );
+};
+
+// ----- Segmented (2–4 short options) -----
+const Segmented = ({ options, value, onChange }) => (
+  <div className="segmented">
+    {options.map((o) => (
+      <button
+        key={o.value}
+        type="button"
+        className={`seg-btn ${value === o.value ? 'active' : ''}`}
+        onClick={() => onChange(o.value)}
+      >{o.label}</button>
+    ))}
+  </div>
+);
+
+// ----- Text Input -----
+const TextField = ({ label, value, onChange, placeholder, type = 'text', error, autoFocus, inputMode }) => (
+  <div className="field">
+    {label && <label className="field-label">{label}</label>}
+    <input
+      type={type}
+      inputMode={inputMode}
+      className={`input ${error ? 'error' : ''}`}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+      autoFocus={autoFocus}
+    />
+    {error && <div className="input-error">{error}</div>}
+  </div>
+);
+
+// ----- Phone field with country code prefix selector -----
+const PhoneField = ({ label, codeValue, codeOptions, numberValue, onCodeChange, onNumberChange, error, maxDigits }) => (
+  <div className="field">
+    {label && <label className="field-label">{label}</label>}
+    <div className="phone-row">
+      <select
+        className="input"
+        value={codeValue}
+        onChange={(e) => onCodeChange(e.target.value)}
+        style={{ paddingRight: 8, appearance: 'none' }}
+      >
+        {codeOptions.map((c) => (
+          <option key={c.value} value={c.value} style={{ color: '#000' }}>{c.label}</option>
+        ))}
+      </select>
+      <input
+        type="tel"
+        inputMode="tel"
+        className={`input ${error ? 'error' : ''}`}
+        value={numberValue}
+        onChange={(e) => {
+          const digitsOnly = e.target.value.replace(/[^0-9 ]/g, '');
+          if (maxDigits && digitsOnly.replace(/\s/g, '').length > maxDigits) return;
+          onNumberChange(digitsOnly);
+        }}
+        placeholder="50 123 4567"
+      />
+    </div>
+    {error && <div className="input-error">{error}</div>}
+  </div>
+);
+
+// ----- Searchable Combobox -----
+// Big tappable trigger + searchable list. Used for the long industry list.
+const Combobox = ({ value, onChange, options, placeholder = 'Search...', triggerLabel }) => {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  const inputRef = useRef(null);
+  const selected = options.find((o) => o.value === value);
+
+  useEffect(() => {
+    if (open && inputRef.current) inputRef.current.focus();
+    document.body.classList.toggle('combo-open', open);
+    return () => document.body.classList.remove('combo-open');
+  }, [open]);
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return options;
+    return options.filter((o) => o.label.toLowerCase().includes(q));
+  }, [query, options]);
+
+  return (
+    <div className="combobox">
+      <button type="button" className={`combo-trigger ${selected ? 'has-value' : ''}`} onClick={() => setOpen(true)}>
+        <span className="combo-trigger-label">
+          {selected ? selected.label : (triggerLabel || 'Choose your industry')}
+        </span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" width="18" height="18">
+          <path d="M6 9l6 6 6-6" />
+        </svg>
+      </button>
+
+      {open && (
+        <div className="combo-overlay" onClick={() => setOpen(false)}>
+          <div className="combo-sheet" onClick={(e) => e.stopPropagation()}>
+            <div className="combo-search-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" width="18" height="18">
+                <circle cx="11" cy="11" r="7" /><path d="M20 20l-3.5-3.5" />
+              </svg>
+              <input
+                ref={inputRef}
+                type="text"
+                className="combo-search"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder={placeholder}
+              />
+              <button type="button" className="combo-close" onClick={() => setOpen(false)} aria-label="Close">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" width="18" height="18">
+                  <path d="M6 6l12 12M18 6L6 18" />
+                </svg>
+              </button>
+            </div>
+            <div className="combo-list">
+              {filtered.length === 0 && (
+                <div className="combo-empty">No matches. Try a different keyword.</div>
+              )}
+              {filtered.map((o) => (
+                <button
+                  key={o.value}
+                  type="button"
+                  className={`combo-item ${value === o.value ? 'selected' : ''}`}
+                  onClick={() => { onChange(o.value); setOpen(false); setQuery(''); }}
+                >
+                  <span>{o.label}</span>
+                  {value === o.value && <Ico.check />}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ----- Multi-select option group -----
+const MultiOptionGroup = ({ options, values = [], onChange, cols = 1 }) => {
+  const toggle = (v) => {
+    const set = new Set(values);
+    if (set.has(v)) set.delete(v); else set.add(v);
+    onChange(Array.from(set));
+  };
+  return (
+    <div className={`options ${cols === 2 ? 'cols-2' : ''}`}>
+      {options.map((o) => (
+        <button
+          key={o.value}
+          type="button"
+          className={`opt ${values.includes(o.value) ? 'selected' : ''}`}
+          onClick={() => toggle(o.value)}
+        >
+          {o.icon && <span className="opt-icon">{o.icon}</span>}
+          <span className="opt-label">
+            {o.label}
+            {o.sublabel && <div className="opt-sub">{o.sublabel}</div>}
+          </span>
+          <span className="opt-check" aria-hidden></span>
+        </button>
+      ))}
+    </div>
+  );
+};
+
+Object.assign(window, { OptionCard, OptionGroup, MultiOptionGroup, Slider, Segmented, TextField, PhoneField, Combobox });
+
+
+// === form-steps.jsx ===
+
+// Step components — each is one screen of the form.
+
+const formatAED = (v) => {
+  if (v >= 1_000_000) return (v / 1_000_000).toFixed(v % 1_000_000 === 0 ? 0 : 1) + 'M';
+  if (v >= 1_000) return (v / 1_000).toFixed(0) + 'K';
+  return String(v);
+};
+
+// Currency map by country
+const CURRENCY = {
+  UAE: { code: 'AED', label: 'AED', symbol: 'AED' },
+  OM: { code: 'OMR', label: 'OMR', symbol: 'OMR' },
+  KSA: { code: 'SAR', label: 'SAR', symbol: 'SAR' },
+  OTHER: { code: 'AED', label: 'AED', symbol: 'AED' },
+};
+// Conversion factors from AED baseline (rough, indicative only).
+// 1 AED ≈ 0.10 OMR; 1 AED ≈ 1.02 SAR
+const FX_FROM_AED = { UAE: 1, OM: 0.10, KSA: 1.02, OTHER: 1 };
+const ccyOf = (data) => CURRENCY.UAE;
+const fxOf = (data) => 1;
+const fmtMoneyForCountry = (aedValue, data) => {
+  const v = aedValue * fxOf(data);
+  return `${ccyOf(data).symbol} ${formatAED(v)}`;
+};
+
+// ===== STEP: Business age =====
+const StepAge = ({ data, set, next }) => (
+  <>
+    <div className="eyebrow"><span className="eyebrow-dot" />About your business</div>
+    <h1 className="q-title">How long has your business been operating?</h1>
+    <p className="q-sub">Pick the range that fits. We'll get to specifics later.</p>
+    <OptionGroup
+      autoAdvance
+      onAutoAdvance={() => {
+        window.trackEvent && window.trackEvent('form_step_complete', { step: 'age', step_label: (window.STEP_LABELS && window.STEP_LABELS.age) || 'business_age' });
+        next();
+      }}
+      value={data.businessAge}
+      onChange={(v) => set({ businessAge: v })}
+      options={[
+        { value: '<6', label: 'Under 6 months' },
+        { value: '6-12', label: '6 to 12 months' },
+        { value: '1-2', label: '1 to 2 years' },
+        { value: '2+', label: 'Over 2 years' },
+      ]}
+    />
+  </>
+);
+
+// ===== STEP: Sector + Industry =====
+const StepSectorIndustry = ({ data, set }) => {
+  const industriesForSector = useMemo(
+    () => INDUSTRIES.filter((i) => i.sector === data.sector),
+    [data.sector]
+  );
+
+  // Reset industry if user changes sector
+  const handleSectorChange = (v) => {
+    if (v === data.sector) return;
+    set({ sector: v, industry: '' });
+  };
+
+  return (
+    <>
+      <div className="eyebrow"><span className="eyebrow-dot" />Sector</div>
+      <h1 className="q-title">What kind of business do you run?</h1>
+      <p className="q-sub">Pick a sector first, then choose your specific industry.</p>
+
+      <div className="options" style={{ marginBottom: 18 }}>
+        {SECTORS.map((s) => (
+          <button
+            key={s.value}
+            type="button"
+            className={`opt ${data.sector === s.value ? 'selected' : ''}`}
+            onClick={() => handleSectorChange(s.value)}
+          >
+            <span className="opt-label">
+              {s.label}
+              <div className="opt-sub">{s.sublabel}</div>
+            </span>
+            <span className="opt-check" aria-hidden></span>
+          </button>
+        ))}
+      </div>
+
+      {data.sector && (
+        <div className="industry-picker">
+          <label className="field-label" style={{ marginBottom: 6, display: 'block' }}>Your industry</label>
+          <Combobox
+            value={data.industry}
+            onChange={(v) => set({ industry: v })}
+            options={industriesForSector}
+            placeholder={`Search ${labelForSector(data.sector).toLowerCase()} industries...`}
+            triggerLabel={`Choose a ${labelForSector(data.sector).toLowerCase()} industry`}
+          />
+        </div>
+      )}
+    </>
+  );
+};
+
+// ===== STEP: Annual revenue =====
+const StepRevenue = ({ data, set }) => {
+  const ccy = ccyOf(data);
+  const fx = fxOf(data);
+  // Stored in AED-equivalent (annual)
+  const maxAED = 50_000_000;
+  const stepAED = 250_000;
+  const revenueScale = {
+    maxPos: 112,
+    toPos: (v) => v <= 2_000_000 ? Math.round(v / 50_000)
+      : v <= 10_000_000 ? 40 + Math.round((v - 2_000_000) / 250_000)
+      : 72 + Math.round((v - 10_000_000) / 1_000_000),
+    fromPos: (p) => p <= 40 ? p * 50_000
+      : p <= 72 ? 2_000_000 + (p - 40) * 250_000
+      : 10_000_000 + (p - 72) * 1_000_000,
+  };
+  return (
+    <>
+      <div className="eyebrow"><span className="eyebrow-dot" />Trading volume</div>
+      <h1 className="q-title">What is your average annual revenue?</h1>
+      <p className="q-sub">A rough figure is fine. Drag the slider to your typical year.</p>
+      <Slider
+        min={0}
+        max={maxAED}
+        step={stepAED}
+        value={data.revenue}
+        onChange={(v) => set({ revenue: v, revenueTouched: true })}
+        scale={revenueScale}
+        prefix={`${ccy.symbol} `}
+        format={(v) => v >= maxAED ? `${formatAED(v * fx)}+` : formatAED(v * fx)}
+        formatBound={(v) => v === maxAED ? `${ccy.symbol} ${formatAED(maxAED * fx)}+` : `${ccy.symbol} ${formatAED(v * fx)}`}
+        caption="Drag to set your annual revenue"
+      />
+      <div className="chips">
+        {[2_000_000, 5_000_000, 10_000_000, 25_000_000, 50_000_000].map((v) => (
+          <button key={v} type="button" className={`chip ${data.revenueTouched && data.revenue === v ? 'active' : ''}`} onClick={() => set({ revenue: v, revenueTouched: true })}>{`${ccy.symbol} ${formatAED(v * fx)}${v === maxAED ? '+' : ''}`}</button>
+        ))}
+      </div>
+    </>
+  );
+};
+
+// ===== STEP: Loan amount =====
+const StepLoan = ({ data, set }) => {
+  const capAED = 2_000_000;
+  const ccy = ccyOf(data);
+  const fx = fxOf(data);
+  return (
+    <>
+      <div className="eyebrow"><span className="eyebrow-dot" />Funding goal</div>
+      <h1 className="q-title">How much funding do you need?</h1>
+      <p className="q-sub">{`Beehive funds eligible businesses up to ${ccy.symbol} ${formatAED(capAED * fx)}.`}</p>
+      <Slider
+        min={50_000}
+        max={capAED}
+        step={25_000}
+        value={Math.min(data.loanAmount, capAED)}
+        onChange={(v) => set({ loanAmount: v, loanTouched: true })}
+        prefix={`${ccy.symbol} `}
+        format={(v) => formatAED(v * fx)}
+        formatBound={(v) => `${ccy.symbol} ${formatAED(v * fx)}`}
+        caption={`Most Beehive loans land between ${ccy.symbol} ${formatAED(100_000 * fx)} and ${ccy.symbol} ${formatAED(1_000_000 * fx)}`}
+      />
+    </>
+  );
+};
+
+// ===== STEP: Contact =====
+const StepContact = ({ data, set, errors }) => {
+  const codeOptions = [
+    { value: '+971', label: '🇦🇪 +971' },
+    { value: '+968', label: '🇴🇲 +968' },
+    { value: '+966', label: '🇸🇦 +966' },
+  ];
+  // Country-specific mobile number lengths (digits, excluding country code)
+  const PHONE_MAX_DIGITS = { '+971': 9, '+968': 8, '+966': 9 };
+  const maxDigits = PHONE_MAX_DIGITS[data.phoneCode] || 9;
+  return (
+    <>
+      <div className="eyebrow"><span className="eyebrow-dot" />Almost there</div>
+      <h1 className="q-title">Where should we send your result?</h1>
+      <p className="q-sub">A Beehive advisor will reach out within one working day.</p>
+      <TextField label="Your name" value={data.name} onChange={(v) => set({ name: v })} placeholder="First and last name" error={errors.name} autoFocus />
+      <TextField label="Business name" value={data.businessName} onChange={(v) => set({ businessName: v })} placeholder="Trading or legal name" error={errors.businessName} />
+      <TextField label="Work email" type="email" inputMode="email" value={data.email} onChange={(v) => set({ email: v })} placeholder="you@business.com" error={errors.email} />
+      <PhoneField label="Mobile number" codeValue={data.phoneCode} codeOptions={codeOptions} numberValue={data.phone} onCodeChange={(v) => set({ phoneCode: v })} onNumberChange={(v) => set({ phone: v })} error={errors.phone} maxDigits={maxDigits} />
+
+      <label className={`tc-row ${errors.terms ? 'has-err' : ''}`}>
+        <input
+          type="checkbox"
+          checked={!!data.terms}
+          onChange={(e) => set({ terms: e.target.checked })}
+        />
+        <span className="tc-text">
+          I agree to Beehive's <a href="https://www.beehive.ae/terms-and-conditions" target="_blank" rel="noopener">Terms of Service</a> and <a href="https://www.beehive.ae/privacy-policy" target="_blank" rel="noopener">Privacy Policy</a>, and consent to being contacted about my application.
+        </span>
+      </label>
+      {errors.terms && <div className="tc-err">{errors.terms}</div>}
+      <label className="tc-row">
+        <input
+          type="checkbox"
+          checked={!!data.marketingOptIn}
+          onChange={(e) => set({ marketingOptIn: e.target.checked })}
+        />
+        <span className="tc-text">
+          Yes, I'd like to receive Beehive's newsletter, funding insights and exclusive offers by email, WhatsApp and SMS. I can unsubscribe at any time.
+        </span>
+      </label>
+    </>
+  );
+};
+
+Object.assign(window, {
+  StepAge, StepSectorIndustry, StepRevenue, StepLoan, StepContact,
+  formatAED, CURRENCY, FX_FROM_AED, ccyOf, fxOf, fmtMoneyForCountry,
+});
+
+
+// === form-app.jsx ===
+
+// Main app — orchestrates steps, progress, navigation, results, HubSpot submit.
+
+// ============================================================================
+// HUBSPOT_CONFIG — replace these with your portal + form IDs.
+// ============================================================================
+window.HUBSPOT_CONFIG = {
+  portalId: '2060720',
+  formGuid: '2e671895-4121-4572-9445-f45e0290230d',
+};
+window.BEEHIVE_FIELD_MAP = {
+  email: 'email',
+  phone: 'phone',
+  businessName: 'company',
+  country: 'country_of_business',
+  businessAge: 'age_of_business_range',
+  sector: 'product_market_sector',
+  industry: 'industry',
+  revenue: 'monthly_revenue_aed',
+  audited: 'audited_accounts',
+  loanAmount: 'form_funding_amount',
+  purposes: 'funding_purpose',
+  qualified: 'eligibility_status',
+  indicativeOffer: 'indicative_offer_aed',
+};
+
+// ============================================================================
+// Eligibility logic
+// ============================================================================
+const qualifyLead = (data) => {
+  // We don't fund Tobacco / sheesha businesses
+  if (data.industry === 'TOBACCO') return { qualified: false, reason: 'industry' };
+  // We don't lend to businesses under 2 years old
+  if (['<6', '6-12', '1-2'].includes(data.businessAge)) return { qualified: false, reason: 'age' };
+  // Annual revenue must be at least 2M AED
+  if (data.revenue < 2_000_000) return { qualified: false, reason: 'revenue' };
+  return { qualified: true };
+};
+
+// ============================================================================
+// Validation
+// ============================================================================
+const validateContact = (data) => {
+  const e = {};
+  if (!data.name || data.name.trim().length < 2) e.name = 'Please enter your name';
+  if (!data.businessName || data.businessName.trim().length < 2) e.businessName = 'Please enter your business name';
+  if (!data.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) e.email = 'Enter a valid email';
+  if (!data.phone || data.phone.replace(/\s/g, '').length < 6) e.phone = 'Enter a valid mobile number';
+  if (!data.terms) e.terms = 'Please accept the Terms and Privacy Policy to continue';
+  return e;
+};
+
+// ============================================================================
+// HubSpot submit
+// ============================================================================
+const submitToHubSpot = async (data, result) => {
+  const cfg = window.HUBSPOT_CONFIG;
+  if (!cfg.portalId || cfg.portalId === 'YOUR_PORTAL_ID') {
+    console.warn('[Beehive] HubSpot not configured. Simulating submit.', data, result);
+    await new Promise((r) => setTimeout(r, 900));
+    return { ok: true, simulated: true };
+  }
+  const map = window.BEEHIVE_FIELD_MAP;
+  const [firstname, ...rest] = (data.name || '').trim().split(/\s+/);
+  const lastname = rest.join(' ');
+  const fields = [
+    { objectTypeId: '0-1', name: 'firstname', value: firstname || '' },
+    { objectTypeId: '0-1', name: 'lastname', value: lastname || '' },
+    { objectTypeId: '0-1', name: map.email, value: data.email },
+    { objectTypeId: '0-1', name: map.phone, value: `${data.phoneCode}${data.phone.replace(/\s/g, '')}` },
+    { objectTypeId: '0-1', name: map.businessName, value: data.businessName },
+    { objectTypeId: '0-1', name: map.businessAge, value: ({ '<6': 'Under 6 Months', '6-12': '6 - 12 Months', '1-2': '1 - 2 Years', '2+': '2+ Years' }[data.businessAge] || '') },
+    { objectTypeId: '0-1', name: map.sector, value: labelForSector(data.sector) },
+    { objectTypeId: '0-1', name: map.industry, value: data.industry },
+    { objectTypeId: '0-1', name: map.revenue, value: String(data.revenue) },
+    { objectTypeId: '0-1', name: map.loanAmount, value: String(data.loanAmount) },
+    { objectTypeId: '0-1', name: map.qualified, value: result.qualified ? 'Eligible' : 'Not eligible' },
+    { objectTypeId: '0-1', name: 'lead_source', value: 'Marketing Inbound' },
+    { objectTypeId: '0-1', name: 'marketing_origin', value: 'Online Eligibility Calculator' },
+    { objectTypeId: '0-1', name: 'marketing_email_opt_in', value: data.marketingOptIn ? 'true' : 'false' },
+    // Company object — the form has a required "Company name" field (0-2/name)
+    { objectTypeId: '0-2', name: 'name', value: data.businessName },
+  ];
+  // Attach any UTMs relayed from the parent page, if HubSpot has matching fields.
+  const utms = window.beehiveUtms || {};
+  ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].forEach((key) => {
+    if (utms[key]) fields.push({ objectTypeId: '0-1', name: key, value: utms[key] });
+  });
+  const pageUri = window.beehiveParentUri || window.location.href;
+  const url = `https://api.hsforms.com/submissions/v3/integration/submit/${cfg.portalId}/${cfg.formGuid}`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ fields, context: { pageUri: pageUri, pageName: document.title } }),
+  });
+  if (!res.ok) {
+    const detail = await res.text().catch(() => '');
+    console.error('[Beehive] HubSpot rejected the submission:', res.status, detail);
+  } else {
+    console.info('[Beehive] HubSpot submission accepted.');
+  }
+  return { ok: res.ok };
+};
+
+// ============================================================================
+// Tracking — pushes to this iframe's own dataLayer AND relays to the parent
+// page (Webflow) via postMessage, which forwards into the host's GTM dataLayer.
+// GTM itself is intentionally NOT loaded inside this iframe (would double-count
+// the parent site's container).
+// ============================================================================
+const FORM_NAME = 'beehive_uae_eligibility';
+window.dataLayer = window.dataLayer || [];
+const trackEvent = (event, params = {}) => {
+  const payload = { event, form_name: FORM_NAME, ...params };
+  window.dataLayer.push(payload);
+  window.parent.postMessage({ source: 'beehive-eligibility-form', event, params: { form_name: FORM_NAME, ...params } }, '*');
+};
+
+let __formStarted = false;
+const trackFormStart = () => {
+  if (__formStarted) return;
+  __formStarted = true;
+  trackEvent('form_start');
+};
+
+const STEP_LABELS = {
+  country: 'country',
+  age: 'business_age',
+  sector: 'sector_industry',
+  revenue: 'annual_revenue',
+  loan: 'funding_amount',
+  contact: 'contact_details',
+};
+window.trackEvent = trackEvent;
+window.STEP_LABELS = STEP_LABELS;
+
+// Dwell time — fires once each at 30s / 60s / 120s after load.
+[30000, 60000, 120000].forEach((ms) => {
+  setTimeout(() => {
+    trackEvent('dwell_time', { dwell_seconds: ms / 1000, page_path: window.location.pathname });
+  }, ms);
+});
+
+// ============================================================================
+// Persistence (cache answers across reload + restart)
+// ============================================================================
+const STORAGE_KEY = 'beehive_eligibility_v2';
+const loadCache = () => {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch { return null; }
+};
+const saveCache = (data) => {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch {}
+};
+
+const DEFAULT_DATA = {
+  businessAge: '', sector: '', industry: '',
+  revenue: 3_000_000, loanAmount: 500_000, revenueTouched: false, loanTouched: false,
+  name: '', businessName: '', email: '', phoneCode: '+971', phone: '', terms: false, marketingOptIn: false,
+};
+
+// ============================================================================
+// App
+// ============================================================================
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "theme": "light",
+  "progressStyle": "bar",
+  "accent": "#E00800"
+}/*EDITMODE-END*/;
+
+const App = () => {
+  const [tweaks, setTweak] = (window.useTweaks ? window.useTweaks(TWEAK_DEFAULTS) : [TWEAK_DEFAULTS, () => {}]);
+
+  useEffect(() => {
+    document.body.classList.toggle('theme-light', tweaks.theme === 'light');
+    document.documentElement.style.setProperty('--accent', tweaks.accent || '#E00800');
+  }, [tweaks.theme, tweaks.accent]);
+
+  // Load cached answers on mount
+  const [data, setData] = useState(() => ({ ...DEFAULT_DATA, ...(loadCache() || {}), terms: false, marketingOptIn: false }));
+  const set = (patch) => setData((d) => {
+    const next = { ...d, ...patch };
+    saveCache(next);
+    return next;
+  });
+
+  const [stepIdx, setStepIdx] = useState(0);
+  const [started, setStarted] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
+  const [done, setDone] = useState(null);
+
+  // Attach any UTMs relayed from the parent page (see postMessage listener below)
+  useEffect(() => {
+    const onUtms = (e) => {
+      if (e.data && e.data.type === 'beehive_utms') {
+        window.beehiveUtms = e.data.utms || {};
+      }
+    };
+    window.addEventListener('message', onUtms);
+    return () => window.removeEventListener('message', onUtms);
+  }, []);
+
+  // Track first interaction with any field on the current step
+  useEffect(() => {
+    if (!started) return;
+    const root = document.getElementById('beehive-form');
+    if (!root) return;
+    const onFirstInput = () => trackFormStart();
+    root.addEventListener('input', onFirstInput, { once: true });
+    root.addEventListener('click', onFirstInput, { once: true });
+    return () => {
+      root.removeEventListener('input', onFirstInput);
+      root.removeEventListener('click', onFirstInput);
+    };
+  }, [started]);
+
+  const steps = useMemo(() => ([
+    { id: 'age', component: StepAge, isValid: () => !!data.businessAge },
+    { id: 'sector', component: StepSectorIndustry, isValid: () => !!data.sector && !!data.industry },
+    { id: 'revenue', component: StepRevenue, isValid: () => !!data.revenueTouched },
+    { id: 'loan', component: StepLoan, isValid: () => !!data.loanTouched },
+    { id: 'contact', component: StepContact, isValid: () => Object.keys(validateContact(data)).length === 0 },
+  ]), [data]);
+
+  const total = steps.length;
+  const current = steps[stepIdx];
+  const StepComp = current?.component;
+
+  const next = useCallback(() => {
+    if (stepIdx < total - 1) {
+      let i = stepIdx + 1;
+      while (i < total - 1 && steps[i].skip && steps[i].skip()) i++;
+      setStepIdx(i); setErrors({});
+    }
+  }, [stepIdx, total, steps]);
+
+  const back = useCallback(() => {
+    if (stepIdx > 0) {
+      let i = stepIdx - 1;
+      while (i > 0 && steps[i].skip && steps[i].skip()) i--;
+      setStepIdx(i); setErrors({});
+    }
+  }, [stepIdx, steps]);
+
+  const handleSubmit = async () => {
+    const v = validateContact(data);
+    if (Object.keys(v).length) { setErrors(v); return; }
+    setSubmitting(true);
+    const result = qualifyLead(data);
+    try {
+      const res = await submitToHubSpot(data, result);
+      trackEvent('form_submit', { qualified: !!result.qualified });
+      if (res && res.ok) {
+        // GA4 recommended event name for lead-gen conversions — flag this as a
+        // Key Event in GA4 Admin > Events so it counts in conversion reports.
+        trackEvent('generate_lead', { qualified: !!result.qualified });
+      }
+      setDone(result);
+    } catch (err) {
+      console.error('[Beehive] submit failed', err);
+      trackEvent('form_submit', { qualified: !!result.qualified, error: true });
+      setDone(result);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleNext = () => {
+    trackFormStart();
+    if (current.id === 'contact') {
+      trackEvent('form_step_complete', { step: 'contact', step_label: STEP_LABELS.contact || 'contact_details' });
+      return handleSubmit();
+    }
+    if (!current.isValid()) return;
+    const stepParams = { step: current.id, step_label: (window.STEP_LABELS && window.STEP_LABELS[current.id]) || current.id };
+    if (current.id === 'revenue') stepParams.annual_revenue_aed = Math.round(data.revenue);
+    window.trackEvent && window.trackEvent('form_step_complete', stepParams);
+    next();
+  };
+
+  const restart = () => {
+    // Cache stays. Just rewind to step 0.
+    setDone(null);
+    setStepIdx(0);
+    setErrors({});
+  };
+
+  const startFresh = () => {
+    // Wipe cache + state
+    localStorage.removeItem(STORAGE_KEY);
+    setData({ ...DEFAULT_DATA });
+    setDone(null);
+    setStepIdx(0);
+    setErrors({});
+  };
+
+  // Keyboard: Enter advances
+  useEffect(() => {
+    const onKey = (e) => {
+      if (done) return;
+      if (e.key === 'Enter' && current?.isValid()) {
+        e.preventDefault();
+        handleNext();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [stepIdx, data, done]);
+
+  // Smarter progress: completed steps / total. Reaches 100% only on submit.
+  const progress = (stepIdx / total) * 100;
+
+  // Detect if we have meaningful cached data (other than defaults)
+  const hasCachedData = data.businessAge || data.sector || data.industry;
+
+  return (
+    <div className={`stage ${done ? 'is-done' : ''}`}>
+      {!done && !started && (
+        <div className="intro">
+          <div className="intro-inner">
+            <h1 className="intro-title">Your funding journey starts here</h1>
+            <p className="intro-text">Take a 2-minute check to see what funding could look like for your business.</p>
+            <button className="btn btn-primary intro-cta" onClick={() => setStarted(true)}>Begin<Ico.arrowRight /></button>
+          </div>
+        </div>
+      )}
+
+      {!done && started && stepIdx > 0 && hasCachedData && (
+        <div className="restart-row">
+          <button className="restart-btn" onClick={restart} title="Go back to the first step, keeping your answers">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" width="14" height="14"><path d="M3 12a9 9 0 1 0 3-6.7L3 8" /><path d="M3 3v5h5" /></svg>
+            Go back and check
+          </button>
+        </div>
+      )}
+
+      {!done && started && (
+        <div className="progress-wrap">
+          {tweaks.progressStyle === 'stepper' ? (
+            <>
+              <div className="progress-meta">
+                <span><strong>Step {stepIdx + 1}</strong> of {total}</span>
+                <span>{Math.round(progress)}%</span>
+              </div>
+              <div className="stepper">
+                {steps.map((s, i) => (
+                  <div key={s.id} className={`stepper-dot ${i < stepIdx ? 'done' : ''} ${i === stepIdx ? 'current' : ''}`} />
+                ))}
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="progress-meta">
+                <span><strong>Step {stepIdx + 1}</strong> of {total}</span>
+                <span>Onward</span>
+              </div>
+              <div className="progress-bar">
+                <div className="progress-fill" style={{ width: `${progress}%` }} />
+              </div>
+            </>
+          )}
+        </div>
+      )}
+
+      <main className="main">
+        {!done && started && StepComp && (
+          <div key={current.id} className="step">
+            <StepComp data={data} set={set} next={next} errors={errors} />
+          </div>
+        )}
+        {done && <ResultScreen data={data} result={done} onRestart={restart} onStartFresh={startFresh} />}
+      </main>
+
+      {!done && started && (
+        <div className="footer-nav">
+          <div className="footer-inner-col">
+            <div className="footer-inner">
+              <button className="btn btn-back" onClick={() => stepIdx === 0 ? setStarted(false) : back()}>Back</button>
+              <button
+                className="btn btn-primary"
+                onClick={handleNext}
+                disabled={!current.isValid() || submitting}
+              >
+                {submitting ? <><span className="spinner" /> Sending...</> : (current.id === 'contact' ? 'Get My Eligibility' : 'Continue')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {window.TweaksPanel && (
+        <TweaksPanel title="Tweaks">
+          <TweakSection title="Visual">
+            <TweakRadio
+              label="Theme"
+              value={tweaks.theme}
+              onChange={(v) => setTweak('theme', v)}
+              options={[{ value: 'dark', label: 'Dark' }, { value: 'light', label: 'Light' }]}
+            />
+            <TweakRadio
+              label="Progress"
+              value={tweaks.progressStyle}
+              onChange={(v) => setTweak('progressStyle', v)}
+              options={[{ value: 'bar', label: 'Bar' }, { value: 'stepper', label: 'Stepper' }]}
+            />
+            <TweakColor label="Accent" value={tweaks.accent} onChange={(v) => setTweak('accent', v)} />
+          </TweakSection>
+          <TweakSection title="Demo">
+            <TweakButton onClick={() => {
+              const demo = {
+                businessAge: '2+', sector: 'trading', industry: 'RETAIL',
+                revenue: 4_000_000, loanAmount: 500_000, revenueTouched: true, loanTouched: true,
+                name: 'Yusuf Al Rashid', businessName: 'Hive Trading LLC',
+                email: 'yusuf@hivetrading.ae', phoneCode: '+971', phone: '50 123 4567', terms: true,
+              };
+              setData(demo); saveCache(demo); setStepIdx(steps.length - 1);
+            }}>Fill demo data</TweakButton>
+            <TweakButton onClick={startFresh}>Wipe cache and reset</TweakButton>
+          </TweakSection>
+        </TweaksPanel>
+      )}
+    </div>
+  );
+};
+
+// ============================================================================
+// Result screen
+// ============================================================================
+const ResultScreen = ({ data, result, onRestart, onStartFresh }) => {
+  const { qualified, reason } = result;
+  const firstName = (data.name || '').split(' ')[0];
+
+  const headline = qualified
+    ? `Great news, ${firstName}.`
+    : `Thanks, ${firstName}.`;
+
+  const message = qualified
+    ? `Based on what you've shared, your business looks like a strong fit for Beehive funding. A representative will be in touch as soon as possible to walk you through the next steps.`
+    : reason === 'industry'
+      ? `Unfortunately, Beehive is unable to fund businesses in this industry at this time.`
+      : reason === 'age'
+      ? `Unfortunately, Beehive currently funds businesses that have been trading for over 2 years. Once you cross that mark, we'd love to hear from you again.`
+      : `Unfortunately, your annual revenue is below our current funding threshold of AED 2,000,000. Let's stay in touch as your business grows.`;
+
+  return (
+    <div className="result">
+      <div className="result-hero">
+        <h1 className="result-title">{headline}</h1>
+        <p className="result-lead">{message}</p>
+      </div>
+
+      {qualified && (
+        <ol className="next-steps">
+          <li>
+            <span className="next-num">1</span>
+            <div className="next-text"><strong>Confirmation call</strong><span>A Beehive representative reaches out as soon as possible.</span></div>
+          </li>
+          <li>
+            <span className="next-num">2</span>
+            <div className="next-text"><strong>Share documents</strong><span>Trade licence and bank statements, all uploaded in your portal.</span></div>
+          </li>
+          <li>
+            <span className="next-num">3</span>
+            <div className="next-text"><strong>Get funded</strong><span>Most decisions in 48 hours. Funds in your account fast.</span></div>
+          </li>
+        </ol>
+      )}
+
+      <div className="result-actions">
+        <button className="btn btn-text" onClick={onStartFresh}>Start fresh</button>
+      </div>
+    </div>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+
+// ── Auto-resize: tell the parent (Webflow) how tall the form is ──────────────
+// Eliminates the fixed-height iframe's double scrollbar + top cropping.
+(function reportHeight() {
+  var last = 0;
+  const measure = () => {
+    const el = document.getElementById('beehive-form');
+    if (el) return Math.ceil(el.getBoundingClientRect().height);
+    const b = document.body;
+    return Math.ceil(Math.max(b.scrollHeight, b.offsetHeight));
+  };
+  const send = () => {
+    const h = measure();
+    if (h > 0 && Math.abs(h - last) > 1) {
+      last = h;
+      window.parent.postMessage({ beehiveFormHeight: h }, '*');
+    }
+  };
+  window.addEventListener('load', send);
+  if (window.ResizeObserver) {
+    new ResizeObserver(send).observe(document.getElementById('beehive-form') || document.body);
+  }
+  new MutationObserver(send).observe(document.body, { childList: true, subtree: true, attributes: true });
+  window.addEventListener('resize', send);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(send);
+  [0, 100, 300, 600, 1000, 2000, 3500].forEach((t) => setTimeout(send, t));
+})();
+
+  </script>
+
+</body></html>
