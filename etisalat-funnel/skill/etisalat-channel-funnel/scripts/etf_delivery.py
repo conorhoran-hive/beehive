@@ -290,15 +290,14 @@ def cmd_body(a):
                 changes.append("%s %s%d" % (lab, "+" if c > p else "", c - p))
     head = "<tr><th>Stage</th><th>All time</th>%s</tr>" % ("<th>%s</th>" % esc(month["label"]) if month else "")
     if not a.previous:
-        change_txt = ""
+        change_txt = "<p><b>Changes since the last update:</b> not available for this run.</p>"
     elif changes:
         change_txt = "<p><b>Changes since the last update (all time):</b> %s.</p>" % esc(", ".join(changes))
     else:
-        change_txt = "<p><b>Changes since the last update:</b> none.</p>"
+        change_txt = "<p><b>Changes since the last update:</b> no changes.</p>"
     body = (
         "<p>Dear Etisalat team,</p>"
         "<p>Please find attached today's Etisalat channel funnel dashboard, with data as of %s Dubai time.</p>"
-        "<table border=\"1\" cellpadding=\"6\" cellspacing=\"0\" style=\"border-collapse:collapse\">%s%s</table>"
         "%s"
         "<p>Figures are from Beehive's own records and are a snapshot at the time shown; they can change as applications progress. "
         "Past performance is not necessarily a reliable indicator of future performance.</p>"
@@ -310,7 +309,7 @@ def cmd_body(a):
         "For questions, contact %s.<br>"
         "Beehive P2P Limited, Gate Avenue, South Zone, DIFC, PO Box 506943, Dubai<br>"
         "Regulated by the Dubai Financial Services Authority</p>"
-    ) % (esc(as_of_label), head, "".join(rows), change_txt, esc(a.contact))
+    ) % (esc(as_of_label), change_txt, esc(a.contact))
     _write(a.out, body)
     print(json.dumps({"bodyChars": len(body), "changes": changes, "month": month["label"] if month else None}))
 
