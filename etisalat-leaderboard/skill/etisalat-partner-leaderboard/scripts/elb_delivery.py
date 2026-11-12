@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Etisalat partner leaderboard: data hand-off for the Power Automate email flow.
 
-The daily Claude run cannot send the leaderboard itself: the Microsoft 365 connector
-rejects or strips <img>, <style>, <span> and comments, and the email is 35-120 KB.
-So the run emails a small coded copy to marketing.noreply. Power Automate expands it
-with a fixed dictionary stored in OneDrive (the "template") and sends the result, as
-the email BODY, character for character the same as etisalat-partner-leaderboard-email.html.
+The daily Claude run cannot attach files or write to OneDrive, and the leaderboard is
+35-120 KB, too large to transcribe reliably. So the run emails a small coded copy to
+marketing.noreply. Power Automate expands it with a fixed dictionary stored in OneDrive
+(the "template"), saves the result as etisalat-partner-leaderboard-YYYY-MM-DD.html and
+sends it as an ATTACHMENT. The file is character for character the same as
+etisalat-partner-leaderboard-email.html and opens offline in any browser.
 
 How the coding works
   The dictionary is a fixed list of long pieces of the email (the opening section with
