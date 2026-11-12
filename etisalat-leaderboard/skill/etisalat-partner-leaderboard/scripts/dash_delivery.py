@@ -201,9 +201,6 @@ def body_leaderboard(page, previous, st):
     """Body for the Etisalat partner leaderboard: headline figures for this month and
     last month, changes since the last update, how to open the file, sign-off."""
     esc = html.escape
-    contact = (st.get("contact") or "").strip()
-    if not contact:
-        sys.exit("ERROR: 'contact' is not set in delivery.json (the address for questions in the email body)")
     as_of_label = json.loads(_line(page, "AS_OF_LABEL").group(1))
     data = json.loads(_line(page, "DATA").group(1))
     months = data["months"]
@@ -244,11 +241,10 @@ def body_leaderboard(page, previous, st):
         "Chrome, Edge or Safari, then choose a month. It works offline.</p>"
         "<p>This report is prepared for the Etisalat leadership team. Please do not forward it outside Etisalat.</p>"
         "<p>Kind regards,<br>The Beehive Team, on behalf of Beehive P2P Limited</p>"
-        "<hr><p style=\"font-size:12px;color:#666\">This is an automated email; please do not reply to it. "
-        "For questions, contact %s.<br>"
+        "<hr><p style=\"font-size:12px;color:#666\">This is an automated email; please do not reply to it.<br>"
         "Beehive P2P Limited, Gate Avenue, South Zone, DIFC, PO Box 506943, Dubai<br>"
         "Regulated by the Dubai Financial Services Authority</p>"
-    ) % (esc(as_of_label), table, change_txt, esc(contact))
+    ) % (esc(as_of_label), table, change_txt)
 
 
 BODIES = {"leaderboard": body_leaderboard}
